@@ -1,4 +1,10 @@
 >> Verificar Address::Booking
 >> Verificar Address::DescriptiveDocument
 >> Verificar Address::Halting
->> Verificar 
+>> Verificar candidate_cadastre_checklists
+>> Apagar candidate_day_occurrencies
+>> Apagar candidate_comunids
+>> Apagar candidate_attendance*
+>> Apagar candidate_signed_instrument
+>> Apagar candidate_zones
+>> Apagar address_allotment_type
