@@ -19,8 +19,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 5.0.2"
   s.add_dependency "pg"
-  s.add_dependency "rspec-rails"
-  s.add_dependency "factory_girl_rails"
-  s.add_dependency "capybara"
+  s.add_dependency "one_signal"
 
 end
