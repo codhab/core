@@ -20,5 +20,9 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 5.0.2"
   s.add_dependency "pg"
   s.add_dependency "one_signal"
+  s.add_dependency "validates_cpf_cnpj"
+  s.add_dependency "validates_timeliness"
+  s.add_dependency "email_validator"
+  s.add_dependency "file_validators"
 
 end

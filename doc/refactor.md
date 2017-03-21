@@ -8,3 +8,4 @@
 >> Apagar candidate_signed_instrument
 >> Apagar candidate_zones
 >> Apagar address_allotment_type
+>> TransferCadastre Regularização

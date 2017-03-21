@@ -5,7 +5,7 @@ module Core
 
       belongs_to :cadastre,        class_name: Core::Candidate::Cadastre
       belongs_to :cadastre_mirror, class_name: Core::Candidate::CadastreMirror
-      belongs_to :convocation,     class_name: CoreCandidate::Convocation
+      belongs_to :convocation,     class_name: Core::Candidate::CadastreConvocation
       belongs_to :ticket_context
       belongs_to :ticket_status
 
