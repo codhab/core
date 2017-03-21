@@ -1,10 +1,13 @@
+require_dependency 'core/application_record'
+require_dependency 'core/address/state'
+
 module Core
   module Brb
     class Invoice < ApplicationRecord
       self.table_name = 'extranet.brb_invoices'
 
-      belongs_to :category
-      belongs_to :state, class_name: "Address::State"
+      belongs_to :category, required: false,    class_name: ::Core::Brb::Category
+      belongs_to :state,    required: false,    class_name: ::Core::Address::State
 
       scope :paids, -> { where(status: 1)}
 
