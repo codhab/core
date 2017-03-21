@@ -1,5 +1,5 @@
 require_dependency 'core/address/city'
-require_dependency 'core/address/State'
+require_dependency 'core/address/state'
 require_dependency 'core/attendance/ticket'
 require_dependency 'core/regularization/requeriment'
 require_dependency 'core/schedule/agenda_schedule'
