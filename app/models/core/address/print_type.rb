@@ -1,12 +1,12 @@
-module Address
-  class PrintType < ActiveRecord::Base
+require_dependency 'core/application_record'
 
-    has_many :print_allotments
+module Core
+  module Address
+    class PrintType  < ApplicationRecord
+      self.table_name = 'extranet.address_print_types'
 
-    validates :name, :description, :main_signature, presence: true
-    validates :main_cpf, :first_attestant_signature, presence: true
-    validates :second_attestant_signature, presence: true
-    validates :first_attestant_cpf, :second_attestant_cpf, presence: true
-    
+      has_many :print_allotments
+
+    end
   end
 end

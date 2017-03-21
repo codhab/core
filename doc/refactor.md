@@ -9,3 +9,5 @@
 >> Apagar candidate_zones
 >> Apagar address_allotment_type
 >> TransferCadastre Regularização
+>> Apagar SituationCadastreAddress
+>> Apagar address_allotment_types

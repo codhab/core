@@ -1,9 +1,11 @@
-module Address
-  class SituationUnit < ActiveRecord::Base
+require_dependency 'core/application_record'
+module Core
+  module Address
+    class SituationUnit < ApplicationRecord
+      self.table_name = 'extranet.address_situation_units'
 
-    audited
+      has_many :unit
 
-  has_many :unit
-
+    end
   end
 end

@@ -3,25 +3,24 @@ require_dependency 'core/application_record'
 module Core
   module Address
     class Unit < ApplicationRecord
-
       self.table_name = 'extranet.address_units'
-      
+
       has_one :notary_office
 
       belongs_to :situation_unit, required: false
 
-      belongs_to :ownership_type,     
-                  required: false, 
-                  class_name: ::Core::Address::OwnershipType, 
+      belongs_to :ownership_type,
+                  required: false,
+                  class_name: ::Core::Address::OwnershipType,
                   foreign_key: :ownership_type_id
 
-      belongs_to :project_enterprise, 
+      belongs_to :project_enterprise,
                   required: false,
-                  class_name: ::Core::Project::Enterprise, 
+                  class_name: ::Core::Project::Enterprise,
                   foreign_key: :project_enterprise_id
 
       belongs_to :city,          required: false
-      belongs_to :type_use_unit, required: false 
+      belongs_to :type_use_unit, required: false
 
 
       has_many :registry_units
@@ -50,11 +49,11 @@ module Core
       scope :by_address,     -> (address) {
         where("complete_address ILIKE ?", "%#{address}%")
       }
-      
+
       scope :by_situation,   -> (status)  {
         where(situation_unit_id: status)
       }
-      
+
       scope :regularization, -> {
         where("urb not in ('ETAPA 4C','MORARBEM','H4')")
       }
@@ -78,7 +77,7 @@ module Core
       }
 
 
-    
+
     end
   end
 end

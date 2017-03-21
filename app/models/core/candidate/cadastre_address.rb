@@ -9,7 +9,7 @@ module Core
       belongs_to :unit,                    required: false,   class_name: ::Core::Address::Unit
       belongs_to :cadastre,                required: false,   class_name: ::Core::Candidate::Cadastre
       belongs_to :cadastre_procedural,     required: false,   class_name: ::Core::Candidate::CadastreProcedural
-      belongs_to :regularization_type,     required: false    class_name: ::Core::Candidate::RegularizationType
+      belongs_to :regularization_type,     required: false,   class_name: ::Core::Candidate::RegularizationType
       belongs_to :second_cadastre,         required: false,   class_name: ::Core::Candidate::Cadastre,                                foreign_key: :second_cadastre_id
       belongs_to :third_cadastre,          required: false,   class_name: ::Core::Candidate::Cadastre,              primary_key: :id, foreign_key: :third_cadastre_id
       belongs_to :fourth_cadastre,         required: false,   class_name: ::Core::Candidate::Cadastre,              primary_key: :id, foreign_key: :fourth_cadastre_id

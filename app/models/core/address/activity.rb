@@ -6,10 +6,10 @@ module Core
     class Activity < ApplicationRecord
       self.table_name = 'extranet.address_address_activities'
 
-      belongs_to :unit,            required: false
+      belongs_to :unit,            required: false, class_name: ::Core::Address::Unit
       belongs_to :staff,           required: false, class_name: ::Core::Person::Staff
-      belongs_to :activity_status, required: false
-      
+      belongs_to :activity_status, required: false, class_name: ::Core::Address::ActivityStatus
+
 
     end
   end

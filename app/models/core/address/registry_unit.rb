@@ -1,10 +1,14 @@
-module Address
-  class RegistryUnit < ActiveRecord::Base
-    audited
+require_dependency 'core/application_record'
 
-    belongs_to :unit
+module Core
+  module Address
+    class RegistryUnit < ApplicationRecord
+      self.table_name = 'extranet.address_registry_units'
 
-    enum situation: [:não, :em_fase, :sim]
+      belongs_to :unit, required: false, class_name: ::Core::Address::Unit
 
+      enum situation: [:não, :em_fase, :sim]
+
+    end
   end
 end

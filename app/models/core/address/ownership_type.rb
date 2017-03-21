@@ -4,8 +4,8 @@ module Core
   module Address
     class OwnershipType < ApplicationRecord
       self.table_name = 'extranet.address_ownership_types'
-      
-      has_many :unit, required: false
+
+      has_many :unit
 
     end
   end
