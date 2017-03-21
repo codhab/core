@@ -1,16 +1,3 @@
-require_dependency 'core/address/city'
-require_dependency 'core/address/state'
-require_dependency 'core/attendance/ticket'
-require_dependency 'core/regularization/requeriment'
-require_dependency 'core/schedule/agenda_schedule'
-require_dependency 'core/protocol/assessment'
-require_dependency 'core/sefaz/exemption'
-require_dependency 'core/candidate/cadastre_occurrence'
-require_dependency 'core/candidate/enterprise_cadastre'
-require_dependency 'core/brb/invoice'
-require_dependency 'core/entity/old_candidate'
-require_dependency 'core/entity/old'
-
 module Core
   module Candidate
     class Cadastre < ApplicationRecord
