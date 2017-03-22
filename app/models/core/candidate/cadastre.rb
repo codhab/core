@@ -16,10 +16,10 @@ module Core
       belongs_to :work_city,              required: false,          class_name: ::Core::Address::City
 
 
-      # => Associations in attendance 
+      # => Associations in attendance
       has_many :tickets,       class_name: ::Core::Attendance::Ticket
       has_many :notifications, class_name: ::Core::Attendance::Notification
-      
+
 
       has_many :requeriments, primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Regularization::Requeriment
       has_many :schedules,    primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Schedule::AgendaSchedule
@@ -55,6 +55,7 @@ module Core
 
       has_many :cadastre_attendances
       has_many :cadastre_attendance_statuses, through: :cadastre_attendances
+      has_many :attendance_chats,  class_name: ::Core::Attendance::Chat
 
       enum gender: ['N/D', 'masculino', 'feminino']
     end
