@@ -9,7 +9,6 @@ module Core
 
       belongs_to :document_father, required: false, class_name: ::Core::Protocol::Assessment
       belongs_to :document_child,  required: false, class_name: ::Core::Protocol::Assessment
-      belongs_to :attach_type,     required: false, class_name: ::Core::Protocol::AttachType
       belongs_to :sector,          required: false, class_name: ::Core::Person::Sector
       belongs_to :staff,           required: false, class_name: ::Core::Person::Staff
 

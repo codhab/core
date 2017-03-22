@@ -1,19 +1,14 @@
-module Project
-  class Company < ActiveRecord::Base
-    belongs_to :city,   class_name: "Address::City"
+require_dependency 'core/application_record'
 
-    has_many :enterprise, class_name: "Project::Enterprise"
+module Core
+  module Project
+    class Company < ActiveRecord::Base
+      belongs_to :city,  required: false,   class_name: ::Core::Address::City
 
-    has_many :user_companies
+      has_many :enterprise, class_name: "Project::Enterprise"
 
-    validates_presence_of :name, :trade,:cnpj #, :cep, :city, :address, :telephone
+      has_many :user_companies
 
-    validates :cnpj, cnpj: true
-
-    audited
-
-    def complete_name
-      "#{self.id} - #{self.name}"
     end
   end
 end

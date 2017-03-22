@@ -8,11 +8,11 @@ module Core
   class Assessment < ApplicationRecord
     self.table_name = 'extranet.protocol_assessments'
 
-    belongs_to :document_type,  required: false, class_name: ::Core::Protocol::DocumentType, -> {order(:name)}
-    belongs_to :subject,        required: false, class_name: ::Core::Protocol::Subject,      -> {order(:name)}
+    belongs_to :document_type,  required: false, class_name: ::Core::Protocol::DocumentType
+    belongs_to :subject,        required: false, class_name: ::Core::Protocol::Subject
     belongs_to :staff,          required: false, class_name: ::Core::Person::Staff
     belongs_to :sector,         required: false, class_name: ::Core::Person::Sector
-    belongs_to :candidate,      required: false, class_name: ::Core::Candidate::Cadastre,                            primary_key: :cpf, foreign_key: :cpf
+    belongs_to :candidate,      required: false, class_name: ::Core::Candidate::Cadastre,    primary_key: :cpf, foreign_key: :cpf
 
     has_many :conducts
     has_many :digital_documents
