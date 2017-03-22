@@ -2,13 +2,8 @@ module Core
   class ApplicationPresenter < SimpleDelegator
     
     def initialize(model, view = nil)
-      @view = view
       super(model)
+      @view = view
     end
-
-    def h
-      @view
-    end
-    
   end
 end

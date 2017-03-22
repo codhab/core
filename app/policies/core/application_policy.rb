@@ -1,15 +1,16 @@
 module Core
   class ApplicationPolicy < SimpleDelegator
 
-    attr_accessor :model, :view
-    
-    def initialize(model, view = nil)
-      super(model)
-      @view = view
+    def allow_recadastre?
+      (self.current_situation_id == 4 && true)
     end
 
-    def h
-      @view
+    def allow_update_cadastre?
+      true
+    end
+
+    def allow_habilitation?
+      (self.current_situation_id == 3 && true)
     end
 
   end
