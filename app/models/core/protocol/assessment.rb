@@ -39,6 +39,13 @@ module Core
     scope :by_date_start, -> (date_start) { where("protocol_assessments.created_at::date >= ?", Date.parse(date_start))}
     scope :by_date_end, -> (date_end) { where("protocol_assessments.created_at::date <= ?", Date.parse(date_end))}
 
+    before_create :set_number
+
+    def set_number
+      service = Core::Protocol::AssessmentService.new(self)
+      service.set_number!(501,6)
+    end
+
   end
  end
 end
