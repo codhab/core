@@ -5,9 +5,9 @@ module Core
     class Position < ApplicationRecord
       self.table_name = 'extranet.candidate_positions'
 
-      belongs_to :cadastre,    required: false,  ::Core::Candidate::Cadastre
-      belongs_to :pontuation,  required: false,  ::Core::Candidate::Pontuation
-      belongs_to :program,     required: false,  ::Core::Candidate::Program
+      belongs_to :cadastre,    required: false,  class_name: ::Core::Candidate::Cadastre
+      belongs_to :pontuation,  required: false,  class_name: ::Core::Candidate::Pontuation
+      belongs_to :program,     required: false,  class_name: ::Core::Candidate::Program
 
       scope :rii, -> { where(program_id: 1)}
       scope :rie, -> { where(program_id: 2)}

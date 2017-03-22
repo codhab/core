@@ -1,4 +1,5 @@
 require 'validates_timeliness'
+require 'friendly_id'
 
 module Core
   class Engine < ::Rails::Engine
