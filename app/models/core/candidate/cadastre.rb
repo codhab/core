@@ -16,7 +16,10 @@ module Core
       belongs_to :work_city,              required: false,          class_name: ::Core::Address::City
 
 
-      has_many :attendance_tickets,                                 class_name: ::Core::Attendance::Ticket
+      # => Associations in attendance 
+      has_many :tickets,       class_name: ::Core::Attendance::Ticket
+      has_many :notifications, class_name: ::Core::Attendance::Notification
+      
 
       has_many :requeriments, primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Regularization::Requeriment
       has_many :schedules,    primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Schedule::AgendaSchedule

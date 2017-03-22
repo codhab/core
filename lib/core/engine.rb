@@ -1,3 +1,5 @@
+require 'validates_timeliness'
+
 module Core
   class Engine < ::Rails::Engine
     isolate_namespace Core

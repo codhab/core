@@ -1,20 +1,24 @@
-module CoreCandidate
-  class Validation < ApplicationRecord
+require_dependency 'core/application_record'
 
-    self.table_name = 'extranet.candidate_validations'
+module Core
+  module Candidate
+    class Validation < ApplicationRecord
 
-    belongs_to :program
-    belongs_to :occurrence_situation
+      self.table_name = 'extranet.candidate_validations'
 
-    enum validation_type: ['query', 'service']
-    enum target_return_type: ['retorno_query', 'retorno_service']
-    enum occurrence_type: ['informação', 'pendência', 'pendência_impeditiva']
+      belongs_to :program
+      belongs_to :occurrence_situation
+
+      enum validation_type: ['query', 'service']
+      enum target_return_type: ['retorno_query', 'retorno_service']
+      enum occurrence_type: ['informação', 'pendência', 'pendência_impeditiva']
 
 
-    def fields
-      self.target_return_field.split(';') rescue nil
+      def fields
+        self.target_return_field.split(';') rescue nil
+      end
+
+
     end
-
-
   end
 end
