@@ -9,7 +9,7 @@ module Core
       belongs_to :assessment, required: false, class_name: ::Core::Protocol::Assessment
       belongs_to :staff,      required: false, class_name: ::Core::Person::Staff
 
-
+      mount_uploader :doc_path, Core::Protocol::DocumentDigitalUploader
     end
   end
 end

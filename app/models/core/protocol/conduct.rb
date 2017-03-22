@@ -7,6 +7,10 @@ module Core
     class Conduct < ApplicationRecord
       self.table_name = 'extranet.protocol_conducts'
 
+      belongs_to :assessment,  required: false, class_name: ::Core::Protocol::Assessment
+      belongs_to :allotment,   required: false, class_name: ::Core::Protocol::Allotment
+      belongs_to :staff,       required: false, class_name: ::Core::Person::Staff
+      belongs_to :sector,      required: false, class_name: ::Core::Person::Sector
 
       enum :conduct_type => [:doc_create, :doc_sent, :doc_return, :doc_cancel, :doc_receive, :doc_to_send]
 
