@@ -1,27 +1,21 @@
-module Protocol
-  class AttachDocument < ActiveRecord::Base
-    audited
+require_dependency 'core/application_record'
+require_dependency 'core/person/sector'
+require_dependency 'core/person/staff'
 
-    belongs_to :document_father, class_name: "Protocol::Assessment"
-    belongs_to :document_child, class_name: "Protocol::Assessment"
+module Core
+  module Protocol
+    class AttachDocument < ApplicationRecord
+      self.table_name = 'extranet.protocol_attach_documents'
 
-    belongs_to :attach_type
-    belongs_to :sector, class_name: "Person::Sector"
-    belongs_to :staff, class_name: "Person::Staff"
+      belongs_to :document_father, required: false, class_name: ::Core::Protocol::Assessment
+      belongs_to :document_child,  required: false, class_name: ::Core::Protocol::Assessment
+      belongs_to :attach_type,     required: false, class_name: ::Core::Protocol::AttachType
+      belongs_to :sector,          required: false, class_name: ::Core::Person::Sector
+      belongs_to :staff,           required: false, class_name: ::Core::Person::Staff
 
 
-    enum :attach_type => [:attach, :append]
-
-
-   def set_attach(user, assessment,type)
-      @assesstment = Protocol::Assessment.find(assessment)
-
-      self.sector_id = user.sector_current.id
-      self.document_child_id = @assesstment.id
-      self.staff_id = user.id
-      self.attach_type = type
+      enum :attach_type => [:attach, :append]
 
     end
-
   end
 end

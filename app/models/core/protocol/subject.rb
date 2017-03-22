@@ -1,7 +1,11 @@
-module Protocol
-  class Subject < ActiveRecord::Base
-    audited
+require_dependency 'core/application_record'
 
-    has_many :assessment
+module Core
+  module Protocol
+    class Subject < ApplicationRecord
+      self.table_name = 'extranet.protocol_subjects'
+
+      has_many :assessment
+    end
   end
 end

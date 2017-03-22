@@ -14,3 +14,4 @@
 >> Apagar candidate_cadastre_checklists
 >> Apagar candidate_checklists
 >> Apagar candidate_checklist_types
+>> Apagar protocol_controls

@@ -1,9 +1,13 @@
-module Protocol
-  class DocumentType < ActiveRecord::Base
-    audited
+require_dependency 'core/application_record'
 
-    has_many :assessment
+module Core
+  module Protocol
+    class DocumentType < ApplicationRecord
+      self.table_name = 'extranet.protocol_document_types'
 
-    default_scope { order('name ASC') }
+      has_many :assessment
+
+      default_scope { order('name ASC') }
+    end
   end
 end
