@@ -7,7 +7,7 @@ module Core
       def create_by_context context_id
                 
         @context = @ticket.ticket_contexts.able.new.tap do 
-          context_id: context_id
+          context_id = context_id
         end
 
       end
