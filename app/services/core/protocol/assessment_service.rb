@@ -24,7 +24,7 @@ module Core
          @assessment.year        =  Time.now.year
          document = documents.present? ? documents : Core::Protocol::Assessment.where(document_type_id:  @assessment.document_type_id,
                                       year: Time.now.year, prefex: @assessment.prefex).order('id asc').last
-         @assessment.number = (document.present?) ? document.number + 1 : 1         
+         @assessment.number = (document.present?) ? document.number + 1 : 1
 
          format_document_number!
 
@@ -37,6 +37,16 @@ module Core
 
           @assessment.document_number = number
       end
+
+      def set_conduct!(assessment,user, sector)
+        @conduct  = Protocol::Conduct.new
+        @conduct.conduct_type = 0
+        @conduct.assessment_id = assessment.id
+        @conduct.staff_id = user
+        @conduct.sector_id = sector
+        @conduct.save
+      end
+
     end
   end
 end

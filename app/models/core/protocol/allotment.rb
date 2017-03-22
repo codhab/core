@@ -7,7 +7,7 @@ module Core
       self.table_name = 'extranet.protocol_allotments'
 
       belongs_to :staff,   required: false, class_name: ::Core::Person::Staff
-      has_many :conducts,  required: false, class_name: ::Core::Protocol::Conduct
+      has_many :conducts,   class_name: ::Core::Protocol::Conduct
 
       enum :priority => [:baixa, :media, :alta]
 
