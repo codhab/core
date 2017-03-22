@@ -1,14 +1,18 @@
-module CoreCandidate
-  class EnterpriseCadastreSituation < ApplicationRecord
+require_dependency 'core/application_record'
 
-    self.table_name = 'extranet.candidate_enterprise_cadastre_situations'
+module Core
+  module Candidate
+    class EnterpriseCadastreSituation < ApplicationRecord
 
-    belongs_to :enterprise_situation_status, foreign_key: "enterprise_cadastre_status_id"
-    belongs_to :enterprise_situation_action, foreign_key: "enterprise_situation_action_id"
-    belongs_to :enterprise_cadastre, class_name: "CoreCandidate::EnterpriseCadastre"
-    belongs_to :firm_user, class_name: "CoreCandidate::Project::UserCompany", foreign_key: "firm_user_id"
+      self.table_name = 'extranet.candidate_enterprise_cadastre_situations'
 
-    enum type_action: ['contato', 'informação', 'devolução']
+      belongs_to :enterprise_situation_status, required: false, class_name: ::Core::Candidate::EnterpriseSituationStatus,  foreign_key: "enterprise_cadastre_status_id"
+      belongs_to :enterprise_situation_action, required: false, class_name: ::Core::Candidate::EnterpriseSituationAction,  foreign_key: "enterprise_situation_action_id"
+      belongs_to :enterprise_cadastre,         required: false, class_name: ::Core::Candidate::EnterpriseCadastre,
+      belongs_to :firm_user,                   required: false, class_name: ::Core::Candidate::Project::UserCompany,       foreign_key: "firm_user_id"
 
+      enum type_action: ['contato', 'informação', 'devolução']
+
+    end
   end
 end

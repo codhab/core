@@ -1,20 +1,14 @@
-module CoreCandidate
-  class Dependent < ApplicationRecord
-    self.table_name = 'extranet.candidate_dependents'
+module Core
+  module Candidate
+    class Dependent < ApplicationRecord
+      self.table_name = 'extranet.candidate_dependents'
 
-    belongs_to :cadastre
-    belongs_to :civil_state
-    belongs_to :kinship
-    belongs_to :special_condition
-    belongs_to :rg_uf, class_name: "Address::State"
+      belongs_to :cadastre,           required: false, class_name: ::Core::Candidate::Cadastre
+      belongs_to :civil_state,        required: false, class_name: ::Core::Candidate::CivilState
+      belongs_to :kinship,            required: false, class_name: ::Core::Candidate::Kinship
+      belongs_to :special_condition,  required: false, class_name: ::Core::Candidate::SpecialCondition
 
-    enum gender: ['N/D', 'masculino', 'feminino']
-
-
-    # Define dependent age through born
-    def age
-      ((Date.today - self.born).to_i / 365.25).to_i rescue I18n.t(:no_information)
+      enum gender: ['N/D', 'masculino', 'feminino']
     end
-
   end
 end

@@ -3,11 +3,11 @@ module Core
     class CadastreProcedural < ApplicationRecord
       self.table_name = 'extranet.candidate_cadastre_procedurals'
 
-      belongs_to :procedural_status
-      belongs_to :convocation
-      belongs_to :cadastre
-      belongs_to :assessment, class_name: "CoreCandidate::Protocol::Assessment"
-      belongs_to :old_assessment, class_name: "CoreCandidate::Protocol::Assessment", foreign_key: 'old_process', primary_key: "document_number"
+      belongs_to :procedural_status,  required: false, class_name: ::Core::Candidate::ProceduralStatus
+      belongs_to :convocation,        required: false, class_name: ::Core::Candidate::Convocation
+      belongs_to :cadastre,           required: false, class_name: ::Core::Candidate::Cadastre
+      belongs_to :assessment,         required: false, class_name: ::Core::Protocol::Assessment
+
 
     end
   end
