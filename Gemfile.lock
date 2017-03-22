@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     core (0.1.0)
+      carrierwave
       email_validator
       file_validators
       one_signal
@@ -62,6 +63,10 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    carrierwave (1.0.0)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
     cliver (0.3.2)
     coderay (1.1.1)
     concurrent-ruby (1.0.5)

@@ -5,13 +5,11 @@ module Core
       attr_accessor :ticket, :context, :ticket_context
 
       def create_by_context context_id
-        
+                
         @context = @ticket.ticket_contexts.able.new.tap do 
-          context_id: context_id,
-          
+          context_id: context_id
         end
 
-        @context.
       end
 
       def cancel_by_candidate       
