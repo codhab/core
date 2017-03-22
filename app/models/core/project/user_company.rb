@@ -1,11 +1,11 @@
-module Project
-  class UserCompany < ActiveRecord::Base
-    belongs_to :company
+require_dependency 'core/application_record'
 
-    validates_presence_of :name,  :login_user, :password
-    validates :password,  confirmation: true,length: {within: 6..40}
+module Core
+  module Project
+    class UserCompany < ApplicationRecord
+      self.table_name = 'extranet.project_user_companies'
 
-    audited
-
+      belongs_to :company
+    end
   end
 end

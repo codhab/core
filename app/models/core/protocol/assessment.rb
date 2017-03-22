@@ -1,14 +1,18 @@
+require_dependency 'core/application_record'
+require_dependency 'core/person/staff'
+require_dependency 'core/person/sector'
+require_dependency 'core/candidate/cadastre'
+
 module Core
  module Protocol
   class Assessment < ApplicationRecord
     self.table_name = 'extranet.protocol_assessments'
 
-    belongs_to :document_type, -> {order(:name)}
-    belongs_to :subject, -> {order(:name)}
-    belongs_to :staff, class_name: "Person::Staff"
-    belongs_to :sector, class_name: "Person::Sector"
-
-    belongs_to :candidate, class_name: "Candidate::Cadastre", primary_key: :cpf, foreign_key: :cpf
+    belongs_to :document_type,  required: false, class_name: ::Core::Protocol::DocumentType
+    belongs_to :subject,        required: false, class_name: ::Core::Protocol::Subject
+    belongs_to :staff,          required: false, class_name: ::Core::Person::Staff
+    belongs_to :sector,         required: false, class_name: ::Core::Person::Sector
+    belongs_to :candidate,      required: false, class_name: ::Core::Candidate::Cadastre,    primary_key: :cpf, foreign_key: :cpf
 
     has_many :conducts
     has_many :digital_documents
@@ -19,7 +23,7 @@ module Core
     has_many :solicitations
 
     has_many :attach_documents, foreign_key: "document_father_id"
-    has_many :attach_document_children, class_name: "Protocol::AttachDocument", foreign_key: "document_child_id"
+    has_many :attach_document_children, class_name: ::Core::Protocol::AttachDocument, foreign_key: "document_child_id"
 
     scope :by_process,  -> (process) {where(document_number: process)}
     scope :by_external_number,  -> (external) {where(external_number: external)}

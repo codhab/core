@@ -1,3 +1,4 @@
+require_dependency 'core/application_record'
 require_dependency 'core/address/unit'
 require_dependency 'core/candidate/cadastre'
 

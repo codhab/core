@@ -1,12 +1,15 @@
-module CoreCandidate
-  class Program < ApplicationRecord
+require_dependency 'core/application_record'
 
-    self.table_name = 'extranet.candidate_programs'
+module Core
+  module Candidate
+    class Program < ApplicationRecord
+      self.table_name = 'extranet.candidate_programs'
 
-    has_many :positions
+      has_many :positions
 
-    def validations
-      CoreCandidate::Validation.where("'#{self.id}' = ANY(program_id)")
+      def validations
+        Core::Candidate::Validation.where("'#{self.id}' = ANY(program_id)")
+      end
     end
   end
 end

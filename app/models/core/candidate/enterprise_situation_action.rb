@@ -1,7 +1,10 @@
-module CoreCandidate
-  class EnterpriseSituationAction < ApplicationRecord
+require_dependency 'core/application_record'
 
-    self.table_name = 'extranet.candidate_enterprise_situation_actions'
+module Core
+  module Candidate
+    class EnterpriseSituationAction < ApplicationRecord
+      self.table_name = 'extranet.candidate_enterprise_situation_actions'
 
+    end
   end
 end

@@ -1,7 +1,10 @@
-module CoreCandidate
-  class OccurrenceCadin < ApplicationRecord
+require_dependency 'core/application_record'
 
-    self.table_name = 'extranet.candidate_occurrence_cadins'
+module Core
+  module Candidate
+    class OccurrenceCadin < ApplicationRecord
+      self.table_name = 'extranet.candidate_occurrence_cadins'
 
+    end
   end
 end

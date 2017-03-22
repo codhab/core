@@ -1,11 +1,15 @@
-module Protocol
-  class DigitalDocument < ActiveRecord::Base
-    audited
+require_dependency 'core/application_record'
+require_dependency 'core/person/staff'
 
-    belongs_to :assessment
-    belongs_to :staff, class_name: "Person::Staff"
+module Core
+  module Protocol
+    class DigitalDocument < ApplicationRecord
+      self.table_name = 'extranet.protocol_digital_documents'
 
-    mount_uploader :doc_path, Protocol::DocPathUploader
+      belongs_to :assessment, required: false, class_name: ::Core::Protocol::Assessment
+      belongs_to :staff,      required: false, class_name: ::Core::Person::Staff
 
+
+    end
   end
 end

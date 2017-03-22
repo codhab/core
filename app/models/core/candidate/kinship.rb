@@ -1,7 +1,10 @@
-module CoreCandidate
-  class Kinship < ApplicationRecord
+require_dependency 'core/application_record'
 
-    self.table_name = 'extranet.candidate_kinships'
+module Core
+  module Candidate
+    class Kinship < ApplicationRecord
+      self.table_name = 'extranet.candidate_kinships'
 
+    end
   end
 end

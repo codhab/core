@@ -1,7 +1,10 @@
-module CoreCandidate
-  class Iptu < ApplicationRecord
+require_dependency 'core/application_record'
 
-    self.table_name = 'extranet.candidate_iptus'
+module Core
+  module Candidate
+    class Iptu < ApplicationRecord
+      self.table_name = 'extranet.candidate_iptus'
 
+    end
   end
 end
