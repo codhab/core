@@ -1,18 +1,21 @@
-module CoreCandidate
-  class Pontuation < ApplicationRecord
+require_dependency 'core/application_record'
 
-    self.table_name = 'extranet.candidate_pontuations'
+module Core
+  module Candidate
+    class Pontuation < ApplicationRecord
+      self.table_name = 'extranet.candidate_pontuations'
 
-    belongs_to :cadastre_mirror
-    belongs_to :situation_status
+      belongs_to :cadastre_mirror,   required: false, ::Core::Candidate::CadastreMirror
+      belongs_to :situation_status,  required: false, ::Core::Candidate::SituationStatus
 
-    default_scope { order('created_at DESC')}
+      default_scope { order('created_at DESC')}
 
-    def year
-      if self.code.present?
-        Date.parse(self.code.to_s)
-      else
-        self.created_at
+      def year
+        if self.code.present?
+          Date.parse(self.code.to_s)
+        else
+          self.created_at
+        end
       end
     end
   end

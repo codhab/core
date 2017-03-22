@@ -1,11 +1,17 @@
-module CoreCandidate
-  class Question <  ApplicationRecord
+require_dependency 'core/application_record'
+require_dependency 'core/attendance/ticket'
+require_dependency 'core/attendance/subject'
+require_dependency 'core/person/staff'
 
-    self.table_name = 'extranet.candidate_questions'
+module Core
+  module Candidate
+    class Question <  ApplicationRecord
+      self.table_name = 'extranet.candidate_questions'
 
-    belongs_to :ticket
-    belongs_to :subject
-    belongs_to :staff, class_name: "CoreCandidate::Person::Staff"
+      belongs_to :ticket,   required: false, class_name: ::Core::Attendance::Ticket
+      belongs_to :subject,  required: false, class_name: ::Core::Attendance::Subject
+      belongs_to :staff,    required: false, class_name: ::Core::Person::Staff
 
+    end
   end
 end

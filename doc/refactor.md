@@ -11,3 +11,6 @@
 >> TransferCadastre Regularização
 >> Apagar SituationCadastreAddress
 >> Apagar address_allotment_types
+>> Apagar candidate_cadastre_checklists
+>> Apagar candidate_checklists
+>> Apagar candidate_checklist_types

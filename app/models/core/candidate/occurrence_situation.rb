@@ -1,12 +1,15 @@
-module CoreCandidate
-  class OccurrenceSituation < ApplicationRecord
+require_dependency 'core/application_record'
 
-    self.table_name = 'extranet.candidate_occurrence_situations'
+module Core
+  module Candidate
+    class OccurrenceSituation < ApplicationRecord
+      self.table_name = 'extranet.candidate_occurrence_situations'
 
-    private
+      private
 
-    def is_visible_portal?
-      self.visible_portal.present?
+      def is_visible_portal?
+        self.visible_portal.present?
+      end
     end
   end
 end

@@ -1,3 +1,5 @@
+require_dependency 'core/application_record'
+
 module Core
   module Candidate
     class Cadin < ApplicationRecord

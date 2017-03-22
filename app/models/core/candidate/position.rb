@@ -1,16 +1,19 @@
-module CoreCandidate
-  class Position < ApplicationRecord
+require_dependency 'core/application_record'
 
-    self.table_name = 'extranet.candidate_positions'
+module Core
+  module Candidate
+    class Position < ApplicationRecord
+      self.table_name = 'extranet.candidate_positions'
 
-    belongs_to :cadastre
-    belongs_to :pontuation
-    belongs_to :program
+      belongs_to :cadastre,    required: false,  ::Core::Candidate::Cadastre
+      belongs_to :pontuation,  required: false,  ::Core::Candidate::Pontuation
+      belongs_to :program,     required: false,  ::Core::Candidate::Program
 
-    scope :rii, -> { where(program_id: 1)}
-    scope :rie, -> { where(program_id: 2)}
-    scope :old, -> { where(program_id: 7)}
-    scope :vulnerable, -> { where(program_id: 4)}
-    scope :special, ->    { where(program_id: 5)}
+      scope :rii, -> { where(program_id: 1)}
+      scope :rie, -> { where(program_id: 2)}
+      scope :old, -> { where(program_id: 7)}
+      scope :vulnerable, -> { where(program_id: 4)}
+      scope :special, ->    { where(program_id: 5)}
+    end
   end
 end
