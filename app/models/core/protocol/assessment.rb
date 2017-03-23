@@ -14,7 +14,7 @@ module Core
     belongs_to :sector,         required: false, class_name: ::Core::Person::Sector
 
     has_many :conducts
-    has_many :digital_documents
+    has_many :digital_documents, class_name: ::Core::Protocol::DigitalDocumentForm
     has_many :locations
     has_many :controls
     has_many :call_controls
@@ -42,7 +42,7 @@ module Core
     scope :by_date_end, -> (date_end) { where("protocol_assessments.created_at::date <= ?", Date.parse(date_end))}
 
     validates :document_number, uniqueness: { scope: [:document_type] }, presence: true
-    
+
 
   end
  end
