@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     core (0.1.0)
-      audited
       carrierwave
       email_validator
       file_validators
@@ -56,7 +55,6 @@ GEM
     addressable (2.5.0)
       public_suffix (~> 2.0, >= 2.0.2)
     arel (7.1.4)
-    audited (3.0.0)
     builder (3.2.3)
     byebug (9.0.6)
     capybara (2.13.0)
@@ -264,4 +262,4 @@ DEPENDENCIES
   rspec-rails
 
 BUNDLED WITH
-   1.13.7
+   1.14.4
