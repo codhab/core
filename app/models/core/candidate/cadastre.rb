@@ -42,6 +42,7 @@ module Core
       has_many :enterprise_cadastres,   foreign_key: "cadastre_id",                   class_name: ::Core::Candidate::EnterpriseCadastre
 
       has_many :invoices,               foreign_key: :cpf,         primary_key: :cpf, class_name: ::Core::Brb::Invoice
+      has_many :iptus,                  foreign_key: :cpf,         primary_key: :cpf, class_name: ::Core::Candidate::Iptu
       has_many :cadastre_address
       has_many :cadastre_procedurals
       has_many :cadastre_logs

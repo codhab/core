@@ -18,15 +18,15 @@ module Core
 
         "#{@string}, #{self.humanize_first_name}"
       end
-  
+
       def humanize_first_name
         self.name.split(' ')[0].humanize
-      end      
+      end
 
       def humanize_complete_name
         self.name.titleize
-      end  
-      
+      end
+
 
       def special_condition_name
         self.special_condition.name rescue nil
@@ -34,7 +34,7 @@ module Core
 
       def civil_state_name
         self.civil_state.name rescue nil
-      end 
+      end
 
       # => cadastre_situation
 
@@ -59,9 +59,13 @@ module Core
       def current_convocation_name
         "#{current_convocation.convocation.id} - #{current_convocation.convocation.description}" rescue nil
       end
-      
+
       def current_convocation_id
         current_convocation.convocation_id rescue nil
+      end
+
+      def current_cadastre_address
+        self.cadastre_address.where(situation_id: [0,1,5]).order('created_at ASC').last rescue nil
       end
 
     end
