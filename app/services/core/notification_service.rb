@@ -3,9 +3,9 @@ require_dependency 'core/attendance/notification'
 module Core
   class NotificationService
 
-    AUTH_TOKEN = APP_ENV['onesignal']['auth_token']
-    APP_ID     = APP_ENV['onesignal']['app_id']
-      
+    AUTH_TOKEN = 1#APP_ENV['onesignal']['auth_token']
+    APP_ID     = 1#APP_ENV['onesignal']['app_id']
+
     attr_accessor :notification, :cadastre
 
     def self.create(cadastre_id: nil, category_id: 1, content: nil, title: nil, link: false, push: false, email: false)
@@ -24,26 +24,26 @@ module Core
         notification.link                     = link
       end
 
-      @notification.save 
+      @notification.save
 
       # => OneSignal API
       if push && @cadastre.mobile_user_token.present?
-        
-        params = {heading: title, message: content, user_ids: @cadastre.mobile_user_token}             
+
+        params = {heading: title, message: content, user_ids: @cadastre.mobile_user_token}
         send_push_notification!(params)
-      
+
       end
 
       # => ActionMailer
       if email && @cadastre.email.present?
-        
-        params = {heading: title, message: content, emails: @cadastre.email}  
+
+        params = {heading: title, message: content, emails: @cadastre.email}
         send_email_notification!(params)
-      
+
       end
 
       return true
-      
+
     end
 
     def self.create_bulk(category_id: 1, content: nil, title: nil, cadastre_ids: [], push: false, email: false)
@@ -52,23 +52,23 @@ module Core
         create(category_id: category_id, content: content, title: title, push: false)
       end
 
-      if push 
+      if push
 
         mobile_user_ids = Core::Candidate::Cadastre.where(id: cadastre_ids).map(&:mobile_user_token)
         mobile_user_ids = mobile_user_ids.reject { |c| c.empty? }
-      
-        params = {heading: title, message: content, user_ids: mobile_user_ids}  
+
+        params = {heading: title, message: content, user_ids: mobile_user_ids}
 
         send_push_notification!(params)
 
       end
 
-      if email 
-      
+      if email
+
         user_emails = Core::Candidate::Cadastre.where(id: cadastre_ids).map(&:email)
         mobile_user_ids = mobile_user_ids.reject { |c| c.empty? }
-        
-        params = {heading: title, message: content, emails: user_emails}  
+
+        params = {heading: title, message: content, emails: user_emails}
 
         send_email_notification!(params)
 
@@ -90,7 +90,7 @@ module Core
       params = {
         headings:{ en: heading },
         contents:{ en: message },
-        include_player_ids: array 
+        include_player_ids: array
       }
 
       @client = OneSignal::Client.new(auth_token: AUTH_TOKEN, app_id: APP_ID)
@@ -98,16 +98,16 @@ module Core
       begin
         @client.notifications.create(params)
         return true
-      rescue Exception => e 
+      rescue Exception => e
         puts e
         return false
       end
     end
 
     def send_email_notification!(message: nil, subject: nil, emails: nil)
-      
+
       return false if emails.nil? || message.nil?
-      
+
       array = []
       array = emails.is_a?(Array) ? emails : array << emails
 
@@ -116,6 +116,6 @@ module Core
         #ClassMailer.notification_mail(email: email, subject: subject, body: message).delivery_now!
       end
     end
-    
+
   end
 end

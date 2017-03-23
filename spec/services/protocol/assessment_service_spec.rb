@@ -1,17 +1,8 @@
-describe Core::Protocol::AssessmentService do
-  let(:params) do
-    {
-      assessment: {
-        document_type_id: 3,
-        subject_id: 6,
-        recipient: 'Teste do sistema'
-      }
-     }
-  end
+describe Core::Protocol::Assessment do
 
    it 'create a new assessment' do
      expect do
-       assessment :create, params
+       FactoryGirl.create(Core::Protocol::Assessment)
      end.to change(Core::Protocol::Assessment, :count).by(1)
    end
 end
