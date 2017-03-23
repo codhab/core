@@ -3,16 +3,16 @@ require_dependency 'core/attendance/notification'
 module Core
   class NotificationService
 
-    AUTH_TOKEN = 1#APP_ENV['onesignal']['auth_token']
-    APP_ID     = 1#APP_ENV['onesignal']['app_id']
+    AUTH_TOKEN = APP_ENV['onesignal']['auth_token']
+    APP_ID     = APP_ENV['onesignal']['app_id']
 
     attr_accessor :notification, :cadastre
 
-    def self.create(cadastre_id: nil, category_id: 1, content: nil, title: nil, link: false, push: false, email: false)
+    def create(cadastre_id: nil, category_id: 1, content: "", title: "", link: false, push: false, email: false)
 
       return false if cadastre_id.nil?
 
-      @cadastre = Core::Candidate::Cadastre.find(cadastre_id) rescue nil
+      @cadastre = Core::Candidate::Cadastre.find(cadastre_id.to_i) rescue nil
 
       return false if @cadastre.nil?
 

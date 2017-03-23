@@ -2,6 +2,17 @@ module Core
   module Attendance
     class TicketPolicy < ApplicationPolicy
 
+      def closed?
+        ([2,3,4,5,6,7].include? self.ticket_status_id) 
+      end
+
+      def allow_button_recadastre?
+        self.ticket_context_actions.find_by(ticket_context_id: 1, status: [1, 2]).present? &&
+        self.ticket_context_actions.find_by(ticket_context_id: 2, status: [1, 2]).present? &&
+        self.ticket_context_actions.find_by(ticket_context_id: 3, status: [1, 2]).present? &&
+        self.ticket_context_actions.find_by(ticket_context_id: 4, status: [1, 2]).present?
+      end
+
       def allow_recadastre_cadastre? 
         allow?(1)
       end

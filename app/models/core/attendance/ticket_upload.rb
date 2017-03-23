@@ -4,7 +4,9 @@ module Core
   module Attendance
     class TicketUpload < ApplicationRecord
       self.table_name = 'extranet.attendance_ticket_uploads'
-
+      
+      attr_accessor :disable_destroy
+      
       belongs_to :ticket_upload_category
 
       mount_uploader :upload_path, Core::Attendance::DocumentUploader

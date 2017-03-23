@@ -2,8 +2,15 @@ module Core
   module Candidate
     class CadastrePolicy < ApplicationPolicy
 
-      def allow_update?
-        false
+      def allow_recadastre_button?
+        self.current_situation_id == 4 &&
+        !self.tickets.where(ticket_type_id: 1).where.not(ticket_status_id: 1).present?
+      end
+
+      def allow_update_button?
+        ((self.program_id != 3 && self.current_situation_id == 4) &&
+        self.tickets.where(ticket_type_id: 1).where.not(ticket_status_id: 1).present?) ||
+        self.program_id == 3 
       end
       
     end

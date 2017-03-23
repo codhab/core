@@ -4,86 +4,54 @@ module Core
       
       attr_accessor :cadastre, :ticket, :context, :ticket_context, :cadastre_mirror
 
-      def initialize(cadastre: nil, ticket: nil, context: nil, ticket_context: nil)
+      def initialize(cadastre: nil, ticket: nil, context: nil)
         @cadastre       = cadastre
         @ticket         = ticket
         @context        = context
         @ticket_context = ticket_context
       end
 
+      def ticket
+        return @ticket if !@ticket.nil?
+        return @cadastre.tickets.find_by(status: true) rescue false
+      end
+
       def create
-        @ticket = @cadastre.tickets.where(ticket_type_id: 1, status: true).first rescue nil
         
-        if @ticket.nil?
-         
-          @ticket = @cadastre.tickets.new.tap do |ticket|
-            ticket.ticket_type_id     = 1
-            ticket.ticket_status_id   = 1
-            ticket.status             = true
-          end 
-
-          clone_and_create_mirror!
-
-          @ticket.cadastre_mirror_id = @cadastre_mirror.id
-          @ticket.save
-
+        @ticket = @cadastre.tickets.new.tap do |ticket|
+          ticket.ticket_type_id     = 1
+          ticket.ticket_status_id   = 1
+          ticket.status             = true
         end 
 
+        clone_and_create_mirror!
+
+        @ticket.cadastre_mirror_id = @cadastre_mirror.id
+        @ticket.save
       end
 
-
-      def confirm_by_context context_id 
-        @context_action = current_action(context_id.to_i)
-
-        return true if !@context_action.present?
-
-        @context_action.update(status: 1) 
-      end
-
-      def create_context context_id
-        
-        return true if current_action(context_id)
-         
-        @action = @ticket.ticket_context_actions.new.tap do |action|
-          action.ticket_context_id = context_id
-          action.status = 0
+      def close_recadastre
+        if @ticket.ticket_context_actions.where(status: 2).present?
+          @ticket.update(ticket_status_id: 2)
+        else
+          @ticket.update(ticket_status_id: 6)
         end
-
-        @action.save
-
       end
 
-     
-      def cancel_by_candidate       
-      end
-
-      def close_by_candidate context_id
-        current_action(context_id.to_i).update(status: 1)
-      end
-
-      def cancel_by_attendant
-      end
-
-      def close_by_attendant
-      end
-
-      def document_required context_id
-        case context_id.to_i
-        when 1
-          if @ticket.cadastre.rg != @ticket.cadastre_mirror.rg
-            @ticket.rg_uploads.new
-          end
+      def set_required_documents
+        if @ticket.cadastre.rg != @ticket.cadastre_mirror.rg
+          @context.rg_uploads.new(disable_destroy: true)
         end
-
-        return @ticket
       end
 
+      def document_required_any?
+        %w(rg special_condition).each do |item|
+          return true if @context.send("#{item}_uploads").any? 
+        end
+      end
 
       private
 
-      def current_action context_id
-        @ticket.ticket_context_actions.find_by(ticket_context_id: context_id.to_i) rescue nil
-      end
 
       def clone_and_create_mirror!
         return false if @cadastre.nil?
