@@ -1,0 +1,45 @@
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        'core/candidate/cadastre_mirror':
+          attributes:
+            born:
+              invalid_date: "data inválida"
+    models:
+      'core/candidate/cadastre_mirror': Cadastro Espelho
+    attributes:
+      'core/candidate/cadastre_mirror':
+        name: "Nome Completo"
+        employment: "Ocupação"
+        admission_date: "Data de admissão"
+        cpf: "CPF"
+        rg: "RG"
+        state_id: "UF"
+        rg_org: "RG ORG"
+        rg_uf: "RG UF"
+        gender: "Sexo"
+        born: "Data de Nasc."
+        born_uf: "Naturalidade"
+        place_birth: "Cidade de Nascimento"
+        telephone: "Telefone"
+        celphone: "Celular"
+        email: "E-mail"
+        telephone_optional: "Telefone Opcional"
+        civil_state: "Estado Civil"
+        cep: "CEP"
+        city: "Cidade"
+        address: "Endereço"
+        address_complement: "Complemento Endereço"
+        work_city: "Cidade de Trabalho"
+        work_cep: "CEP de Trabalho"
+        work_address: "Endereço do Trabalho"
+        income: "Renda Familiar"
+        special_condition: "Condição Especial"
+        adapted_property: "Propriedade Adaptada?"
+        nis: "NIS"
+        cid: "CID"
+        arrival_df: "Chegada ao DF"
+        mother_name: "Nome da Mãe"
+        main_income: "Renda Títular"
+        special_condition_type: "Tipo de condição especial"

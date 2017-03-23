@@ -35,7 +35,6 @@ module Core
       has_many :cadastre_situations
       has_many :pontuations , ->  { order(:id)}
       has_many :positions
-      has_many :tickets
       has_many :cadastre_attendances
       has_many :cadastre_checklists
       has_many :attendance_logs
@@ -58,6 +57,7 @@ module Core
       has_many :cadastre_attendance_statuses, through: :cadastre_attendances
       has_many :attendance_chats,  class_name: ::Core::Attendance::Chat
 
+      enum gender: ['N/D', 'masculino', 'feminino']
     end
   end
 end

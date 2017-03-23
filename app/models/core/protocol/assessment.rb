@@ -24,6 +24,8 @@ module Core
     has_many :attach_documents, foreign_key: "document_father_id"
     has_many :attach_document_children, class_name: ::Core::Protocol::AttachDocument, foreign_key: "document_child_id"
 
+    accepts_nested_attributes_for :digital_documents
+
     scope :by_process,  -> (process) {where(document_number: process)}
     scope :by_external_number,  -> (external) {where(external_number: external)}
     scope :by_doc_type,  -> (doc_type) {where(document_type_id: doc_type)}
@@ -39,12 +41,8 @@ module Core
     scope :by_date_start, -> (date_start) { where("protocol_assessments.created_at::date >= ?", Date.parse(date_start))}
     scope :by_date_end, -> (date_end) { where("protocol_assessments.created_at::date <= ?", Date.parse(date_end))}
 
-    before_create :set_number
-
-    def set_number
-      service = Core::Protocol::AssessmentService.new(self)
-      service.set_number!(501,6)
-    end
+    validates :document_number, uniqueness: { scope: [:document_type] }, presence: true
+    
 
   end
  end

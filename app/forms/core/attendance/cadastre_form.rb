@@ -2,7 +2,7 @@ require_dependency 'core/candidate/cadastre'
 
 module Core
   module Attendance
-    class ContactForm < Core::Candidate::Cadastre
+    class CadastreForm < Core::Candidate::CadastreMirror
       validates :name, presence: true
     end
   end

@@ -1,3 +1,5 @@
+require_dependency 'core/application_record'
+
 module Core
   module Attendance
     class Ticket < ApplicationRecord
@@ -11,6 +13,7 @@ module Core
 
       has_many :ticket_uploads
       has_many :ticket_comments
+      has_many :ticket_context_actions
 
 
       has_many :rg_uploads, 

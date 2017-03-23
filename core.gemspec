@@ -24,5 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency "validates_timeliness"
   s.add_dependency "email_validator"
   s.add_dependency "file_validators"
+  s.add_dependency "carrierwave"
+  s.add_dependency "friendly_id"
 
 end
