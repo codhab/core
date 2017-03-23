@@ -22,6 +22,7 @@ module Core
       belongs_to :cadastre_procedural,    required: false, class_name: ::Core::Candidate::CadastreProcedural,        foreign_key: :procedural_id
 
       has_many :dependent_mirrors, dependent: :destroy
+
       has_many :cadastre_procedurals
 
       has_one :pontuation
@@ -29,6 +30,7 @@ module Core
       enum situation: ['em_progresso','pendente', 'aprovado']
       enum gender: ['N/D', 'masculino', 'feminino']
 
+      accepts_nested_attributes_for :dependent_mirrors, allow_destroy: true
     end
   end
 end

@@ -33,7 +33,7 @@ module Core
 
 
       def confirm_by_context context_id 
-        @context_action = current_action(context_id)
+        @context_action = current_action(context_id.to_i)
 
         return true if !@context_action.present?
 
@@ -57,8 +57,8 @@ module Core
       def cancel_by_candidate       
       end
 
-      def close_by_candidate
-        current_action(1).update(status: 1)
+      def close_by_candidate context_id
+        current_action(context_id.to_i).update(status: 1)
       end
 
       def cancel_by_attendant
@@ -82,7 +82,7 @@ module Core
       private
 
       def current_action context_id
-        @ticket.ticket_context_actions.where(ticket_context_id: context_id).last
+        @ticket.ticket_context_actions.find_by(ticket_context_id: context_id.to_i) rescue nil
       end
 
       def clone_and_create_mirror!
