@@ -6,13 +6,13 @@ module Core
 
       self.table_name = 'extranet.candidate_cadastres'
 
-      belongs_to :special_condition,      required: false
-      belongs_to :special_condition_type, required: false
+      belongs_to :special_condition,      required: false,          class_name: ::Core::Candidate::SpecialCondition
+      belongs_to :special_condition_type, required: false,          class_name: ::Core::Candidate::SpecialConditionType
       belongs_to :city,                   required: false,          class_name: ::Core::Address::City
       belongs_to :state,                  required: false,          class_name: ::Core::Address::State
       belongs_to :work_city,              required: false,          class_name: ::Core::Address::City
-      belongs_to :civil_state,            required: false
-      belongs_to :program,                required: false
+      belongs_to :civil_state,            required: false,          class_name: ::Core::Candidate::CivilState
+      belongs_to :program,                required: false,          class_name: ::Core::Candidate::Program
       belongs_to :work_city,              required: false,          class_name: ::Core::Address::City
 
 

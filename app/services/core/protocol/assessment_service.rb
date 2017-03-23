@@ -17,13 +17,13 @@ module Core
           @assessment.prefex = (!document_type.prefex.nil?) ? document_type.prefex  : sector_find.sector.prefex
           documents = Core::Protocol::Assessment.where("sector_id = ? and document_type_id = ? and year = ? and prefex <> '777' ",@assessment.sector_id,
                                        @assessment.document_type_id,
-                                       Time.now.year).order('id ASC').last
+                                       Time.now.year).order('number ASC').last
         end
          @assessment.staff_id    =  user
          @assessment.sector_id   =  sector
          @assessment.year        =  Time.now.year
          document = documents.present? ? documents : Core::Protocol::Assessment.where(document_type_id:  @assessment.document_type_id,
-                                      year: Time.now.year, prefex: @assessment.prefex).order('id asc').last
+                                      year: Time.now.year, prefex: @assessment.prefex).order('number asc').last
          @assessment.number = (document.present?) ? document.number + 1 : 1
 
          format_document_number!
