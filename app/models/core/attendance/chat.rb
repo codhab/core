@@ -5,6 +5,8 @@ module Core
     class Chat < ApplicationRecord
       self.table_name = 'extranet.attendance_chats'
 
+        validates :chat_category_id, :content, presence: true
+
         has_many :chat_comments
 
         belongs_to :chat_category, required: false, class_name: ::Core::Attendance::ChatCategory
