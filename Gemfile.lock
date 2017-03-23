@@ -76,9 +76,6 @@ GEM
     eventmachine (1.0.9.1)
     factory_girl (4.8.0)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.8.0)
-      factory_girl (~> 4.8.0)
-      railties (>= 3.0.0)
     ffi (1.9.18)
     file_validators (2.1.0)
       activemodel (>= 3.0)
@@ -245,7 +242,7 @@ DEPENDENCIES
   byebug
   capybara
   core!
-  factory_girl_rails
+  factory_girl
   guard
   guard-livereload
   guard-rails
@@ -254,4 +251,4 @@ DEPENDENCIES
   rspec-rails
 
 BUNDLED WITH
-   1.13.7
+   1.14.4

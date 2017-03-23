@@ -1,6 +1,6 @@
 module Core
   module Protocol
-    class Assessment
+    class AssessmentService
 
       def initialize(assessment)
         @assessment = assessment
