@@ -5,7 +5,7 @@ module Core
 
       belongs_to :ticket_context 
 
-      enum status: ['aberto', 'finalizado', 'finalizado_pendente_análise', 'cancelado'] 
+      enum status: ['iniciado', 'em_atualização', 'finalizado', 'em_análise', 'cancelado'] 
 
       has_many :ticket_uploads
 

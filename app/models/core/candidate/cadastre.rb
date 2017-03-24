@@ -17,7 +17,8 @@ module Core
 
 
       # => Associations in attendance
-      has_many :tickets,       class_name: ::Core::Attendance::Ticket
+      has_many :tickets,                      class_name: ::Core::Attendance::Ticket
+      has_many :ticket_context_actions,       class_name: ::Core::Attendance::TicketContextAction, through: :tickets
       has_many :notifications, class_name: ::Core::Attendance::Notification
 
 
@@ -59,6 +60,15 @@ module Core
       has_many :attendance_chats,  class_name: ::Core::Attendance::Chat
 
       enum gender: ['N/D', 'masculino', 'feminino']
+
+
+      def income
+        '%.2f' % self[:income] 
+      end
+
+      def main_income
+        '%.2f' % self[:main_income] 
+      end
     end
   end
 end

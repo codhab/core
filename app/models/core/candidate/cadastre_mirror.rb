@@ -31,6 +31,15 @@ module Core
       enum gender: ['N/D', 'masculino', 'feminino']
 
       accepts_nested_attributes_for :dependent_mirrors, allow_destroy: true
+
+      def income
+        '%.2f' % self[:income] 
+      end
+
+      def main_income
+        '%.2f' % self[:main_income] 
+      end
+      
     end
   end
 end
