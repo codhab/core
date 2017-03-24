@@ -24,7 +24,7 @@ module Core
 
       has_many :requeriments, primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Regularization::Requeriment
       has_many :schedules,    primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Schedule::AgendaSchedule
-      has_many :assessments,  primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Protocol::Assessment
+      has_many :assessments,  primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Protocol::AssessmentForm
       has_many :exemptions,   primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Sefaz::Exemption
 
       has_many :occurrences,                                        class_name: ::Core::Candidate::CadastreOccurrence
@@ -63,12 +63,13 @@ module Core
 
       scope :by_cpf,          -> (cpf = nil) { where(cpf: cpf.gsub('-','').gsub('.','')) }
 
+
       def income
-        '%.2f' % self[:income] 
+        '%.2f' % self[:income]
       end
 
       def main_income
-        '%.2f' % self[:main_income] 
+        '%.2f' % self[:main_income]
       end
 
     end

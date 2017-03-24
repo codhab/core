@@ -1,8 +1,12 @@
+require_dependency 'core/application_record'
+
 module Core
   module Project
-    class Enterprise < ActiveRecord::Base
-      belongs_to :typology, -> { order(:id) }
-      belongs_to :company,  -> { order(:id) }, class_name: "Project::Company"
+    class Enterprise < ApplicationRecord
+      self.table_name = 'extranet.project_enterprises'
+
+      belongs_to :typology
+      belongs_to :company,   class_name: ::Core::Project::Company
 
       has_many :steps
       has_many :enterprise_typologies

@@ -1,17 +1,21 @@
-module Project
-  class Typology < ActiveRecord::Base
-    has_many :enterprise
-    has_many :enterprise_typologies
+require_dependency 'core/application_record'
 
-    validates :name, :home_type, :private_area, :income_family, :initial_value, :end_value, presence: true
+module Core
+  module Project
+    class Typology < ApplicationRecord
+      self.table_name = 'extranet.project_typologies'
 
-    def complete_name
-      "#{self.id} - #{self.name}"
+      has_many :enterprise
+      has_many :enterprise_typologies
+
+      def complete_name
+        "#{self.id} - #{self.name}"
+      end
+
+      def name_of_method
+        "#{self.name} - #{self.home_type} - #{self.private_area} m²"
+      end
+
     end
-
-    def name_of_method
-      "#{self.name} - #{self.home_type} - #{self.private_area} m²"
-    end
-
   end
 end
