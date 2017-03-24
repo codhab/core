@@ -59,6 +59,9 @@ module Core
       has_many :attendance_chats,  class_name: ::Core::Attendance::Chat
 
       enum gender: ['N/D', 'masculino', 'feminino']
+
+      scope :by_cpf,          -> (cpf = nil) { where(cpf: cpf.gsub('-','').gsub('.','')) }
+
     end
   end
 end
