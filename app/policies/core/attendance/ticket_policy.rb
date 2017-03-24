@@ -7,10 +7,10 @@ module Core
       end
 
       def allow_button_recadastre?
-        self.ticket_context_actions.find_by(ticket_context_id: 1, status: [1, 2]).present? &&
-        self.ticket_context_actions.find_by(ticket_context_id: 2, status: [1, 2]).present? &&
-        self.ticket_context_actions.find_by(ticket_context_id: 3, status: [1, 2]).present? &&
-        self.ticket_context_actions.find_by(ticket_context_id: 4, status: [1, 2]).present?
+        self.ticket_context_actions.find_by(ticket_context_id: 1, status: [3, 2]).present? &&
+        self.ticket_context_actions.find_by(ticket_context_id: 2, status: [3, 2]).present? &&
+        self.ticket_context_actions.find_by(ticket_context_id: 3, status: [3, 2]).present? &&
+        self.ticket_context_actions.find_by(ticket_context_id: 4, status: [3, 2]).present?
       end
 
       def allow_recadastre_cadastre? 

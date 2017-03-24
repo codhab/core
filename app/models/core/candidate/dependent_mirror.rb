@@ -12,6 +12,11 @@ module Core
       belongs_to :cadastre_mirror,         required: false,  class_name: ::Core::Candidate::CadastreMirror
 
       enum gender: ['N/D', 'masculino', 'feminino']
+
+      def income
+        '%.2f' % self[:income] 
+      end
+
     end
   end
 end

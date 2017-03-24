@@ -1,0 +1,31 @@
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        dependent_mirror:
+          attributes:
+            born:
+              invalid_date: "data inválida"
+    models:
+      'core/candidate/dependent_mirror': Dependente
+    attributes:
+      'core/candidate/dependent_mirror':
+        admission_date: "Data de admissão"
+        employment: "Ocupação"
+        name: "Nome Completo"
+        cpf: "CPF"
+        rg: "RG"
+        rg_org: "RG ORG"
+        rg_uf_id: "RG UF"
+        gender: "Sexo"
+        born: "Data de Nasc."
+        place_birth: "Cidade de Nascimento"
+        civil_state: "Estado Civil"
+        income: "Renda"
+        special_condition: "Condição Especial"
+        special_condition_type: "Tipo de condição Especial"
+        nis: "NIS"
+        cid: "CID"
+        percentage: "Porcentagem %"
+        co_acquirer: "Co-adquirente"
+        kinship: "Parentesco"

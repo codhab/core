@@ -17,7 +17,8 @@ module Core
 
 
       # => Associations in attendance
-      has_many :tickets,       class_name: ::Core::Attendance::Ticket
+      has_many :tickets,                      class_name: ::Core::Attendance::Ticket
+      has_many :ticket_context_actions,       class_name: ::Core::Attendance::TicketContextAction, through: :tickets
       has_many :notifications, class_name: ::Core::Attendance::Notification
 
 
@@ -60,8 +61,19 @@ module Core
 
       enum gender: ['N/D', 'masculino', 'feminino']
 
+<<<<<<< HEAD
       scope :by_cpf,          -> (cpf = nil) { where(cpf: cpf.gsub('-','').gsub('.','')) }
 
+=======
+
+      def income
+        '%.2f' % self[:income] 
+      end
+
+      def main_income
+        '%.2f' % self[:main_income] 
+      end
+>>>>>>> c367aa7dcd8b58b1ad0b86e206511d244ddf0da5
     end
   end
 end
