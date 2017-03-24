@@ -18,21 +18,7 @@ module Core
 
       has_many :enterprise_cadastre_situations, class_name: ::Core::Candidate::EnterpriseCadastreSituation
 
-      scope :prepare_allotment, -> (allotment_id) {
-        cadastres = CoreCandidate::Indication::Cadastre.where(allotment_id: allotment_id).map(&:id)
-      }
-
-      scope :prepare_step, -> (step_id) {
-        allotments = CoreCandidate::Indication::Allotment.where(step_id: step_id).map(&:id)
-        self.prepare_allotment(allotments)
-      }
-
-
-      scope :in_process, -> {
-        self.where(inactive: nil).joins('INNER JOIN general_pontuations AS point
-                    ON point.id = candidate_enterprise_cadastres.cadastre_id')
-                  .where('point.situation_status_id = 4')
-      }
+    
 
 
     end
