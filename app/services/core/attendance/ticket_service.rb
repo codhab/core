@@ -4,145 +4,169 @@ require_dependency 'core/notification_service'
 module Core
   module Attendance
     class TicketService
+      
+      # Scope :attendance_tickets
+      #
+      # define :ticket_situations, table: `attendance_ticket_situations`
+      # 1 => pendente com candidato
+      # 2 => pendente com atendente
+      # 3 => pendente com supervisor
+      # 4 => cancelado pelo candidato
+      # 5 => deferido
+      # 6 => indeferido
+      # 7 => finalizado pelo candidato
+      
+      # define :ticket_contexts table: `attendance_ticket_contexts`
+      # 1 => atualização cadastral (recadastramento)
+      # 2 => atualização cadastral (convocado)
+      # 3 => atualização cadastral (habilitado)
+      # 4 => atualização cadastral (regularização)
+      # 5 => atualização cadastral (outro)
 
-      attr_accessor(:cadastre_mirror,
-                    :cadastre,
-                    :cadastre_id,
-                    :ticket,
-                    :context_id,
-                    :view,
-                    :notification_service)
+      # Scope :attendance_ticket_actions
+      #
+      # define :ticket_action_contexts
+      # 1 => atualização dados básicos
+      # 2 => atualização de dependentes 
+      # 3 => atualização de renda 
+      # 4 => atualização de dados de contato 
 
-      def cadastre=(object)
-        @cadastre = CoreAttendance::Candidate::Cadastre.find(object.id)
+      # define :ticket_action_situations
+      # 1 => em processo de atualização
+      # 2 => atualizado
+      # 3 => confirmado
+
+      attr_accessor :cadastre, :ticket, :cadastre_mirror, :action
+
+      def create_of_find
+        @ticket = @cadastre.tickets.find_by(status: true) rescue nil
+
+        if @ticket.nil?
+          clone_cadastre_to_make_mirrors!
+
+          @ticket = @cadastre.tickets.new.tap do |ticket|
+            ticket.cadastre_mirror_id   = @cadastre_mirror.id
+            ticket.started_at           = Time.now
+            ticket.ticket_situation_id  = 1
+            ticket.ticket_context_id    = set_ticket_context
+            ticket.active               = true
+          end
+
+        end
+
       end
 
-      def create(status_id: 1, notification: true, push: true)
+      def confirm
 
-        return false if @cadastre.nil? || @context_id.nil?
-        return false if @cadastre.tickets.where(ticket_context_id: @context_id, status: true).present?
+        return false if @ticket.nil? || !@ticket.ticket_actions.present? || @action.nil?
 
-        clone_cadastre_to_make_mirror!
+        @action.update(situation_id: 2)
 
-        @ticket = Ticket.new({
-          ticket_context_id: @context_id,
-          ticket_status_id: status_id, 
-          cadastre_id: @cadastre.id,
-          cadastre_mirror_id: @cadastre_mirror.id
-        })
+      end
 
-        @ticket.save
+      def cancel
 
-        if notification
-          @notification_service = NotificationService.new(cadastre: @cadastre)
-          @notification_service.create_notification do |service| 
-            service.category_id = 2
-            service.title       = title.html_safe
-            service.content     = message.html_safe
-            service.link        = ''
-            service.push        = true
-          end
-        end
+        return false if @ticket.nil?
+
+        @action.update(situation_id: 4)
+
+      end
+
+      def close
+        return false if @ticket.nil?
+        return false if @ticket.ticket_actions.where(situation_id: 1).present?
+        
+        # Regra #1
+        # Atendimentos que contém em suas acões a situação `atualizado`
+        # colocar os mesmo para análise do atendente  esta clásula deve
+        # ignorada quando a ação for do tipo `atualização de dados de contato`
+        #
+        # SE (situation_id = 2) EM ticket_actions.where.not(context_id: 4) `atualização de contatos`
+        # => ATTRIBUIR ticket_situation_id = 2 `pendente com atendente`        
+        # SE NÃO
+        # => ATTRIBUIR ticket_situation_id = 7 `finalizado pelo candidato`        
+
+
+        @actions = @ticket.ticket_actions.where.not(context_id: 4).where(situation_id: 2)
+
+        #pendente com atendente : finalizado pelo candidato
+        situation_id = @actions.present? ? 2 : 7 
+
+        @ticket.update(situation_id: situation_id)
         
       end
 
-      def update(status_id: nil, notification: true, push: true)
-        return false if status_id.nil? || @cadastre.nil? || @ticket.nil?
-
-        title     = "Situação do seu atendimento de nº #{@ticket.id} foi atualizado."
-        message   = render_message 'update_ticket'
-
-
-        @ticket.update(ticket_status_id: status_id)
-
-        if notification
-          @service = NotificationService.new(cadastre: @cadastre)
-          
-          @service.create_notification do |service| 
-            service.category_id = 2
-            service.title       = title.html_safe
-            service.content     = message.html_safe
-            service.link        = ''
-            service.push        = push
-          end
-        end
-
-      end
-
-      def upload_required 
-
-          return false if @context_id.nil?
-          
-          case @context_id
-          when 1
-          
-          if (@cadastre.main_income != @cadastre_mirror.main_income) || @cadastre.current_situation_id == 3
-            @ticket.income_uploads.new if !@ticket.income_uploads.present?
-          end
-
-          if (@cadastre.rg != @cadastre_mirror.rg) ||
-             (@cadastre.born != @cadastre_mirror.born) ||
-             @cadastre.current_situation_id == 3
-
-            @ticket.rg_uploads.new if !@ticket.rg_uploads.present?
-          end
-
-          if @cadastre.current_situation_id == 3 ||
-            @cadastre.arrival_df != @cadastre_mirror.arrival_df
-            @ticket.arrival_df_uploads.new if !@ticket.arrival_df_uploads.present?
-          end 
-   
-          if @cadastre.current_situation_id == 3
-            @cadastre.payment_uploads.new if !@ticket.payment_uploads.present?
-          end
-
-          if @cadastre.current_situation_id == 3
-            @ticket.residence_uploads.new if !@ticket.residence_uploads.present?
-          end
-          
-          if @cadastre.current_situation_id == 3
-            @ticket.registry_uploads.new if !@ticket.registry_uploads.present?
-          end
-
-          if ((@cadastre.special_condition_id != @cadastre_mirror.special_condition_id) &&
-              @cadastre_mirror.special_condition_id == 2) ||
-              (@cadastre.current_situation_id == 3 && @cadastre_mirror.special_condition_id == 2)
-              @ticket.special_condition_uploads.new if !@ticket.special_condition_uploads.present?
-          end 
-
-        when 2
-          @dependent = @ticket.cadastre_mirror.dependent_mirrors.find(@dependent_mirror_id)
-          
-          if @dependent.income.to_i != 0
-            @ticket.income_uploads.new if !@ticket.income_uploads.present?
-          end
-
-          if @dependent.is_major? 
-            @ticket.cpf_uploads.new if !@ticket.cpf_uploads.present?
-          end
-
-          @ticket.certificate_born_uploads.new if !@ticket.certificate_born_uploads.present?
-          
-          if @dependent.special_condition_id == 2
-            @ticket.special_condition_uploads.new if !@ticket.special_condition_uploads.present?
-          end
-
-        when 3
-
-          count = @cadastre_mirror.dependent_mirrors
-
-          count.times do
-            @ticket.income_uploads.new if count < @ticket.income_uploads.count
-          end
-
-        end
-      end
-
-
       private
-
       
-      def clone_cadastre_to_make_mirror!
+      def set_ticket_context
+        # Verifica qual tipo de contexto pode ser criado para o candidato
+        # 1 - Se for habilitado e não tiver atendimento de recadastramento 
+        # e program_id = [1,2] 
+        # => recadastramento
+        #
+        # 2 - Se tiver atendimento de recastramento finalizado e 
+        # for habilitado e program_id = [1,2] 
+        # =>  atualização cadastral (habilitado)  
+        # 
+        # 3 - Se não for convocado e programa_id = [1,2]
+        # => atualização cadastral (convocado) 
+        #
+        # 4 - Se for program_id = 3
+        # => atualiazação cadastral (regularização)
+        #
+        # 5 - Se não se adequar em nenhuma das regras
+        # => atualização cadastral (outro)
+
+        @cadastre = Core::Candidate::CadastrePresenter.new(@cadastre)
+
+        # ele é RII ou RIE
+        if [1, 2].include?(@cadastre.program_id)
+          # ele é habilitado?
+          if @cadastre.current_situation_id == 4 
+            # ele fez o recadastramento?
+            if @cadastre.tickets.where(context_id: 1).where.not(situation_id: 1).present?
+              #retorna contexto atualização cadastral (habilitado)
+              return 3 
+            else
+              #retorna contexto atualização cadastral (recadastramento)
+              return 1 
+            end
+          elsif @cadastre.current_situation_id == 3
+            if !@cadastre.tickets.where(context_id: 2).where.not(situation_id: [5,6,7]).present? 
+              #retorna contexto atualização cadastral (convocado)
+              return 2 
+            else
+              #retorna false, pois convocado só poderá fazer um atendimento.
+              return false 
+            end
+          else
+            #retorna contexto atualização cadastral (outro)
+            return 5 
+          end
+        # ele é de regularização
+        elsif @cadastre.program_id == 3
+          # não possui regras
+          #retorna contexto atualização cadastral (regularização)
+          return 4 
+        # não entra em nenhuma regra
+        else
+          #retorna contexto atualização cadastral (outro)
+          return 5
+        end 
+      end
+
+      def send_notification_by_action action = nil
+        return false if action.nil?
+
+        content = Core::Attendance::ContextNotification.find_by(action: action) rescue nil
+        
+        return false if content.nil?
+
+        notification = Core::NotificationService.new(cadastre: @cadastre)
+        notification.create(title: content.title, message: content.message, push: true, email: true)
+      end 
+
+      def clone_cadastre_to_make_mirrors!
         return false if @cadastre.nil?
 
         @cadastre_mirror = @cadastre.cadastre_mirrors.new
@@ -169,11 +193,6 @@ module Core
           @new_dependent.save
       
         end
-      end
-
-
-      def render_message(view)
-        view_context.render "ticket_service/#{view}_message", ticket: @ticket
       end
 
     end
