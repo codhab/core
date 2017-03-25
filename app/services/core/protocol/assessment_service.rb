@@ -39,7 +39,7 @@ module Core
       end
 
       def set_conduct!(assessment,user, sector)
-        @conduct  = Protocol::Conduct.new
+        @conduct  = Core::Protocol::Conduct.new
         @conduct.conduct_type = 0
         @conduct.assessment_id = assessment.id
         @conduct.staff_id = user

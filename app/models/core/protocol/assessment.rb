@@ -1,7 +1,6 @@
 require_dependency 'core/application_record'
 require_dependency 'core/person/staff'
 require_dependency 'core/person/sector'
-require_dependency 'core/candidate/cadastre'
 
 module Core
  module Protocol
@@ -14,7 +13,7 @@ module Core
     belongs_to :sector,         required: false, class_name: ::Core::Person::Sector
 
     has_many :conducts
-    has_many :digital_documents, class_name: ::Core::Protocol::DigitalDocumentForm
+    has_many :digital_documents, class_name: ::Core::Protocol::DigitalDocument
     has_many :locations
     has_many :controls
     has_many :call_controls
