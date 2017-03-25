@@ -7,14 +7,9 @@ module Core
 
       belongs_to :cadastre,        class_name: Core::Candidate::Cadastre
       belongs_to :cadastre_mirror, class_name: Core::Candidate::CadastreMirror
-      belongs_to :convocation,     class_name: Core::Candidate::CadastreConvocation
-      belongs_to :ticket_context
-      belongs_to :ticket_status
-      belongs_to :ticket_type
+      belongs_to :context,         class_name: Core::Attendance::TicketContext, foreign_key: :context_id
 
-      has_many :ticket_uploads
-      has_many :ticket_comments
-      has_many :ticket_context_actions
+      has_many :actions, class_name: Core::Attendance::TicketAction, foreign_key: :ticket_id
 
 
     end

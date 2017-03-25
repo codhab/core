@@ -38,8 +38,15 @@ module Core
 
       attr_accessor :cadastre, :ticket, :cadastre_mirror, :action
 
-      def create_of_find
-        @ticket = @cadastre.tickets.find_by(status: true) rescue nil
+      def initialize(cadastre: nil, ticket: nil, cadastre_mirror: nil, action: nil)
+        @cadastre         = cadastre
+        @ticket           = ticket
+        @cadastre_mirror  = cadastre_mirror
+        @action           = action
+      end
+
+      def create_or_find context_id
+        @ticket = @cadastre.tickets.find_by(active: true) rescue nil
 
         if @ticket.nil?
           clone_cadastre_to_make_mirrors!
@@ -47,34 +54,51 @@ module Core
           @ticket = @cadastre.tickets.new.tap do |ticket|
             ticket.cadastre_mirror_id   = @cadastre_mirror.id
             ticket.started_at           = Time.now
-            ticket.ticket_situation_id  = 1
-            ticket.ticket_context_id    = set_ticket_context
+            ticket.situation_id         = 1
+            ticket.context_id           = context_id
             ticket.active               = true
           end
+
+          @ticket.save
 
         end
 
       end
 
-      def confirm
+      def create_or_find_action action_id
+        @action = @ticket.actions.find_by(context_id: action_id) rescue nil
 
-        return false if @ticket.nil? || !@ticket.ticket_actions.present? || @action.nil?
+        if @action.nil?
+          
+          @action = @ticket.actions.new.tap do |action|
+            action.context_id     = action_id
+            action.situation_id   = set_context_situation
+            action.started_at     = Time.now
+          end
 
+          @action.save
+
+        end
+      end
+
+      def confirm_action
+        return false if @ticket.nil? || !@ticket.actions.present? || @action.nil?
+        @action.update(situation_id: 3)
+      end
+
+      def open_action
+        return false if @ticket.nil? || !@ticket.actions.present? || @action.nil?
         @action.update(situation_id: 2)
-
       end
 
-      def cancel
-
+      def cancel_ticket
         return false if @ticket.nil?
-
-        @action.update(situation_id: 4)
-
+        @action.update(sset_context_situationituation_id: 4)
       end
 
-      def close
+      def close_ticket
         return false if @ticket.nil?
-        return false if @ticket.ticket_actions.where(situation_id: 1).present?
+        return false if @ticket.actions.where(situation_id: 1).present?
         
         # Regra #1
         # Atendimentos que contém em suas acões a situação `atualizado`
@@ -98,6 +122,10 @@ module Core
 
       private
       
+      def set_context_situation
+        @ticket.context.confirmation_required ? 1 : 2
+      end
+
       def set_ticket_context
         # Verifica qual tipo de contexto pode ser criado para o candidato
         # 1 - Se for habilitado e não tiver atendimento de recadastramento 
