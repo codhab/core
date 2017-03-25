@@ -47,8 +47,10 @@ module Core
           when 1
             "blue flag"
           when 2
-            "green flag"
+            "yellow flag"
           when 3
+            "green flag"
+          when 4
             "green checked"
           end
 
