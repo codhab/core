@@ -1,6 +1,6 @@
 module Core
   module Attendance  
-    class TicketStatus < ApplicationRecord
+    class TicketSituation < ApplicationRecord
       self.table_name = 'extranet.attendance_ticket_situations'
 
     end

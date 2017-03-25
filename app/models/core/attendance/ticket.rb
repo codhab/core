@@ -8,6 +8,7 @@ module Core
       belongs_to :cadastre,        class_name: Core::Candidate::Cadastre
       belongs_to :cadastre_mirror, class_name: Core::Candidate::CadastreMirror
       belongs_to :context,         class_name: Core::Attendance::TicketContext, foreign_key: :context_id
+      belongs_to :situation,       class_name: Core::Attendance::TicketSituation, foreign_key: :context_id
 
       has_many :actions, class_name: Core::Attendance::TicketAction, foreign_key: :ticket_id
 

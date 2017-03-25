@@ -14,7 +14,7 @@ module Core
       enum gender: ['N/D', 'masculino', 'feminino']
 
       def income
-        '%.2f' % self[:income] 
+        self[:income].present? ? '%.2f' % self[:income] : 0 
       end
 
     end

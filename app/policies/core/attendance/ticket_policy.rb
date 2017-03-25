@@ -5,7 +5,8 @@ module Core
       def allow_close?
         case self.context_id 
         when 1
-          !self.actions.where(situation_id: [1,2]).present?
+          !self.actions.where(situation_id: [1,2]).present? &&
+          self.actions.where(situation_id: [3.4]).present?
         when 2
           !self.actions.where(situation_id: [1,2]).present?
         when 3
@@ -18,7 +19,6 @@ module Core
           !self.actions.where(situation_id: [1,2]).present? &&
           self.actions.where(situation_id: [3,4]).present?
         end
-
       end
 
       def confirmation_required? action
@@ -37,6 +37,10 @@ module Core
       def input_disabled? action
         return true if closed?(action)
         (action.situation_id == 1 && self.context.confirmation_required)
+      end
+
+      def document_required? action
+        action.uploads.any?
       end
     end
   end
