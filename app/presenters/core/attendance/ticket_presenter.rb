@@ -49,9 +49,9 @@ module Core
           when 2
             "yellow flag"
           when 3
-            "green flag"
+            "green checkmark"
           when 4
-            "green checked"
+            "green checkmark"
           end
 
         end

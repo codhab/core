@@ -81,14 +81,20 @@ module Core
         end
       end
 
-      def confirm_action
-        return false if @ticket.nil? || !@ticket.actions.present? || @action.nil?
-        @action.update(situation_id: 3)
-      end
-
       def open_action
         return false if @ticket.nil? || !@ticket.actions.present? || @action.nil?
         @action.update(situation_id: 2)
+      end
+
+      def confirm_action
+        return false if @ticket.nil? || !@ticket.actions.present? || @action.nil?
+        @action.update(situation_id: 4)
+      end
+
+
+      def close_action
+        return false if @ticket.nil? || !@ticket.actions.present? || @action.nil?
+        @action.update(situation_id: 3)
       end
 
       def cancel_ticket
@@ -98,7 +104,7 @@ module Core
 
       def close_ticket
         return false if @ticket.nil?
-        return false if @ticket.actions.where(situation_id: 1).present?
+        return false if @ticket.actions.where(situation_id: [1,2]).present?
         
         # Regra #1
         # Atendimentos que contém em suas acões a situação `atualizado`
@@ -111,12 +117,12 @@ module Core
         # => ATTRIBUIR ticket_situation_id = 7 `finalizado pelo candidato`        
 
 
-        @actions = @ticket.ticket_actions.where.not(context_id: 4).where(situation_id: 2)
+        @actions = @ticket.actions.where.not(context_id: 4).where(situation_id: 2)
 
         #pendente com atendente : finalizado pelo candidato
         situation_id = @actions.present? ? 2 : 7 
 
-        @ticket.update(situation_id: situation_id)
+        @ticket.update(situation_id: situation_id, active: false)
         
       end
 

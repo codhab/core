@@ -20,16 +20,22 @@ module Core
       
       attr_accessor :cadastre, :action, :ticket, :cadastre_mirror
 
-      def initialize(cadastre: nil, action: nil, ticket: nil, cadastre_mirror: nil)
+      def initialize(cadastre: nil, action: nil, ticket: nil)
         @cadastre = cadastre
         @action   = action
         @ticket   = ticket
+      end
+
+      def documents
+        return Core::Attendance::TicketUploadCategory.all.order(:name)
       end
 
       def documents_required? document
       end
 
       def documents_required!
+        @cadastre_mirror = @ticket.cadastre_mirror 
+        
         case @action.context_id
         when 1 # (atualização dados básicos)
           #se atualização cadastral (convocado) => pedir todos os documentos
@@ -49,13 +55,7 @@ module Core
           end
 
         when 3 # (atualização de renda)
-        
-          #se atualização cadastral (convocado) => pedir todos os documentos
-          if @ticket.context_id == 2
-          
-          else
-          
-          end
+          income_documents
         when 4 # (atualização de dados de contato)
         
           #se atualização cadastral (convocado) => pedir todos os documentos
@@ -104,6 +104,7 @@ module Core
 
       def income_documents
 
+
         if @ticket.context_id == 2
           
           @action.income_documents.new(disable_destroy: true)
@@ -114,7 +115,7 @@ module Core
 
         else
 
-          if @cadastre.main_icome.to_f != @cadastre_mirror.main_income.to_f
+          if @cadastre.main_income.to_f != @cadastre_mirror.main_income.to_f
             @action.income_documents.new(disable_destroy: true)
           end
 
@@ -123,7 +124,7 @@ module Core
             dependent = @cadastre.dependents.find_by_name(mirror.name) rescue nil
             
             if dependent.present?
-              if dependet.income != mirror.income
+              if dependent.income != mirror.income
                 @action.income_documents.new(disable_destroy: true)
               end
             else
