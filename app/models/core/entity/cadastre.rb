@@ -1,10 +1,13 @@
+require_dependency 'core/application_record'
+
 module Core
   module Entity
-    class Cadastre < ActiveRecord::Base
+    class Cadastre < ApplicationRecord
+      self.table_name = 'extranet.entity_cadastres'
 
       belongs_to :city, class_name: ::Core::Address::City
 
-      has_many :situations
+      has_many :situations, class_name: ::Core::Entity::Situation
       has_many :inspections
       has_many :candidates
       has_many :situation_status, through: :situations
@@ -17,14 +20,14 @@ module Core
 
       has_many :realties
       has_many :activities
-      has_many :assessments, 
-               class_name: ::Core::Protocol::Assessment, 
+      has_many :assessments,
+               class_name: ::Core::Protocol::Assessment,
                foreign_key: :cnpj,
                primary_key: :cnpj
 
 
       scope :with_president, -> {
-        joins('LEFT JOIN entity_members 
+        joins('LEFT JOIN entity_members
                ON entity_members.cadastre_id = entity_cadastres.id
                AND entity_members.member_job_id = 2')
       }
@@ -32,18 +35,18 @@ module Core
 
 
       scope :situation, -> (status) {
-        Entity::Cadastre.joins(:situations)
+        Core::Entity::Cadastre.joins(:situations)
         .where('entity_situations.situation_status_id = (SELECT MAX(entity_situations.situation_status_id)
                 FROM entity_situations WHERE entity_situations.cadastre_id = entity_cadastres.id)')
         .where('entity_situations.situation_status_id = ?', status)
       }
 
       scope :senders, -> {
-        where(id: Entity::Document.all.map(&:cadastre_id))
+        where(id: Core::Entity::Document.all.map(&:cadastre_id))
       }
 
       scope :active_documents, -> {
-        Entity::Document.where(document_category_id: Entity::DocumentCategory.actives.map(&:id))
+        Core::Entity::Document.where(document_category_id: Core::Entity::DocumentCategory.actives.map(&:id))
       }
 
       scope :complete, -> {
@@ -64,9 +67,18 @@ module Core
 
       }
 
-      scope :by_cnpj,  -> (cnpj) {where(cnpj: cnpj.unformat_cnpj)}
+      scope :by_cnpj,  -> (cnpj) {where(cnpj: cnpj.gsub('-','').gsub('/','').gsub('.',''))}
       scope :by_name_entity,  -> (name_entity) {where(name: name_entity)}
       scope :by_fantasy_name,  -> (fantasy_name) {where("fantasy_name ILIKE '%#{fantasy_name}%'")}
+
+      def current_situation
+        self.situations.order(:id).last.situation_status.name rescue self.situations.order(:id).last.situation_status_id
+      end
+
+      def president_name
+        obj = self.members.where(member_job_id: 2).first
+        obj.name.mb_chars.upcase rescue nil
+      end
 
     end
   end
