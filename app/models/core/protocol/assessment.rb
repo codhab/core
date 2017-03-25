@@ -14,6 +14,7 @@ module Core
 
     has_many :conducts
     has_many :digital_documents, class_name: ::Core::Protocol::DigitalDocument
+    has_many :digital_document_forms, class_name: ::Core::Protocol::DigitalDocumentForm
     has_many :locations
     has_many :controls
     has_many :call_controls

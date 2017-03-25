@@ -1,7 +1,7 @@
 require_dependency 'core/application_record'
-require_dependency 'core/project/enterprise'
 require_dependency 'core/indication/cadastre'
 require_dependency 'core/indication/situation'
+require_dependency 'core/project/enterprise'
 
 module Core
   module Candidate
@@ -18,7 +18,7 @@ module Core
 
       has_many :enterprise_cadastre_situations, class_name: ::Core::Candidate::EnterpriseCadastreSituation
 
-    
+
 
 
     end

@@ -24,6 +24,7 @@ module Core
       has_many :requeriments,      primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Regularization::Requeriment
       has_many :schedules,         primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Schedule::AgendaSchedule
       has_many :assessments,       primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Protocol::Assessment
+      has_many :assessment_forms,       primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Protocol::AssessmentForm
       has_many :exemptions,        primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Sefaz::Exemption
 
       has_many :occurrences,                                        class_name: ::Core::Candidate::CadastreOccurrence
@@ -39,7 +40,7 @@ module Core
       has_many :cadastre_checklists
       has_many :attendance_logs
       has_many :cadastre_geolocations
-      has_many :enterprise_cadastres,   foreign_key: "cadastre_id",                   class_name: ::Core::Candidate::EnterpriseCadastre
+      has_many :enterprise_cadastres,   foreign_key: "cadastre_id",       class_name: ::Core::Candidate::EnterpriseCadastre
 
       has_many :invoices,               foreign_key: :cpf,         primary_key: :cpf, class_name: ::Core::Brb::Invoice
       has_many :iptus,                  foreign_key: :cpf,         primary_key: :cpf, class_name: ::Core::Candidate::Iptu

@@ -1,20 +1,14 @@
+require_dependency 'core/application_record'
+
 module Core
   module Entity
-    class Situation < ActiveRecord::Base
-      belongs_to :staff, class_name: ::Core::Person::Staff
-      belongs_to :cadastre
-      belongs_to :situation_status
+    class Situation < ApplicationRecord
+      self.table_name = "extranet.entity_situations"
 
-      validates :situation_status, :observation, presence: true
-      validate  :unique_status
+      belongs_to :staff,             class_name: ::Core::Person::Staff
+      belongs_to :cadastre,          class_name: ::Core::Entity::Cadastre
+      belongs_to :situation_status,  class_name: ::Core::Entity::SituationStatus
 
-      private
-
-      def unique_status
-        if self.cadastre.current_situation_id == self.situation_status_id
-          errors.add(:situation_status_id, "Entidade já se encontra nesta situação.")
-        end
-      end
     end
   end
 end

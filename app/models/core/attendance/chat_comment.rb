@@ -6,6 +6,9 @@ module Core
       self.table_name = 'extranet.attendance_chat_comments'
 
       belongs_to :chat, required: false, class_name: ::Core::Attendance::Chat
+
+      validates :content, presence: true
+
     end
   end
 end

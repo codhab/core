@@ -5,7 +5,7 @@ module Core
     class Chat < ApplicationRecord
       self.table_name = 'extranet.attendance_chats'
 
-        validates :chat_category_id, :content, presence: true
+        validates :chat_category_id, presence: true
 
         has_many :chat_comments
 
