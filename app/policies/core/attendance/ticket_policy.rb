@@ -5,8 +5,15 @@ module Core
       def allow_close?
         case self.context_id 
         when 1
-          !self.actions.where(situation_id: [1,2]).present? &&
-          self.actions.where(situation_id: [3.4]).present?
+
+          return false if !self.actions.present?
+          return false if self.actions.count < 4
+          
+          self.actions.each do |situation|
+            return false if [1,2].include? situation.situation_id 
+          end
+
+          return true
         when 2
           !self.actions.where(situation_id: [1,2]).present?
         when 3
