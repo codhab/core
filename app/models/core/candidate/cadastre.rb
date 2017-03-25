@@ -17,8 +17,7 @@ module Core
 
 
       # => Associations in attendance
-      has_many :tickets,                      class_name: ::Core::Attendance::Ticket
-      has_many :ticket_context_actions,       class_name: ::Core::Attendance::TicketContextAction, through: :tickets
+      has_many :tickets,       class_name: ::Core::Attendance::Ticket
       has_many :notifications, class_name: ::Core::Attendance::Notification
 
 
