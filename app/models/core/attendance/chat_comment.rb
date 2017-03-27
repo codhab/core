@@ -10,7 +10,7 @@ module Core
 
       validates :content, presence: true
 
-      has_many :chat_uploads
+      has_many :chat_uploads, class_name: ::Core::Attendance::ChatUpload
 
     end
   end
