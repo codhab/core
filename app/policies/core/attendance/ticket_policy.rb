@@ -2,6 +2,14 @@ module Core
   module Attendance
     class TicketPolicy < ApplicationPolicy
 
+      def disable_remove_spouse mirror
+        mirror.kinship_id != 6
+      end
+
+      def on_attendance?
+        ![7,6,5,4,1].include?(self.situation_id)
+      end
+
       def allow_close?
         case self.context_id 
         when 1
@@ -15,10 +23,11 @@ module Core
 
           return true
         when 2
-          !self.actions.where(situation_id: [1,2]).present?
+          self.actions.present? && !self.actions.where(situation_id: [1,2]).present? &&
+          self.situation_id == 1
         when 3
-          !self.actions.where(situation_id: [1,2]).present? &&
-          self.actions.where(situation_id: [3,4]).present?
+          self.actions.present? && !self.actions.where(situation_id: [1,2]).present? &&
+          self.situation_id == 1
         when 4
           !self.actions.where(situation_id: [1,2]).present? &&
           self.actions.where(situation_id: [3,4]).present?
