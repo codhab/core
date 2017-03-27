@@ -9,7 +9,7 @@ module Core
         belongs_to :cadastre,      required: false, class_name: ::Core::Candidate::Cadastre
         belongs_to :staff,         required: false, class_name: ::Core::Person::Staff,           foreign_key: :close_staff_id
 
-        has_many :chat_comments
+        has_many :chat_comments,                    class_name: ::Core::Attendance::ChatComment
 
         accepts_nested_attributes_for :chat_comments
 
