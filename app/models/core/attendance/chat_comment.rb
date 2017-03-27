@@ -12,6 +12,8 @@ module Core
 
       has_many :chat_uploads, class_name: ::Core::Attendance::ChatUpload
 
+      accepts_nested_attributes_for :chat_uploads
+
     end
   end
 end
