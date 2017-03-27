@@ -124,6 +124,22 @@ module Core
             @ticket.update(situation_id: 2, active: true)
           end
         end
+
+        if @ticket.context_id == 1
+          message = "Sua atualização cadastral foi efetuada com sucesso!"
+        else
+          message = "Seus dados foram atualizados com sucesso, aguarde a análise da CODHAB."
+        end
+
+        notification = Core::NotificationService.new
+        notification.create({
+          cadastre_id: @ticket.cadastre_id,
+          content: message,
+          title: "Interação em seu atendimento",
+          push: true,
+          email: true
+        })
+
       end
 
       private

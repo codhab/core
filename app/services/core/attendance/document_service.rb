@@ -38,13 +38,7 @@ module Core
         
         case @action.context_id
         when 1 # (atualização dados básicos)
-          #se atualização cadastral (convocado) => pedir todos os documentos
-          if @ticket.context_id == 2
-          
-          else
-          
-          end
-
+          cadastre_documents
         when 2 # (atualização de dependentes)
         
           #se atualização cadastral (convocado) => pedir todos os documentos
@@ -57,14 +51,7 @@ module Core
         when 3 # (atualização de renda)
           income_documents
         when 4 # (atualização de dados de contato)
-        
-          #se atualização cadastral (convocado) => pedir todos os documentos
-          if @ticket.context_id == 2
-          
-          else
-          
-          end
-
+          income_documents
         end
       end
 
@@ -119,7 +106,6 @@ module Core
             @action.income_documents.new(disable_destroy: true)
           end
 
-          
           @cadastre_mirror.dependent_mirrors.each do |mirror|
             dependent = @cadastre.dependents.find_by_name(mirror.name) rescue nil
             
