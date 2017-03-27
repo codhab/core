@@ -3,7 +3,7 @@ require_dependency 'core/application_record'
 module Core
   module Person
     class Staff < ApplicationRecord
-      self.table_name = 'extranet.protocol_staffs'         
+      self.table_name = 'extranet.person_staffs'         
 
 
       belongs_to :sector_origin,         required: false,   class_name: ::Core::Person::Sector

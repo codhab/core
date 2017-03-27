@@ -5,9 +5,7 @@ module Core
     class Chat < ApplicationRecord
       self.table_name = 'extranet.attendance_chats'
 
-        validates :chat_category_id, presence: true
-
-        belongs_to :chat_category, required: false, class_name: ::Core::Attendance::ChatCategory
+        belongs_to :chat_category,                  class_name: ::Core::Attendance::ChatCategory
         belongs_to :cadastre,      required: false, class_name: ::Core::Candidate::Cadastre
         belongs_to :staff,         required: false, class_name: ::Core::Person::Staff,           foreign_key: :close_staff_id
 
