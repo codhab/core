@@ -5,7 +5,7 @@ module Core
     class ChatUpload < ApplicationRecord
       self.table_name = 'extranet.attendance_chat_uploads'
 
-      belongs_to :chat_comment, required: false, class_name: ::Core::Attendance::Chat
+      belongs_to :chat_comment, required: false, class_name: ::Core::Attendance::ChatComment
 
       mount_uploader :document, Core::Attendance::DocumentUploader
     end

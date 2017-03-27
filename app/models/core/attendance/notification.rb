@@ -1,10 +1,10 @@
 module Core
-  module Attendance 
+  module Attendance
     class Notification < ActiveRecord::Base
       self.table_name = 'extranet.attendance_notifications'
 
-      belongs_to :cadastre, class_name: 'CoreCandidate::Cadastre'
-      
+      belongs_to :cadastre, class_name: ::Core::Candidate::Cadastre
+
       scope :unread, -> { where(read: false)}
     end
   end
