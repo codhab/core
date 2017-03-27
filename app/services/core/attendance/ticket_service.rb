@@ -77,7 +77,6 @@ module Core
           end
 
           @action.save
-
         end
       end
 
@@ -103,15 +102,27 @@ module Core
       end
 
       def close_ticket
+
         return false if @ticket.nil?
-        return false if @ticket.actions.where(situation_id: [1,2]).present?
-                
-        if @ticket.actions.count == 1 && @ticket.actions.where(context_id: 4).present?
-          @ticket.update(situation_id: 7, active: false)
-        elsif @ticket.context_id == 1
-          @ticket.update(situation_id: 2, active: false)
+        return false if @ticket.actions.where(situation_id: 1).present?
+
+        # 1 => atualização cadastral (recadastramento)
+        if @ticket.context_id == 1
+          if @ticket.actions.where(situation_id: 2).present?
+            # 2 => pendente com atendente
+            @ticket.update(situation_id: 2, active: false)
+          else
+            # 7 => finalizado pelo candidato
+            @ticket.update(situation_id: 7, active: false)
+          end
         else
-          @ticket.update(situation_id: 2, active: true)
+          if @ticket.actions.count == 1 && @ticket.actions.where(context_id: 4).present?
+            # 7 => finalizado pelo candidato
+            @ticket.update(situation_id: 7, active: false)
+          else
+            # 2 => pendente com atendente
+            @ticket.update(situation_id: 2, active: true)
+          end
         end
       end
 
@@ -121,62 +132,6 @@ module Core
         @ticket.context.confirmation_required ? 1 : 2
       end
 
-      def set_ticket_context
-        # Verifica qual tipo de contexto pode ser criado para o candidato
-        # 1 - Se for habilitado e não tiver atendimento de recadastramento 
-        # e program_id = [1,2] 
-        # => recadastramento
-        #
-        # 2 - Se tiver atendimento de recastramento finalizado e 
-        # for habilitado e program_id = [1,2] 
-        # =>  atualização cadastral (habilitado)  
-        # 
-        # 3 - Se não for convocado e programa_id = [1,2]
-        # => atualização cadastral (convocado) 
-        #
-        # 4 - Se for program_id = 3
-        # => atualiazação cadastral (regularização)
-        #
-        # 5 - Se não se adequar em nenhuma das regras
-        # => atualização cadastral (outro)
-
-        @cadastre = Core::Candidate::CadastrePresenter.new(@cadastre)
-
-        # ele é RII ou RIE
-        if [1, 2].include?(@cadastre.program_id)
-          # ele é habilitado?
-          if @cadastre.current_situation_id == 4 
-            # ele fez o recadastramento?
-            if @cadastre.tickets.where(context_id: 1).where.not(situation_id: 1).present?
-              #retorna contexto atualização cadastral (habilitado)
-              return 3 
-            else
-              #retorna contexto atualização cadastral (recadastramento)
-              return 1 
-            end
-          elsif @cadastre.current_situation_id == 3
-            if !@cadastre.tickets.where(context_id: 2).where.not(situation_id: [5,6,7]).present? 
-              #retorna contexto atualização cadastral (convocado)
-              return 2 
-            else
-              #retorna false, pois convocado só poderá fazer um atendimento.
-              return false 
-            end
-          else
-            #retorna contexto atualização cadastral (outro)
-            return 5 
-          end
-        # ele é de regularização
-        elsif @cadastre.program_id == 3
-          # não possui regras
-          #retorna contexto atualização cadastral (regularização)
-          return 4 
-        # não entra em nenhuma regra
-        else
-          #retorna contexto atualização cadastral (outro)
-          return 5
-        end 
-      end
 
       def send_notification_by_action action = nil
         return false if action.nil?

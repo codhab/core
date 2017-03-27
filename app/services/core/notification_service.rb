@@ -8,7 +8,7 @@ module Core
 
     attr_accessor :notification, :cadastre
 
-    def create(cadastre_id: nil, category_id: 1, content: "", title: "", link: false, push: false, email: false)
+    def create(cadastre_id: nil, category_id: 1, content: "", title: "", push: false, email: false)
 
       return false if cadastre_id.nil?
 
@@ -17,11 +17,10 @@ module Core
       return false if @cadastre.nil?
 
       @notification = Core::Attendance::Notification.new.tap do |notification|
-        notification.cadastre_id              = @cadastre.id
-        notification.title                    = title
-        notification.content                  = content
-        notification.notification_category_id = category_id
-        notification.link                     = link
+        notification.cadastre_id = @cadastre.id
+        notification.title       = title
+        notification.message     = content
+        notification.category_id = category_id
       end
 
       @notification.save
@@ -37,7 +36,7 @@ module Core
       # => ActionMailer
       if email && @cadastre.email.present?
 
-        params = {heading: title, message: content, emails: @cadastre.email}
+        params = {subject: title, message: content, email: @cadastre.email}
         send_email_notification!(params)
 
       end
@@ -46,7 +45,7 @@ module Core
 
     end
 
-    def self.create_bulk(category_id: 1, content: nil, title: nil, cadastre_ids: [], push: false, email: false)
+    def self.create_bulk(category_id: 1, content: nil, heading: nil, cadastre_ids: [], push: false, email: false)
 
       cadastre_ids.each do |cadastre_id|
         create(category_id: category_id, content: content, title: title, push: false)
@@ -68,7 +67,7 @@ module Core
         user_emails = Core::Candidate::Cadastre.where(id: cadastre_ids).map(&:email)
         mobile_user_ids = mobile_user_ids.reject { |c| c.empty? }
 
-        params = {heading: title, message: content, emails: user_emails}
+        params = {subject: title, message: content, emails: user_emails}
 
         send_email_notification!(params)
 
@@ -80,7 +79,7 @@ module Core
 
     private
 
-    def send_push_notification!(message: nil, user_ids: nil, heading: nil)
+    def send_push_notification!(message: "", user_ids: nil, heading: "")
 
       return false if user_ids.nil? || message.nil?
 
@@ -104,17 +103,10 @@ module Core
       end
     end
 
-    def send_email_notification!(message: nil, subject: nil, emails: nil)
+    def send_email_notification!(message: "", subject: "", email: "")
 
-      return false if emails.nil? || message.nil?
+      return false if email.nil? || message.nil?
 
-      array = []
-      array = emails.is_a?(Array) ? emails : array << emails
-
-      emails.each do |email|
-        #Sender e-mail to-do
-        #ClassMailer.notification_mail(email: email, subject: subject, body: message).delivery_now!
-      end
     end
 
   end
