@@ -8,7 +8,7 @@ module Core
 
     attr_accessor :notification, :cadastre
 
-    def create(cadastre_id: nil, category_id: 1, content: "", title: "", push: false, email: false)
+    def create(cadastre_id: nil, category_id: 1, content: "", title: "", push: false, email: false, target_model: nil, target: nil)
 
       return false if cadastre_id.nil?
 
@@ -17,10 +17,12 @@ module Core
       return false if @cadastre.nil?
 
       @notification = Core::Attendance::Notification.new.tap do |notification|
-        notification.cadastre_id = @cadastre.id
-        notification.title       = title
-        notification.message     = content
-        notification.category_id = category_id
+        notification.cadastre_id   = @cadastre.id
+        notification.title         = title
+        notification.message       = content
+        notification.category_id   = category_id
+        notification.target_model  = target_model
+        notification.target_id     = target
       end
 
       @notification.save
