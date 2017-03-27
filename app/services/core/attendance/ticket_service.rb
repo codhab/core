@@ -46,6 +46,7 @@ module Core
       end
 
       def create_or_find context_id
+
         @ticket = @cadastre.tickets.find_by(active: true) rescue nil
 
         if @ticket.nil?
@@ -60,16 +61,15 @@ module Core
           end
 
           @ticket.save
-
         end
 
       end
 
       def create_or_find_action action_id
+        return false if @ticket.situation_id != 1
         @action = @ticket.actions.find_by(context_id: action_id) rescue nil
 
-        if @action.nil?
-          
+        if @action.nil?           
           @action = @ticket.actions.new.tap do |action|
             action.context_id     = action_id
             action.situation_id   = set_context_situation
@@ -105,25 +105,14 @@ module Core
       def close_ticket
         return false if @ticket.nil?
         return false if @ticket.actions.where(situation_id: [1,2]).present?
-        
-        # Regra #1
-        # Atendimentos que contém em suas acões a situação `atualizado`
-        # colocar os mesmo para análise do atendente  esta clásula deve
-        # ignorada quando a ação for do tipo `atualização de dados de contato`
-        #
-        # SE (situation_id = 2) EM ticket_actions.where.not(context_id: 4) `atualização de contatos`
-        # => ATTRIBUIR ticket_situation_id = 2 `pendente com atendente`        
-        # SE NÃO
-        # => ATTRIBUIR ticket_situation_id = 7 `finalizado pelo candidato`        
-
-
-        @actions = @ticket.actions.where.not(context_id: 4).where(situation_id: 2)
-
-        #pendente com atendente : finalizado pelo candidato
-        situation_id = @actions.present? ? 2 : 7 
-
-        @ticket.update(situation_id: situation_id, active: false)
-        
+                
+        if @ticket.actions.count == 1 && @ticket.actions.where(context_id: 4).present?
+          @ticket.update(situation_id: 7, active: false)
+        elsif @ticket.context_id == 1
+          @ticket.update(situation_id: 2, active: false)
+        else
+          @ticket.update(situation_id: 2, active: true)
+        end
       end
 
       private

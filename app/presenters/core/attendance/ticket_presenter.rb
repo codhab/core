@@ -8,6 +8,14 @@ module Core
         "#{self.id}#{self.created_at.strftime('%Y')}"
       end
 
+      def close_text
+        if self.situation_id == 1
+          "Finalizar Atualização"
+        else
+          self.situation.external_name
+        end
+      end
+
       def confirmation_text
         self.context.confirmation_text.html_safe rescue nil
       end
