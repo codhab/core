@@ -7,7 +7,7 @@ module Core
 
       belongs_to :chat_comment, required: false, class_name: ::Core::Attendance::Chat
 
-      mount_uploader :upload_path, Attendance::UploadPathUploader
+      #mount_uploader :upload_path, Attendance::UploadPathUploader
     end
   end
 end
