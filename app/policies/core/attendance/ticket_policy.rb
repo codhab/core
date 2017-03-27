@@ -2,6 +2,12 @@ module Core
   module Attendance
     class TicketPolicy < ApplicationPolicy
 
+      def enabled_to_update? context_id
+        if [2,3].include? self.situation_id
+          self.actions.where(context_id: context_id).present?
+        end
+      end
+
       def disable_remove_spouse mirror
         mirror.kinship_id != 6
       end
