@@ -20,10 +20,11 @@ module Core
       
       attr_accessor :cadastre, :action, :ticket, :cadastre_mirror
 
-      def initialize(cadastre: nil, action: nil, ticket: nil)
-        @cadastre = cadastre
-        @action   = action
-        @ticket   = ticket
+      def initialize(cadastre: nil, action: nil, ticket: nil, dependent_mirror: nil)
+        @cadastre         = cadastre
+        @action           = action
+        @ticket           = ticket
+        @dependent_mirror = dependent_mirror
       end
 
       def documents
@@ -40,17 +41,8 @@ module Core
         when 1 # (atualização dados básicos)
           cadastre_documents
         when 2 # (atualização de dependentes)
-        
-          #se atualização cadastral (convocado) => pedir todos os documentos
-          if @ticket.context_id == 2
-          
-          else
-          
-          end
-
+          dependent_documents
         when 3 # (atualização de renda)
-          income_documents
-        when 4 # (atualização de dados de contato)
           income_documents
         end
       end
@@ -87,6 +79,23 @@ module Core
       end
 
       def dependent_documents
+        if @dependent_mirror.present?
+          dependent = @cadastre.dependents.find_by_name(@dependent_mirror.name) rescue nil
+
+          if @dependent_mirror.rg != dependent.name
+            @action.rg_documents.new(disable_destroy: true, target_id: @dependent_mirror.id, target_model: "DependentMirror")
+          end
+
+          if @dependent_mirror.cpf != dependent.cpf 
+            @action.cpf_documents.new(disable_destroy: true, target_id: @dependent_mirror.id, target_model: "DependentMirror")
+          end
+
+          if @dependent_mirror.special_condition_id == 2 &&
+            (@dependent_mirror.special_condition_id != dependent.special_condition_id)
+            @action.special_condition_documents.new(disable_destroy: true, target_id: @dependent_mirror.id, target_model: "DependentMirror")
+          end
+        end
+
       end
 
       def income_documents
@@ -110,11 +119,9 @@ module Core
             dependent = @cadastre.dependents.find_by_name(mirror.name) rescue nil
             
             if dependent.present?
-              if dependent.income != mirror.income
+              if (dependent.income != mirror.income) && mirror.income.to_i > 0
                 @action.income_documents.new(disable_destroy: true)
               end
-            else
-              @action.income_documents.new(disable_destroy: true)
             end
           end
 

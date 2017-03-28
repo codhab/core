@@ -61,8 +61,13 @@ module Core
         (action.situation_id == 1 && self.context.confirmation_required)
       end
 
-      def document_required? action
-        action.uploads.any?
+      def document_required?(action)
+        
+        Core::Attendance::TicketUploadCategory.all.each do |category|
+          return true if action.send(category.target_method).any?
+        end
+
+        return false
       end
     end
   end
