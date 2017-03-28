@@ -24,6 +24,7 @@ module Core
     has_many :attach_documents, foreign_key: "document_father_id"
     has_many :attach_document_children, class_name: ::Core::Protocol::AttachDocument, foreign_key: "document_child_id"
 
+    accepts_nested_attributes_for :digital_documents
     accepts_nested_attributes_for :digital_document_forms
 
     scope :by_process,  -> (process) {where(document_number: process)}

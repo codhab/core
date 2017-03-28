@@ -5,6 +5,13 @@ module Core
     class DependentForm < Core::Candidate::DependentMirror
 
       validates :name, :born, :income, presence: true
+      validates :cpf, cpf: true, presence: true, if: :is_major?
+
+      private
+
+      def is_major?
+        age >= 14
+      end
     end
   end
 end

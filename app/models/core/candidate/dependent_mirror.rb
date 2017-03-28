@@ -13,6 +13,10 @@ module Core
 
       enum gender: ['N/D', 'masculino', 'feminino']
 
+      def age
+        self.born.present? ? (Date.today - self.born).to_i / 365 :  0
+      end
+
       def income
         self[:income].present? ? '%.2f' % self[:income] : 0 
       end
