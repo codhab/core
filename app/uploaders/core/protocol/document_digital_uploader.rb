@@ -4,7 +4,7 @@ module Core
       storage :file
 
       def store_dir
-        'uploads/protocol/document'
+        'uploads/protocol/'
       end
 
       def filename
