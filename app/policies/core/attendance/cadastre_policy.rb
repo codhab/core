@@ -46,7 +46,8 @@ module Core
       end
 
       def allow_other_update?
-        [6, 8].include?(self.program_id)
+        [6, 8].include?(self.program_id) &&
+        !self.tickets.where(context_id: 2).present?
       end
 
       def allow_regularization_update?
@@ -55,8 +56,7 @@ module Core
 
       def allow_convoked_update?
         ![3, 6, 8].include?(self.program_id) &&
-        (self.current_situation_id == 3) &&
-        self.tickets.where(context_id: 2).where.not(situation_id: 1).present?
+        (self.current_situation_id == 3)
       end
 
     end
