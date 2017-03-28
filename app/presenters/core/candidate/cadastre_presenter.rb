@@ -50,6 +50,16 @@ module Core
         current_situation.situation_status_id rescue nil
       end
 
+      # => procedural
+
+      def current_procedural
+        self.cadastre_procedurals.order('created_at ASC').last rescue nil
+      end
+
+      def current_procedural_name
+        current_procedural.procedural_status.name.mb_chars.upcase rescue nil
+      end
+
       # => convocation
 
       def current_convocation
