@@ -43,6 +43,8 @@ module Core
 
     validates :document_number, uniqueness: { scope: [:document_type] }, presence: true
 
+    scope :requeriment,  -> {where(prefex: 777)}
+
 
   end
  end
