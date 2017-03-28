@@ -5,7 +5,7 @@ module Core
     class RequerimentForm < Core::Protocol::Assessment
 
       validates :observation, presence: true
-      default_scope { where(prefex: 777) }
+      default_scope { where(prefex: 777, subject_id: [1746,1747]) }
 
     end
   end
