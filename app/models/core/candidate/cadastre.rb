@@ -53,7 +53,6 @@ module Core
 
       has_many :old_candidates,                                                       class_name: ::Core::Entity::OldCandidate
       has_many :olds, through: :old_candidates,                                       class_name: ::Core::Entity::Old
-      has_many :chats,                                                                class_name: ::Core::Attendance::Chat
 
 
       has_many :cadastre_attendances

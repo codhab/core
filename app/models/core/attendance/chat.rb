@@ -19,6 +19,7 @@ module Core
         scope :by_date_start, -> (date_start) { where("created_at::date >= ?", Date.parse(date_start))}
         scope :by_date_end, -> (date_end) { where("created_at::date <= ?", Date.parse(date_end))}
 
+        validates :chat_category, presence: true
     end
   end
 end

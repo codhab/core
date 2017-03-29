@@ -6,6 +6,21 @@ module Core
         @assessment = assessment
       end
 
+      def app_requeriment!(candidate)
+        @assessment.document_type_id = 26 #external requeriment
+        @assessment.recipient        = candidate.name
+        @assessment.finalized        = false
+        if ([1,2,4,5,7,9,10].include? candidate.program_id)
+          sector = 27
+          @assessment.subject_id = 1746 #request
+        else
+          sector = 30
+          @assessment.subject_id = 1747 #request
+        end
+        number = set_number!(nil,sector)
+        @assessment.document_number = number
+      end
+
       def set_number!(user, sector)
         document_type = Core::Protocol::DocumentType.find(@assessment.document_type_id)
         if @assessment.external_petition == true || document_type.prefex == 777
