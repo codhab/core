@@ -7,6 +7,7 @@ module Core
       end
 
       def app_requeriment!(candidate)
+        
         @assessment.document_type_id = 26 #external requeriment
         @assessment.recipient        = candidate.name
         @assessment.finalized        = false
@@ -19,6 +20,15 @@ module Core
         end
         number = set_number!(nil,sector)
         @assessment.document_number = number
+
+        if @assessment.save
+          @service = Core::Attendance::RequerimentService.new(@assessment)
+          @service.new_requeriment!
+          set_conduct!(@assessment,nil,sector)
+          return true
+        else
+          return false
+        end
       end
 
       def set_number!(user, sector)
