@@ -7,7 +7,7 @@ module Core
       end
 
       def chat_closed?
-        return self.last.closed == true ? true : false
+        return self.order(:created_at).last.closed == true ? true : false
       end
 
       def allow_comment?
