@@ -67,7 +67,7 @@ module Core
       end
 
       def open? action 
-        action 
+        [1,2].include? action.situation_id
       end
 
       def closed? action 
