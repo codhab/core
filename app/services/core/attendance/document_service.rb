@@ -29,7 +29,7 @@ module Core
       end
 
       def documents
-        return Core::Attendance::TicketUploadCategory.all.order(:name)
+        Core::Attendance::TicketUploadCategory.all.order(:name)
       end
 
       def documents_required? document

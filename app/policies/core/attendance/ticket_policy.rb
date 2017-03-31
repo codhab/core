@@ -1,3 +1,5 @@
+require_dependency 'core/application_policy'
+
 module Core
   module Attendance
     class TicketPolicy < ApplicationPolicy
@@ -65,7 +67,7 @@ module Core
       end
 
       def open? action 
-        [1,2].include?(action.situation_id) 
+        action 
       end
 
       def closed? action 

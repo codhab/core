@@ -5,7 +5,8 @@ module Core
       
       belongs_to :situation, class_name: Core::Attendance::TicketActionSituation, foreign_key: :situation_id      
       belongs_to :context,   class_name: Core::Attendance::TicketActionContext,   foreign_key: :context_id      
-     
+      
+
       has_many :uploads,
                class_name: Core::Attendance::TicketUpload,
                foreign_key: :action_id
@@ -52,16 +53,21 @@ module Core
                class_name: Core::Attendance::TicketUpload,
                foreign_key: :action_id
 
-      accepts_nested_attributes_for :born_documents,              allow_destroy: true
-      accepts_nested_attributes_for :certificate_born_documents,  allow_destroy: true
-      accepts_nested_attributes_for :rg_documents,                allow_destroy: true
-      accepts_nested_attributes_for :cpf_documents,               allow_destroy: true
-      accepts_nested_attributes_for :residence_documents,         allow_destroy: true
-      accepts_nested_attributes_for :arrival_df_documents,        allow_destroy: true
-      accepts_nested_attributes_for :registry_documents,          allow_destroy: true
-      accepts_nested_attributes_for :payment_documents,           allow_destroy: true
-      accepts_nested_attributes_for :income_documents,            allow_destroy: true
-      accepts_nested_attributes_for :special_condition_documents, allow_destroy: true
+      accepts_nested_attributes_for :born_documents,              allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
+      accepts_nested_attributes_for :certificate_born_documents,  allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
+      accepts_nested_attributes_for :rg_documents,                allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
+      accepts_nested_attributes_for :cpf_documents,               allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
+      accepts_nested_attributes_for :residence_documents,         allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
+      accepts_nested_attributes_for :arrival_df_documents,        allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
+      accepts_nested_attributes_for :registry_documents,          allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
+      accepts_nested_attributes_for :payment_documents,           allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
+      accepts_nested_attributes_for :income_documents,            allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
+      accepts_nested_attributes_for :special_condition_documents, allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
+    
+
+      def upload_categories
+        Core::Attendance::TicketUploadCategory.all.order(:name)
+      end
     end
   end
 end
