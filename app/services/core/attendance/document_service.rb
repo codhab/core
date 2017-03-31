@@ -118,7 +118,6 @@ module Core
 
       def income_documents
 
-
         if @ticket.context_id == 2
           @action.income_documents.new(disable_destroy: true, target_id: @dependent_id, target_model: "Core::Candidate::DependentMirror")
         else
@@ -126,7 +125,7 @@ module Core
 
           if !@dependent.nil? 
             @original_dependent = Core::Candidate::Dependent.where(name: @dependent.name).first
-            if @original_dependent.present? && @dependent.income != @original_dependent.income 
+            if @original_dependent.present? && (@dependent.income != @original_dependent.income) 
               @action.income_documents.new(disable_destroy: true, target_id: @dependent_id, target_model: "Core::Candidate::DependentMirror")
             end 
           else 
