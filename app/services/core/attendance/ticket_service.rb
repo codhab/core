@@ -61,6 +61,23 @@ module Core
           end
 
           @ticket.save
+
+          text = <<-HTML
+                  Sua atualização cadastral foi inciada.
+                  Atualize ou confirme os 4 passos existente em seu cadastro,
+                  verifique os termos de aceite e finalize o procedimento.
+                HTML
+
+          service = Core::NotificationService.new
+          service.create({
+                          cadastre_id: @ticket.cadastre_id, 
+                          category_id: 1, 
+                          title: "Atualização Cadastral Nº #{@ticket.presenter.protocol} foi iniciada.", 
+                          content: text.html_safe, 
+                          target_model: @ticket.class,
+                          target: @ticket.id, 
+                          push: true
+                        }) 
         end
 
       end
@@ -125,17 +142,18 @@ module Core
           end
         end
 
-        if @ticket.context_id == 1
-          message = "Sua atualização cadastral foi efetuada com sucesso!"
-        else
-          message = "Seus dados foram atualizados com sucesso, aguarde a análise da CODHAB."
-        end
+        message = <<-HTML 
+                  Sua atualização cadastral foi finalizada.
+                  Caso tenha informado novos dados que necessitem ser validados,
+                  faz-se necessário aguardar o retorno do atendimento da CODHAB.
+                   Você receberá notificações informando o andamento da situação da sua atualização
+                  HTML
 
         notification = Core::NotificationService.new
         notification.create({
           cadastre_id: @ticket.cadastre_id,
           content: message,
-          title: "Interação em seu atendimento",
+          title: "Atualização Cadastral Nº #{@ticket.presenter.protocol} foi finalizada por você",
           push: true,
           email: true
         })
