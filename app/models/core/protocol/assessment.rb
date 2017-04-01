@@ -43,6 +43,10 @@ module Core
     scope :by_date_start, -> (date_start) { where("protocol_assessments.created_at::date >= ?", Date.parse(date_start))}
     scope :by_date_end, -> (date_end) { where("protocol_assessments.created_at::date <= ?", Date.parse(date_end))}
 
+    scope :requeriments, -> { where(prefex: 777, subject_id: [1746,1747]) }
+
+    scope :not_requeriments, -> { where.not(prefex: 777, subject_id: [1746,1747]) }
+
     validates :document_number, uniqueness: { scope: [:document_type] }, presence: true
 
 
