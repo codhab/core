@@ -1,5 +1,6 @@
 require 'validates_timeliness'
 require 'friendly_id'
+require 'file_validators'
 
 module Core
   class Engine < ::Rails::Engine

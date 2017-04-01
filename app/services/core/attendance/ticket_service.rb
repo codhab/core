@@ -62,11 +62,7 @@ module Core
 
           @ticket.save
 
-          text = <<-HTML
-                  Sua atualização cadastral foi inciada.
-                  Atualize ou confirme os 4 passos existente em seu cadastro,
-                  verifique os termos de aceite e finalize o procedimento.
-                HTML
+          text = "Sua atualização cadastral foi inciada. Atualize ou confirme os 4 passos existente em seu cadastro, verifique os termos de aceite e finalize o procedimento."
 
           service = Core::NotificationService.new
           service.create({
@@ -142,12 +138,7 @@ module Core
           end
         end
 
-        message = <<-HTML 
-                  Sua atualização cadastral foi finalizada.
-                  Caso tenha informado novos dados que necessitem ser validados,
-                  faz-se necessário aguardar o retorno do atendimento da CODHAB.
-                   Você receberá notificações informando o andamento da situação da sua atualização
-                  HTML
+        message = "Sua atualização cadastral foi finalizada. Caso tenha informado novos dados que necessitem ser validados, faz-se necessário aguardar o retorno do atendimento da CODHAB. Você receberá notificações informando o andamento da situação da sua atualização."
 
         notification = Core::NotificationService.new
         notification.create({

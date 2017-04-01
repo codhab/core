@@ -5,7 +5,7 @@ module Core
     class TicketPresenter < ApplicationPresenter
       
       def protocol
-        "#{self.id}#{self.created_at.strftime('%Y')}"
+        "#{self.id}/#{self.created_at.strftime('%Y')}"
       end
 
       def close_text
