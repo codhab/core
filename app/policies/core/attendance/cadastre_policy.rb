@@ -59,6 +59,10 @@ module Core
         (self.current_situation_id == 3)
       end
 
+      def allow_chats?
+        (self.current_situation_id == 4) && [1,2].include?(self.program_id)
+      end
+
     end
   end
 end
