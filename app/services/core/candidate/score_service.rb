@@ -54,21 +54,11 @@ module Core
       end
 
       def scoring_cadastre!
-        @scores =   @cadastre_mirror.cadastre.pontuations.last
-
-        if @scores.present?
-          new_timelist = @scores.timelist
-          new_bsb = @scores.bsb
-        else
-          new_timelist = timelist_score
-          new_bsb = timebsb_score
-        end
-
 
         total_score = income_score + special_dependent_score + dependent_score + new_timelist + new_bsb
 
         {total: total_score.round(10), income_score: income_score, special_dependent_score: special_dependent_score,
-         dependent_score: dependent_score, timelist_score: new_timelist, timebsb_score: new_bsb}
+         dependent_score: dependent_score, timelist_score: timelist_score, timebsb_score: timebsb_score}
       end
 
       # => MB_11 recebe valor igual a um (1) se o candidato teve classificação no Morar Bem em 2011,
@@ -102,6 +92,7 @@ module Core
 
       # => f) PT_RENDA(i) = PMR* (SAL_MIN * 12 – (R_TOTAL(i) / (DP(i)+1))) / (SAL_MIN * 12)
       def income_score
+        income_mirror = @cadastre_mirror.income.present? ? @cadastre_mirror.income : 0
         (PMR * (@min_salary * 12 - (@cadastre_mirror.income / (@cadastre_mirror.dependent_mirrors.count + 1))) / (@min_salary * 12)).round(10)
       end
 

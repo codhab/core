@@ -11,9 +11,9 @@ module Core
 
       validates :content, presence: true
 
-      has_many :chat_uploads, class_name: ::Core::Attendance::ChatUpload
+      has_many :chat_uploads, inverse_of: :chat_comment, class_name: ::Core::Attendance::ChatUpload
 
-      accepts_nested_attributes_for :chat_uploads
+      accepts_nested_attributes_for :chat_uploads, reject_if: :all_blank,  allow_destroy: true
 
     end
   end
