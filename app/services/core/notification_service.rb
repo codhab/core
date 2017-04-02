@@ -34,7 +34,7 @@ module Core
         send_push_notification!(params)
 
       end
-
+      
       # => ActionMailer
       if email && @cadastre.email.present?
 

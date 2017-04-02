@@ -4,6 +4,11 @@ module Core
   module Attendance
     class TicketPolicy < ApplicationPolicy
 
+
+      def action_allow?
+        (self.context_id != 5)
+      end
+
       def ticket_closed?
         [4,5,6,7].include?(self.situation_id)
       end

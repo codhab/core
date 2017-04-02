@@ -22,9 +22,12 @@ module Core
         @assessment.document_number = number
 
         if @assessment.save
-          @service = Core::Attendance::RequerimentService.new(@assessment)
+          @service = Core::Attendance::RequerimentService.new(@assessment, candidate)
           @service.new_requeriment!
           set_conduct!(@assessment,nil,sector)
+
+
+
           return true
         else
           return false
