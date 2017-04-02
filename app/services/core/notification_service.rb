@@ -34,7 +34,7 @@ module Core
         send_push_notification!(params)
 
       end
-
+      
       # => ActionMailer
       if email && @cadastre.email.present?
 
@@ -106,9 +106,7 @@ module Core
     end
 
     def send_email_notification!(message: "", subject: "", email: "")
-
-      return false if email.nil? || message.nil?
-
+       Core::BasicMailer.simple_sender(email, subject, message).deliver_now!
     end
 
   end

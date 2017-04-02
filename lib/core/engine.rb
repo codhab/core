@@ -1,6 +1,7 @@
 require 'validates_timeliness'
 require 'friendly_id'
 require 'file_validators'
+require 'haml-rails'
 
 module Core
   class Engine < ::Rails::Engine

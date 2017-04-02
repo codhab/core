@@ -32,6 +32,7 @@ module Core
       end
 
       def documents_required? document
+
       end
 
       def documents_required!
@@ -76,6 +77,10 @@ module Core
             @action.special_condition_documents.new(disable_destroy: true)
           end
 
+          if (@cadastre.arrival_df != @cadastre_mirror.arrival_df)
+            @action.arrival_df_documents.new(disable_destroy: true)
+          end
+
         end
       end
 
@@ -100,16 +105,17 @@ module Core
               @action.special_condition_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
             end
           else
-          
             @action.certificate_born_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
             
-            if @dependent.age >= 14
-              @action.cpf_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
-            end
 
             if @dependent.special_condition_id == 2
               @action.special_condition_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
             end
+
+            if @dependent.dependent.present? && (@dependent.age >= 14 || (@dependent.cpf != @dependent.dependent.cpf))
+              @action.cpf_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
+            end 
+            
           end
 
         end
@@ -125,7 +131,7 @@ module Core
 
           if !@dependent.nil? 
             @original_dependent = Core::Candidate::Dependent.where(name: @dependent.name).first
-            if @original_dependent.present? && (@dependent.income != @original_dependent.income) 
+            if @original_dependent.present? && (@dependent.income.to_i != @original_dependent.income.to_i) 
               @action.income_documents.new(disable_destroy: true, target_id: @dependent_id, target_model: "Core::Candidate::DependentMirror")
             end 
           else 

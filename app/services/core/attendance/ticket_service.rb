@@ -72,7 +72,8 @@ module Core
                           content: text.html_safe, 
                           target_model: @ticket.class,
                           target: @ticket.id, 
-                          push: true
+                          push: true,
+                          email: true
                         }) 
         end
 
@@ -109,11 +110,6 @@ module Core
         @action.update(situation_id: 3)
       end
 
-      def cancel_ticket
-        return false if @ticket.nil?
-        @action.update(sset_context_situationituation_id: 4)
-      end
-
       def close_ticket
 
         return false if @ticket.nil?
@@ -121,7 +117,7 @@ module Core
 
         # 1 => atualização cadastral (recadastramento)
         if @ticket.context_id == 1
-          if @ticket.actions.where(situation_id: 2).present?
+          if @ticket.actions.where(situation_id: 3).present?
             # 2 => pendente com atendente
             @ticket.update(situation_id: 2, active: false)
           else
@@ -132,6 +128,8 @@ module Core
           if @ticket.actions.count == 1 && @ticket.actions.where(context_id: 4).present?
             # 7 => finalizado pelo candidato
             @ticket.update(situation_id: 7, active: false)
+
+            rewrite_to_cadastre!
           else
             # 2 => pendente com atendente
             @ticket.update(situation_id: 2, active: true)
@@ -141,8 +139,10 @@ module Core
         message = "Sua atualização cadastral foi finalizada. Caso tenha informado novos dados que necessitem ser validados, faz-se necessário aguardar o retorno do atendimento da CODHAB. Você receberá notificações informando o andamento da situação da sua atualização."
 
         notification = Core::NotificationService.new
+        
         notification.create({
           cadastre_id: @ticket.cadastre_id,
+          category_id: 1,
           content: message,
           title: "Atualização Cadastral Nº #{@ticket.presenter.protocol} foi finalizada por você",
           push: true,
@@ -169,6 +169,20 @@ module Core
         notification.create(title: content.title, message: content.message, push: true, email: true)
       end 
 
+
+      def rewrite_to_cadastre!
+        
+        return false if @ticket.cadastre.nil? || @ticket.cadastre_mirror.nil?
+
+        @ticket.cadastre_mirror.attributes.each do |key, value|
+          unless %w(id created_at updated_at).include? key 
+            @ticket.cadastre[key] = value if @ticket.cadastre.attributes.has_key?(key)
+          end
+        end
+
+        @ticket.cadastre.save
+      end
+
       def clone_cadastre_to_make_mirrors!
         return false if @cadastre.nil?
 
@@ -185,7 +199,7 @@ module Core
         @dependents = @cadastre.dependents
 
         @dependents.each do |dependent|
-          @new_dependent = @cadastre_mirror.dependent_mirrors.new
+          @new_dependent = @cadastre_mirror.dependent_mirrors.new(dependent_id: dependent.id)
           
           dependent.attributes.each do |key, value|
             unless %w(id created_at updated_at).include? key

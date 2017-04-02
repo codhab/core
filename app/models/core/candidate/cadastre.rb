@@ -63,12 +63,8 @@ module Core
 
       scope :by_cpf,          -> (cpf = nil) { where(cpf: cpf.gsub('-','').gsub('.','')) }
 
-
       mount_uploader :avatar, Core::Cadastre::AvatarUploader
 
-      validates :avatar, file_size: { less_than_or_equal_to: 100.kilobytes },
-                         file_content_type: { allow: ['image/jpeg', 'image/png'] },
-                         allow_blank: true 
       def income
         '%.2f' % self[:income]
       end

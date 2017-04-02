@@ -4,6 +4,15 @@ module Core
   module Attendance
     class TicketPolicy < ApplicationPolicy
 
+
+      def action_allow?
+        (self.context_id != 5)
+      end
+
+      def ticket_closed?
+        [4,5,6,7].include?(self.situation_id)
+      end
+
       def peding_with_attendant?
         self.situation_id == 2
       end
@@ -80,14 +89,6 @@ module Core
         self.context_id == 1
       end
 
-      def document_required?(action)
-        
-        Core::Attendance::TicketUploadCategory.all.each do |category|
-          return true if action.send(category.target_method).any?
-        end
-
-        return false
-      end
     end
   end
 end
