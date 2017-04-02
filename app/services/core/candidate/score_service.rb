@@ -55,7 +55,7 @@ module Core
 
       def scoring_cadastre!
 
-        total_score = income_score + special_dependent_score + dependent_score + new_timelist + new_bsb
+        total_score = income_score + special_dependent_score + dependent_score + timelist_score + timebsb_score
 
         {total: total_score.round(10), income_score: income_score, special_dependent_score: special_dependent_score,
          dependent_score: dependent_score, timelist_score: timelist_score, timebsb_score: timebsb_score}
