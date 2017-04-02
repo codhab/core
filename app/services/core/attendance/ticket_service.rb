@@ -72,7 +72,8 @@ module Core
                           content: text.html_safe, 
                           target_model: @ticket.class,
                           target: @ticket.id, 
-                          push: true
+                          push: true,
+                          email: true
                         }) 
         end
 
@@ -121,7 +122,7 @@ module Core
 
         # 1 => atualização cadastral (recadastramento)
         if @ticket.context_id == 1
-          if @ticket.actions.where(situation_id: 2).present?
+          if @ticket.actions.where(situation_id: 3).present?
             # 2 => pendente com atendente
             @ticket.update(situation_id: 2, active: false)
           else
@@ -143,6 +144,7 @@ module Core
         notification = Core::NotificationService.new
         notification.create({
           cadastre_id: @ticket.cadastre_id,
+          category_id: 1,
           content: message,
           title: "Atualização Cadastral Nº #{@ticket.presenter.protocol} foi finalizada por você",
           push: true,
@@ -185,7 +187,7 @@ module Core
         @dependents = @cadastre.dependents
 
         @dependents.each do |dependent|
-          @new_dependent = @cadastre_mirror.dependent_mirrors.new
+          @new_dependent = @cadastre_mirror.dependent_mirrors.new(dependent_id: dependent.id)
           
           dependent.attributes.each do |key, value|
             unless %w(id created_at updated_at).include? key

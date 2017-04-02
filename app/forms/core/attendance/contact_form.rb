@@ -5,8 +5,7 @@ module Core
     class ContactForm < Core::Candidate::CadastreMirror
       validates :address, :cep, :city, presence: true
       validates :email, email: true, presence: true
-      validates :telephone, numericality: true, presence: true
-      validates :telephone_optional, :celphone, numericality: true, allow_blank: true
+      validates :telephone, presence: true
 
       def telephone=(value)
         self[:telephone] = only_numbers(value)

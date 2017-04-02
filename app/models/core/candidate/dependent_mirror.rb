@@ -10,7 +10,8 @@ module Core
       belongs_to :kinship,                 required: false,  class_name: ::Core::Candidate::Kinship
       belongs_to :special_condition_type,  required: false,  class_name: ::Core::Candidate::SpecialConditionType
       belongs_to :cadastre_mirror,         required: false,  class_name: ::Core::Candidate::CadastreMirror
-
+      belongs_to :dependent,               required: false,  class_name: ::Core::Candidate::Dependent, foreign_key: :dependent_id
+       
       enum gender: ['N/D', 'masculino', 'feminino']
 
       def age
