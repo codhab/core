@@ -131,7 +131,7 @@ module Core
 
           if !@dependent.nil? 
             @original_dependent = Core::Candidate::Dependent.where(name: @dependent.name).first
-            if @original_dependent.present? && (@dependent.income.to_i != @original_dependent.income.to_i) 
+            if @original_dependent.present? && (@dependent.income.to_f != @original_dependent.income.to_f) 
               @action.income_documents.new(disable_destroy: true, target_id: @dependent_id, target_model: "Core::Candidate::DependentMirror")
             end 
           end 
