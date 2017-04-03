@@ -4,7 +4,8 @@ module Core
   module Attendance
     class AttendantPolicy < ApplicationPolicy
 
-      def attendant?        
+      def attendant?
+
         @attendant = Core::Attendance::Attendant.find_by_staff_id(self.id)
         return false unless @attendant.present?
         return @attendant.privilege == "atendente" ? true : false
