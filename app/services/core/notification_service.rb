@@ -36,7 +36,7 @@ module Core
       end
       
       # => ActionMailer
-      if email #&& @cadastre.email.present?
+      if email && @cadastre.email.present?
 
         params = {subject: title, message: content, email: @cadastre.email}
         send_email_notification!(params)
@@ -106,7 +106,7 @@ module Core
     end
 
     def send_email_notification!(message: "", subject: "", email: "")
-       Core::BasicMailer.simple_sender('antonio.improise@codhab.df.gov.br', subject, message).deliver_now!
+       Core::BasicMailer.simple_sender(email, subject, message).deliver_now!
     end
 
   end

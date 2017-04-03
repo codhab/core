@@ -63,9 +63,9 @@ module Core
           @ticket.save
 
           if @ticket.context_id == 1
-            text = "Sua atualização cadastral foi inciada. Atualize ou confirme os 4 passos existente em seu cadastro, verifique os termos de aceite e finalize o procedimento."
+            text = "Sua atualização cadastral foi inciada. Atualize ou confirme os 4 passos existentes em seu cadastro, verifique os termos de aceite e finalize o procedimento."
           else
-            text = "Sua atualização de dados foi inciada. Atualize ou confirme os 4 passos existente em seu cadastro, verifique os termos de aceite e finalize o procedimento."
+            text = "Sua atualização de dados foi inciada. Atualize ou confirme os 4 passos existentes em seu cadastro, verifique os termos de aceite e finalize o procedimento."
           end
 
           service = Core::NotificationService.new
