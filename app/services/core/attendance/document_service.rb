@@ -136,10 +136,11 @@ module Core
             end 
           end 
           
-          if @cadastre_mirror.main_income != @cadastre.main_income
-            @action.income_documents.new(disable_destroy: true)
-          end
+          #if @cadastre_mirror.main_income != @cadastre.main_income
+          #end
         end
+        
+        @action.income_documents.new(disable_destroy: true)
 
       end
 

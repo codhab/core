@@ -36,7 +36,7 @@ module Core
       end
       
       # => ActionMailer
-      if email #&& @cadastre.email.present?
+      if email && @cadastre.email.present?
 
         params = {subject: title, message: content, email: @cadastre.email}
         send_email_notification!(params)
