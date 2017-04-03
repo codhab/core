@@ -4,7 +4,7 @@ require_dependency 'core/notification_service'
 module Core
   module Attendance
     class TicketService
-      
+
       # Scope :attendance_tickets
       #
       # define :ticket_situations, table: `attendance_ticket_situations`
@@ -15,7 +15,7 @@ module Core
       # 5 => deferido
       # 6 => indeferido
       # 7 => finalizado pelo candidato
-      
+
       # define :ticket_contexts table: `attendance_ticket_contexts`
       # 1 => atualização cadastral (recadastramento)
       # 2 => atualização cadastral (convocado)
@@ -27,9 +27,9 @@ module Core
       #
       # define :ticket_action_contexts
       # 1 => atualização dados básicos
-      # 2 => atualização de dependentes 
-      # 3 => atualização de renda 
-      # 4 => atualização de dados de contato 
+      # 2 => atualização de dependentes
+      # 3 => atualização de renda
+      # 4 => atualização de dados de contato
 
       # define :ticket_action_situations
       # 1 => em processo de atualização
@@ -64,21 +64,21 @@ module Core
 
           if @ticket.context_id == 1
             text = "Sua atualização cadastral foi inciada. Atualize ou confirme os 4 passos existente em seu cadastro, verifique os termos de aceite e finalize o procedimento."
-          else 
+          else
             text = "Sua atualização de dados foi inciada. Atualize ou confirme os 4 passos existente em seu cadastro, verifique os termos de aceite e finalize o procedimento."
           end
 
           service = Core::NotificationService.new
           service.create({
-                          cadastre_id: @ticket.cadastre_id, 
-                          category_id: 1, 
-                          title: "Atualização Cadastral Nº #{@ticket.presenter.protocol} foi iniciada.", 
-                          content: text.html_safe, 
+                          cadastre_id: @ticket.cadastre_id,
+                          category_id: 1,
+                          title: "Atualização Cadastral Nº #{@ticket.presenter.protocol} foi iniciada.",
+                          content: text.html_safe,
                           target_model: @ticket.class,
-                          target: @ticket.id, 
+                          target: @ticket.id,
                           push: true,
                           email: true
-                        }) 
+                        })
         end
 
       end
@@ -87,7 +87,7 @@ module Core
         return false if @ticket.situation_id != 1
         @action = @ticket.actions.find_by(context_id: action_id) rescue nil
 
-        if @action.nil?           
+        if @action.nil?
           @action = @ticket.actions.new.tap do |action|
             action.context_id     = action_id
             action.situation_id   = set_context_situation
@@ -142,12 +142,12 @@ module Core
 
         if @ticket.context_id == 1
           message = "Sua atualização cadastral foi finalizada. Caso tenha informado novos dados que necessitem ser validados, faz-se necessário aguardar o retorno do atendimento da CODHAB. Você receberá notificações informando o andamento da situação da sua atualização."
-        else 
+        else
           message = "Sua atualização de dados foi finalizada. Caso tenha informado novos dados que necessitem ser validados, faz-se necessário aguardar o retorno do atendimento da CODHAB. Você receberá notificações informando o andamento da situação da sua atualização."
         end
-        
+
         notification = Core::NotificationService.new
-        
+
         notification.create({
           cadastre_id: @ticket.cadastre_id,
           category_id: 1,
@@ -159,8 +159,31 @@ module Core
 
       end
 
+      def scoring_cadastre
+        unless [4,5].include? @ticket.context_id
+
+          @cadastre_mirror = @ticket.cadastre_mirror
+          @score = Core::Candidate::ScoreService.new(cadastre_mirror_id: @cadastre_mirror)
+          @scores = @score.scoring_cadastre!
+
+          @pontuation = Core::Candidate::Pontuation.new(
+            cadastre_id: @cadastre_mirror.cadastre_id,
+            cadastre_mirror_id: @cadastre_mirror.id,
+            bsb: @scores[:timebsb_score],
+            dependent: @scores[:dependent_score],
+            timelist: @scores[:timelist_score],
+            special_condition: @scores[:special_dependent_score],
+            income: @scores[:income_score],
+            total: @scores[:total],
+            program_id: @cadastre_mirror.program_id
+          )
+          @pontuation.save
+
+        end
+      end
+
       private
-      
+
       def set_context_situation
         @ticket.context.confirmation_required ? 1 : 2
       end
@@ -170,20 +193,20 @@ module Core
         return false if action.nil?
 
         content = Core::Attendance::ContextNotification.find_by(action: action) rescue nil
-        
+
         return false if content.nil?
 
         notification = Core::NotificationService.new(cadastre: @cadastre)
         notification.create(title: content.title, message: content.message, push: true, email: true)
-      end 
+      end
 
 
       def rewrite_to_cadastre!
-        
+
         return false if @ticket.cadastre.nil? || @ticket.cadastre_mirror.nil?
 
         @ticket.cadastre_mirror.attributes.each do |key, value|
-          unless %w(id created_at updated_at).include? key 
+          unless %w(id created_at updated_at).include? key
             @ticket.cadastre[key] = value if @ticket.cadastre.attributes.has_key?(key)
           end
         end
@@ -203,12 +226,12 @@ module Core
         end
 
         @cadastre_mirror.save!
-      
+
         @dependents = @cadastre.dependents
 
         @dependents.each do |dependent|
           @new_dependent = @cadastre_mirror.dependent_mirrors.new(dependent_id: dependent.id)
-          
+
           dependent.attributes.each do |key, value|
             unless %w(id created_at updated_at).include? key
               @new_dependent[key] = value if @new_dependent.attributes.has_key?(key)
@@ -216,7 +239,7 @@ module Core
           end
 
           @new_dependent.save
-      
+
         end
       end
 

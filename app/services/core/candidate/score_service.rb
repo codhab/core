@@ -55,7 +55,7 @@ module Core
 
       def scoring_cadastre!
 
-        total_score = income_score + special_dependent_score + dependent_score + new_timelist + new_bsb
+        total_score = income_score + special_dependent_score + dependent_score + timelist_score + timebsb_score
 
         {total: total_score.round(10), income_score: income_score, special_dependent_score: special_dependent_score,
          dependent_score: dependent_score, timelist_score: timelist_score, timebsb_score: timebsb_score}
@@ -92,8 +92,8 @@ module Core
 
       # => f) PT_RENDA(i) = PMR* (SAL_MIN * 12 – (R_TOTAL(i) / (DP(i)+1))) / (SAL_MIN * 12)
       def income_score
-        income_mirror = @cadastre_mirror.income.present? ? @cadastre_mirror.income : 0
-        (PMR * (@min_salary * 12 - (@cadastre_mirror.income / (@cadastre_mirror.dependent_mirrors.count + 1))) / (@min_salary * 12)).round(10)
+        @income_mirror = @cadastre_mirror.income.present? ? @cadastre_mirror.income.to_f : 0
+        (PMR * (@min_salary * 12 - (@income_mirror.to_f / (@cadastre_mirror.dependent_mirrors.count + 1))) / (@min_salary * 12)).round(10)
       end
 
       # =>  PT_MB_ESP(i) = SE (MB_ESP(i) >= 4, 300*4 + 300*CH_ESP(i), SENÃO (MB_ ESP(i)*300 + 300*CH_ESP(i))
