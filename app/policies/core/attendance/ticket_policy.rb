@@ -32,7 +32,7 @@ module Core
       end
 
       def on_attendance?
-        ![7,6,5,4,1].include?(self.situation_id)
+        ![7,6,5,4,2,1].include?(self.situation_id)
       end
 
       def allow_close?
