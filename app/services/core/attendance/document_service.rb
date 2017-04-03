@@ -140,6 +140,8 @@ module Core
             @action.income_documents.new(disable_destroy: true)
           end
         end
+        
+        @action.income_documents.new(disable_destroy: true)
 
       end
 
