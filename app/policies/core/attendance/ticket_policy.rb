@@ -36,14 +36,14 @@ module Core
       end
 
       def allow_close?
-        case self.context_id 
+        case self.context_id
         when 1
 
           return false if !self.actions.present?
           return false if self.actions.count < 4
-          
+
           self.actions.each do |situation|
-            return false if [1,2].include? situation.situation_id 
+            return false if [1,2].include? situation.situation_id
           end
 
           return true
@@ -51,9 +51,9 @@ module Core
 
           return false if !self.actions.present?
           return false if self.actions.count < 4
-          
+
           self.actions.each do |situation|
-            return false if [1,2].include? situation.situation_id 
+            return false if [1,2].include? situation.situation_id
           end
 
           return true
@@ -69,17 +69,19 @@ module Core
         end
       end
 
+      
+
       def confirmation_required? action
         self.context.confirmation_required &&
         action.situation_id == 1 &&
         self.context_id == 1
       end
 
-      def open? action 
+      def open? action
         [1,2].include? action.situation_id
       end
 
-      def closed? action 
+      def closed? action
         !open?(action)
       end
 
