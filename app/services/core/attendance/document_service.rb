@@ -134,10 +134,10 @@ module Core
             if @original_dependent.present? && (@dependent.income.to_i != @original_dependent.income.to_i) 
               @action.income_documents.new(disable_destroy: true, target_id: @dependent_id, target_model: "Core::Candidate::DependentMirror")
             end 
-          else 
-            if @cadastre_mirror.main_income != @cadastre.main_income
-              @action.income_documents.new(disable_destroy: true)
-            end
+          end 
+          
+          if @cadastre_mirror.main_income != @cadastre.main_income
+            @action.income_documents.new(disable_destroy: true)
           end
         end
 
