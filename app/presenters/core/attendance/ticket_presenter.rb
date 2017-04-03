@@ -37,13 +37,13 @@ module Core
 
           case context_id
           when 1
-            "gray user"
+            "gray user fa fa-user"
           when 2
-            "gray users"
+            "gray users fa fa-users"
           when 3
-            "gray dollar"
+            "gray dollar fa fa-dollar"
           when 4
-            "gray phone"
+            "gray phone fa fa-phone"
           end
             
         else
@@ -53,13 +53,13 @@ module Core
           # 3 => confirmado
           case action.situation_id 
           when 1
-            "blue flag"
+            "blue flag fa fa-flag"
           when 2
-            "yellow flag"
+            "yellow flag fa fa-flag"
           when 3
-            "green checkmark"
+            "green checkmark fa fa-flag"
           when 4
-            "green checkmark"
+            "green checkmark fa fa-flag"
           end
 
         end
