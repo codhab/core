@@ -35,7 +35,7 @@ module Core
 
       def allow_recadastre_update?
         !self.tickets.where(context_id: 1).where.not(situation_id: 1).present? &&
-        (self.current_situation_id == 4) &&
+        [4,54].include?(self.current_situation_id) &&
         ![3, 6, 8].include?(self.program_id)
       end
 
