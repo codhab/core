@@ -46,7 +46,7 @@ module Core
       end
 
       def allow_other_update?
-        ![3,4].include?(self.current_situation_id) 
+        self.current_situation_id == 2
       end
 
       def allow_regularization_update?

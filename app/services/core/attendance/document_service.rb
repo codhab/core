@@ -124,24 +124,28 @@ module Core
 
       def income_documents
 
-        if @ticket.context_id == 2
-          @action.income_documents.new(disable_destroy: true, target_id: @dependent_id, target_model: "Core::Candidate::DependentMirror")
+        if !@dependent_id.nil?
+          @action.income_documents.new(disable_destroy: true)
         else
-          @dependent = Core::Candidate::DependentMirror.find(@dependent_id) rescue nil
-
-          if !@dependent.nil? 
-            @original_dependent = Core::Candidate::Dependent.where(name: @dependent.name).first
-            if @original_dependent.present? && (@dependent.income.to_f != @original_dependent.income.to_f) 
-              @action.income_documents.new(disable_destroy: true, target_id: @dependent_id, target_model: "Core::Candidate::DependentMirror")
-            end 
-          end 
-          
-          if @cadastre_mirror.main_income != @cadastre.main_income
-            @action.income_documents.new(disable_destroy: true)
-          end
+          @action.income_documents.new(disable_destroy: true, target_id: @dependent_id, target_model: "Core::Candidate::DependentMirror")
         end
         
+        #if @ticket.context_id == 2
+        #  @action.income_documents.new(disable_destroy: true, target_id: @dependent_id, target_model: "Core::Candidate::DependentMirror")
+        #else
+        #  @dependent = Core::Candidate::DependentMirror.find(@dependent_id) rescue nil
 
+        #  if !@dependent.nil? 
+        #    @original_dependent = Core::Candidate::Dependent.where(name: @dependent.name).first
+        #    if @original_dependent.present? && (@dependent.income.to_f != @original_dependent.income.to_f) 
+        #      @action.income_documents.new(disable_destroy: true, target_id: @dependent_id, target_model: "Core::Candidate::DependentMirror")
+        #    end 
+        #  end 
+          
+        #  if @cadastre_mirror.main_income != @cadastre.main_income
+        #  end
+        #end
+        
       end
 
     end

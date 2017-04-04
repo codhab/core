@@ -63,16 +63,18 @@ module Core
           @ticket.save
 
           if @ticket.context_id == 1
-            text = "Sua atualização cadastral foi inciada. Atualize ou confirme os 4 passos existentes em seu cadastro, verifique os termos de aceite e finalize o procedimento."
+            title = "Atualização Cadastral Nº #{@ticket.presenter.protocol} foi iniciada."
+            text  = "Sua atualização cadastral foi inciada. Atualize ou confirme os 4 passos existentes em seu cadastro, verifique os termos de aceite e finalize o procedimento."
           else
-            text = "Sua atualização de dados foi inciada. Atualize ou confirme os 4 passos existentes em seu cadastro, verifique os termos de aceite e finalize o procedimento."
+            title = "Atualização de dados Nº #{@ticket.presenter.protocol} foi iniciada."
+            text  = "Sua atualização de dados foi inciada. Atualize ou confirme os 4 passos existentes em seu cadastro, verifique os termos de aceite e finalize o procedimento."
           end
 
           service = Core::NotificationService.new
           service.create({
                           cadastre_id: @ticket.cadastre_id,
                           category_id: 1,
-                          title: "Atualização Cadastral Nº #{@ticket.presenter.protocol} foi iniciada.",
+                          title: title,
                           content: text.html_safe,
                           target_model: @ticket.class,
                           target: @ticket.id,
@@ -119,7 +121,7 @@ module Core
         return false if @ticket.nil?
         return false if @ticket.actions.where(situation_id: 1).present?
 
-        # 1 => atualização cadastral (recadastramento)
+          # 1 => atualização cadastral (recadastramento)
         if @ticket.context_id == 1
           if @ticket.actions.where(situation_id: 3).present?
             # 2 => pendente com atendente
@@ -141,11 +143,14 @@ module Core
         end
 
         if @ticket.context_id == 1
+          title   = "Atualização Cadastral Nº #{@ticket.presenter.protocol} foi finalizada por você"
           message = "Sua atualização cadastral foi finalizada. Caso tenha informado novos dados que necessitem ser validados, faz-se necessário aguardar o retorno do atendimento da CODHAB. Você receberá notificações informando o andamento da situação da sua atualização."
         else
+          title   = "Atualização Cadastral Nº #{@ticket.presenter.protocol} foi finalizada por você"
           message = "Sua atualização de dados foi finalizada. Caso tenha informado novos dados que necessitem ser validados, faz-se necessário aguardar o retorno do atendimento da CODHAB. Você receberá notificações informando o andamento da situação da sua atualização."
         end
-
+      
+        
         notification = Core::NotificationService.new
 
         notification.create({
