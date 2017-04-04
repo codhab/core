@@ -41,12 +41,12 @@ module Core
 
       def allow_able_update?
         ![3, 6, 8].include?(self.program_id) &&
-        (self.current_situation_id == 4) &&
+        [4,54].include?(self.current_situation_id) &&
         self.tickets.where(context_id: 1).where.not(situation_id: 1).present?
       end
 
       def allow_other_update?
-        ![3,4].include?(self.current_situation_id) 
+        self.current_situation_id == 2
       end
 
       def allow_regularization_update?
@@ -59,7 +59,7 @@ module Core
       end
 
       def allow_chats?
-        (self.current_situation_id == 4) && [1,2].include?(self.program_id)
+        [4,54].include?(self.current_situation_id) && [1,2].include?(self.program_id)
       end
 
     end

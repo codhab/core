@@ -18,6 +18,15 @@ module Core
         scope :by_status, -> (status) { where(closed: status)}
         scope :by_date_start, -> (date_start) { where("created_at::date >= ?", Date.parse(date_start))}
         scope :by_date_end, -> (date_end) { where("created_at::date <= ?", Date.parse(date_end))}
+        scope :by_type, -> (type) { 
+          if type.to_i == 1
+            includes(:cadastre).where('candidate_cadastres.program_id <> 3') 
+          end
+
+          if type.to_i == 2
+            includes(:cadastre).where('candidate_cadastres.program_id = 3')  
+          end 
+        }
 
         validates :chat_category, presence: true
     end
