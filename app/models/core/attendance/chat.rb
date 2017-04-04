@@ -19,9 +19,13 @@ module Core
         scope :by_date_start, -> (date_start) { where("created_at::date >= ?", Date.parse(date_start))}
         scope :by_date_end, -> (date_end) { where("created_at::date <= ?", Date.parse(date_end))}
         scope :by_type, -> (type) { 
-          includes(:cadastre).where('extranet.candidate_cadastres.program_id <> 3') if type == 'hab'
-          includes(:cadastre).where('extranet.candidate_cadastres.program_id = 3')  if type == 'reg'
-          all if type.nil?
+          if type == 1
+            includes(:cadastre).where('extranet.candidate_cadastres.program_id <> 3') 
+          end
+
+          if type == 2
+            includes(:cadastre).where('extranet.candidate_cadastres.program_id = 3')  
+          end 
         }
 
         validates :chat_category, presence: true
