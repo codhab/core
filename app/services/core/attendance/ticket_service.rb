@@ -183,7 +183,8 @@ module Core
             program_id: @cadastre_mirror.program_id
           )
           @pontuation.save
-
+          rewrite_to_cadastre!
+          rewrite_to_dependents!
         end
       end
 
@@ -218,6 +219,24 @@ module Core
 
         @ticket.cadastre.save
       end
+
+      def rewrite_to_dependents!
+        @dependents = @ticket.cadastre_mirror.dependent_mirrors
+
+        @ticket.cadastre.dependents.delete_all
+
+        @dependents.each do |dependent|
+          @new_dependent = @cadastre.dependents.new
+          dependent.attributes.each do |key, value|
+            unless %w(id created_at cadastre_id updated_at).include? key
+             @new_dependent[key] = value if @new_dependent.attributes.has_key?(key)
+            end
+          end
+
+          @new_dependent.save
+        end
+      end
+
 
       def clone_cadastre_to_make_mirrors!
         return false if @cadastre.nil?
