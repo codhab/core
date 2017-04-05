@@ -130,16 +130,14 @@ module Core
             # 7 => finalizado pelo candidato
             @ticket.update(situation_id: 7, active: false)
           end
-        else
-          if @ticket.context_id == 5
-            # 7 => finalizado pelo candidato
-            @ticket.update(situation_id: 7, active: false)
+        elsif @ticket.context_id == 5
+          # 7 => finalizado pelo candidato
+          @ticket.update(situation_id: 7, active: false)
 
-            rewrite_to_cadastre!
-          else
-            # 2 => pendente com atendente
-            @ticket.update(situation_id: 2, active: true)
-          end
+          scoring_cadastre
+        else
+          # 2 => pendente com atendente
+          @ticket.update(situation_id: 2, active: true)
         end
 
         if @ticket.context_id == 1
@@ -165,7 +163,7 @@ module Core
       end
 
       def scoring_cadastre
-        unless [4,5].include? @ticket.context_id
+        if @ticket.context_id != 4
 
           @cadastre_mirror = @ticket.cadastre_mirror
           @score = Core::Candidate::ScoreService.new(cadastre_mirror_id: @cadastre_mirror)
@@ -183,6 +181,7 @@ module Core
             program_id: @cadastre_mirror.program_id
           )
           @pontuation.save
+
           rewrite_to_cadastre!
           rewrite_to_dependents!
         end
