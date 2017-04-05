@@ -34,7 +34,8 @@ module Core
       # 3 => confirmado
 
       def allow_recadastre_update?
-        !self.tickets.where(context_id: 1).where.not(situation_id: 1).present? &&
+        (!self.tickets.where(context_id: 1).present? ||
+        self.tickets.where(context_id: 1, active: true).present?) &&
         [4,54].include?(self.current_situation_id) &&
         ![3, 6, 8].include?(self.program_id)
       end
@@ -42,7 +43,7 @@ module Core
       def allow_able_update?
         ![3, 6, 8].include?(self.program_id) &&
         [4,54].include?(self.current_situation_id) &&
-        self.tickets.where(context_id: 1).where.not(situation_id: 1).present?
+        self.tickets.where(context_id: 1, active: false).present?
       end
 
       def allow_other_update?

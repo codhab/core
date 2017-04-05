@@ -125,13 +125,13 @@ module Core
         if @ticket.context_id == 1
           if @ticket.actions.where(situation_id: 3).present?
             # 2 => pendente com atendente
-            @ticket.update(situation_id: 2, active: false)
+            @ticket.update(situation_id: 2, active: true)
           else
             # 7 => finalizado pelo candidato
             @ticket.update(situation_id: 7, active: false)
           end
         else
-          if @ticket.actions.count == 1 && @ticket.actions.where(context_id: 4).present?
+          if @ticket.context_id == 5
             # 7 => finalizado pelo candidato
             @ticket.update(situation_id: 7, active: false)
 

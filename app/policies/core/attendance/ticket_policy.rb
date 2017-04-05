@@ -6,7 +6,7 @@ module Core
 
 
       def action_allow?
-        (self.context_id != 5)
+        true
       end
 
       def ticket_closed?
@@ -32,21 +32,38 @@ module Core
       end
 
       def on_attendance?
-        ![7,6,5,4,2,1].include?(self.situation_id)
+        ![7,6,5,4,1].include?(self.situation_id)
       end
 
       def allow_close?
+
+        # define :ticket_action_situations
+        # 1 => em processo de atualização
+        # 2 => atualizado
+        # 3 => confirmado
+
+        # define :ticket_situations, table: `attendance_ticket_situations`
+        # 1 => pendente com candidato
+        # 2 => pendente com atendente
+        # 3 => pendente com supervisor
+        # 4 => cancelado pelo candidato
+        # 5 => deferido
+        # 6 => indeferido
+        # 7 => finalizado pelo candidato
+        
         case self.context_id
         when 1
 
           return false if !self.actions.present?
           return false if self.actions.count < 4
-
+          return false if self.situation_id != 1
+          
           self.actions.each do |situation|
-            return false if [1,2].include? situation.situation_id
+            return false if situation.situation_id == 1
           end
-
+          
           return true
+          
         when 2
 
           return false if !self.actions.present?
