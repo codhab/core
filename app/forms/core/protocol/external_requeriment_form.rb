@@ -5,6 +5,7 @@ module Core
     class ExternalRequerimentForm < Core::Protocol::Assessment
 
       validates :observation, presence: true
+      validates :email, email: true, presence: true
       default_scope { where(prefex: 777, subject_id: 1746) }
 
     end
