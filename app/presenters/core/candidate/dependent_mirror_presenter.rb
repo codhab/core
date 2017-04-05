@@ -5,9 +5,13 @@ module Core
     class DependentMirrorPresenter < ApplicationPresenter
 
       def action
-        dependent = self.cadastre_mirror.dependent_mirrors.where(name: self.name).first rescue nil
+        dependent = self.cadastre_mirror.cadastre.dependents.find(self.dependent_id) rescue nil
 
-        if dependent.present?
+        if dependent.nil?
+          dependent = self.cadastre_mirror.cadastre.dependents.find_by_name(self.name) rescue nil
+        end
+
+        if !dependent.nil?
           if dependent.created_at != dependent.updated_at
             "<label class='ui label blue'>Atualizado</label>".html_safe
           else
