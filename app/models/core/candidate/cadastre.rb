@@ -66,11 +66,11 @@ module Core
       mount_uploader :avatar, Core::Cadastre::AvatarUploader
 
       def income
-        '%.2f' % self[:income]
+        self[:income].present? ? '%.2f' % self[:income] : 0
       end
 
       def main_income
-        '%.2f' % self[:main_income]
+        self[:main_income].present? ? '%.2f' % self[:main_income] : 0
       end
 
       def age

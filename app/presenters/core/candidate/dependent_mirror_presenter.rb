@@ -10,7 +10,7 @@ module Core
         if dependent.nil?
           dependent = self.cadastre_mirror.cadastre.dependents.find_by_name(self.name) rescue nil
         end
-
+        
         if !dependent.nil?
           if dependent.created_at != dependent.updated_at
             "<label class='ui label blue'>Atualizado</label>".html_safe
