@@ -106,7 +106,11 @@ module Core
     end
 
     def send_email_notification!(message: "", subject: "", email: "")
-       Core::BasicMailer.simple_sender(email, subject, message).deliver_now!
+      begin
+        Core::BasicMailer.simple_sender(email, subject, message).deliver_now!
+      rescue
+        puts "EMAIL ZICAPO BROTHER"
+      end
     end
 
   end
