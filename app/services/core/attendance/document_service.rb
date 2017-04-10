@@ -66,19 +66,27 @@ module Core
         else
           
           if @cadastre.rg != @cadastre_mirror.rg
-            @action.rg_documents.new(disable_destroy: true)
+            if !@action.rg_documents.any? {|k| k.persisted? }
+              @action.rg_documents.new(disable_destroy: true)
+            end
           end
 
           if @cadastre.born != @cadastre_mirror.born
-            @action.born_documents.new(disable_destroy: true)
+            if !@action.born_documents.any? {|k| k.persisted? }
+              @action.born_documents.new(disable_destroy: true)
+            end
           end
 
           if (@cadastre.special_condition_id == 1 && @cadastre_mirror.special_condition_id == 2)
-            @action.special_condition_documents.new(disable_destroy: true)
+            if !@action.special_condition_documents.any? {|k| k.persisted? }
+              @action.special_condition_documents.new(disable_destroy: true)
+            end
           end
 
           if (@cadastre.arrival_df != @cadastre_mirror.arrival_df)
-            @action.arrival_df_documents.new(disable_destroy: true)
+            if !@action.arrival_df_documents.any? {|k| k.persisted? }
+              @action.arrival_df_documents.new(disable_destroy: true)
+            end
           end
 
         end
@@ -89,7 +97,7 @@ module Core
 
         if !@dependent_id.nil?
 
-          @dependent = Core::Candidate::DependentMirror.find(@dependent_id) rescue nil
+          @dependent = Core::Candidate::DependentMirror.find(@dependent_id.to_i) rescue nil
           
           if !@ticket.context_id == 2
 
@@ -105,15 +113,24 @@ module Core
               @action.special_condition_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
             end
           else
-            @action.certificate_born_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
-            
+
+
+            if @dependent.age < 14
+              if !@action.certificate_born_documents.any? {|k| k.persisted? }
+                @action.certificate_born_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
+              end
+            end
 
             if @dependent.special_condition_id == 2
-              @action.special_condition_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
+              if !@action.special_condition_documents.any? {|k| k.persisted? }
+                @action.special_condition_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
+              end
             end
 
             if @dependent.dependent.present? && (@dependent.age >= 14 || (@dependent.cpf != @dependent.dependent.cpf))
-              @action.cpf_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
+              if !@action.cpf_documents.present?
+                @action.cpf_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
+              end
             end 
             
           end
@@ -124,27 +141,27 @@ module Core
 
       def income_documents
 
-        if !@dependent_id.nil?
-          @action.income_documents.new(disable_destroy: true)
+        if @dependent_id.nil?
+          if (@ticket.cadastre.main_income.to_f != @ticket.cadastre_mirror.main_income.to_f) &&
+            @ticket.cadastre_mirror.main_income.to_f > 0
+            if !@action.income_documents.any? {|k| k.persisted? }
+              @action.income_documents.new(disable_destroy: true)
+            end
+          end
         else
-          @action.income_documents.new(disable_destroy: true, target_id: @dependent_id, target_model: "Core::Candidate::DependentMirror")
+         
+          dependent_mirror = Core::Candidate::DependentMirror.find(@dependent_id.to_i)
+
+          if dependent_mirror.present?
+            if dependent_mirror.income.to_f > 0
+              if !@action.income_documents.any? {|k| k.persisted? }
+                @action.income_documents.new(disable_destroy: true, target_id: @dependent_id.to_i, target_model: "Core::Candidate::DependentMirror")
+              end
+            end
+          end
+
         end
         
-        #if @ticket.context_id == 2
-        #  @action.income_documents.new(disable_destroy: true, target_id: @dependent_id, target_model: "Core::Candidate::DependentMirror")
-        #else
-        #  @dependent = Core::Candidate::DependentMirror.find(@dependent_id) rescue nil
-
-        #  if !@dependent.nil? 
-        #    @original_dependent = Core::Candidate::Dependent.where(name: @dependent.name).first
-        #    if @original_dependent.present? && (@dependent.income.to_f != @original_dependent.income.to_f) 
-        #      @action.income_documents.new(disable_destroy: true, target_id: @dependent_id, target_model: "Core::Candidate::DependentMirror")
-        #    end 
-        #  end 
-          
-        #  if @cadastre_mirror.main_income != @cadastre.main_income
-        #  end
-        #end
         
       end
 

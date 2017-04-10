@@ -47,7 +47,7 @@ module Core
 
     scope :not_requeriments, -> { where.not(prefex: 777, subject_id: [1746,1747]) }
 
-    validates :document_number, uniqueness: { scope: [:document_type] }, presence: true
+    validates :document_number, uniqueness: { scope: [:document_type] }, presence: true, on: :create
 
 
 

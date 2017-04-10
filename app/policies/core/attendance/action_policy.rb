@@ -7,11 +7,19 @@ module Core
       def document_required?
 
         Core::Attendance::TicketUploadCategory.all.each do |category|
-          self.send(category.target_method).each do |upload|
-            return true if !upload.persisted?
-          end
+          return true if self.send(category.target_method).present?
         end
         
+        return false
+      end
+
+      def objects_persisted?
+        Core::Attendance::TicketUploadCategory.all.each do |category|
+          self.send(category.target_method).each do |upload|
+            return true if upload.persisted? 
+          end
+        end
+
         return false
       end
 

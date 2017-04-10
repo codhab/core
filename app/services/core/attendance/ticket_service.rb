@@ -123,21 +123,44 @@ module Core
 
           # 1 => atualização cadastral (recadastramento)
         if @ticket.context_id == 1
-          if @ticket.actions.where(situation_id: 3).present?
-            # 2 => pendente com atendente
+          if @ticket.actions.where(situation_id: 2).present?
+            
+            if important_data_updated?
+              @ticket.update(situation_id: 2, active: true)
+            else
+              @ticket.update(situation_id: 7, active: false)
+              scoring_cadastre
+            end
+
+          else
+
+            @ticket.update(situation_id: 7, active: false)
+            scoring_cadastre
+          end
+
+        elsif @ticket.context_id == 3
+
+          if important_data_updated?
             @ticket.update(situation_id: 2, active: true)
           else
-            # 7 => finalizado pelo candidato
             @ticket.update(situation_id: 7, active: false)
+            
+            scoring_cadastre
           end
+
         elsif @ticket.context_id == 5
           # 7 => finalizado pelo candidato
           @ticket.update(situation_id: 7, active: false)
 
           scoring_cadastre
         else
-          # 2 => pendente com atendente
-          @ticket.update(situation_id: 2, active: true)
+
+          if important_data_updated?
+            @ticket.update(situation_id: 2, active: true)
+          else
+            @ticket.update(situation_id: 7, active: false)
+          end
+
         end
 
         if @ticket.context_id == 1
@@ -188,6 +211,37 @@ module Core
       end
 
       private
+
+      def important_data_updated?
+
+        @index = 0
+        @cadastre = @ticket.cadastre
+        @mirror   = @ticket.cadastre_mirror
+
+        @cadastre.attributes.keys.each do |key|
+          if %w(nome rg cpf special_condition_id born arrival_df main_income).include? key
+            @index += 1 if @cadastre[key] != @mirror[key]
+          end
+        end
+
+        @cadastre.dependents.each do |dependent|
+          @dep_mirror = Candidate::DependentMirror.find_by_dependent_id(dependent.id) rescue nil
+          
+          if @dep_mirror.nil?
+            @index += 1
+          else
+            dependent.attributes.keys.each do |dependent_key|
+              if %w(nome rg cpf special_condition_id born income).include? dependent_key
+                @index += 1 if dependent[dependent_key] != @dep_mirror[dependent_key]
+              end
+            end
+          end
+        end
+        
+        byebug
+        (@index == 0) ? false : true
+
+      end
 
       def set_context_situation
         @ticket.context.confirmation_required ? 1 : 2
