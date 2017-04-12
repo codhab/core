@@ -18,7 +18,8 @@ module Core
 
       has_many :enterprise_cadastre_situations, class_name: ::Core::Candidate::EnterpriseCadastreSituation
 
-
+      scope :by_indication_situation, -> (situation)  { where(indication_situation_id: situation )}
+      scope :by_enterprise,           -> (enterprise) { where(enterprise_id: enterprise )}
 
 
     end

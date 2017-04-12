@@ -78,6 +78,13 @@ module Core
         self.cadastre_address.where(situation_id: [0,1,5]).order('created_at ASC').last rescue nil
       end
 
+
+      # => pontuation
+
+      def last_pontuation_total
+        self.pontuations.order('created_at ASC').last.total rescue nil
+      end
+
     
     end
   end
