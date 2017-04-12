@@ -36,7 +36,7 @@ module Core
       def field_updated_title value
         return nil unless (field_updated? value) == 'positive'
         
-        original_value = self.cadastre.send(value) rescue nil
+        original_value = self.cadastre.send(value) rescue nil 
 
         return "Valor original: #{original_value}"
       end

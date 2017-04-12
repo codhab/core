@@ -38,8 +38,21 @@ module Core
           enterprise.manifestation_date       =  Date.current
         end
 
-        @indication.save
-        
+        if @indication.save
+          message = "A manifestação para o empreendimento #{@project.name}, referente ao Programa Portas Abertas, foi realizada com sucesso. Aguarde o contato da CODHAB para mais informações."
+          title   = "Manifestação para empreendimento - Realizada"
+          
+          service = Core::NotificationService.new
+          service.create({
+                          cadastre_id: @cadastre.id,
+                          category_id: 5,
+                          title: title,
+                          content: message.html_safe,
+                          push: true,
+                          email: true
+                        })        
+        end
+
       end
 
       def cancel_indicate!
@@ -51,7 +64,20 @@ module Core
         
         return false if !@indication.present?
 
-        @indication.update(indication_situation_id: 3, inactive_date: Date.current, inactive: true)
+        if @indication.update(indication_situation_id: 3, inactive_date: Date.current, inactive: true)
+          message = "A manifestação para o empreendimento #{@project.name}, referente ao Programa Portas Abertas, foi cancelada com sucesso."
+          title   = "Manifestação para empreendimento - Cancelada"
+          
+          service = Core::NotificationService.new
+          service.create({
+                          cadastre_id: @cadastre.id,
+                          category_id: 5,
+                          title: title,
+                          content: message.html_safe,
+                          push: true,
+                          email: true
+                        })      
+        end
       end
 
     end
