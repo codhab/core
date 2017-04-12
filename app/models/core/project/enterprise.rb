@@ -14,6 +14,7 @@ module Core
 
       #enum situation:  ['editais', 'licitações', 'em construção', 'concluído'] Verificar
 
+      scope :manifestation_enabled, -> {where(manifestation_enabled: true).order(:name)}
       scope :actives, -> { where(status: true).order(:name)}
 
       scope :by_name, -> (name) { where(name: name) }

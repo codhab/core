@@ -59,7 +59,7 @@ module Core
           return false if self.situation_id != 1
           
           self.actions.each do |situation|
-            return false if situation.situation_id == 1
+            return false if [1,2].include? situation.situation_id
           end
           
           return true

@@ -123,7 +123,9 @@ module Core
 
           # 1 => atualização cadastral (recadastramento)
         if @ticket.context_id == 1
-          if @ticket.actions.where(situation_id: 2).present?
+
+          if @ticket.actions.where(situation_id: 3).present?
+            
             
             if important_data_updated?
               @ticket.update(situation_id: 2, active: true)
@@ -154,7 +156,7 @@ module Core
 
           scoring_cadastre
         else
-
+          
           if important_data_updated?
             @ticket.update(situation_id: 2, active: true)
           else
@@ -219,26 +221,28 @@ module Core
         @mirror   = @ticket.cadastre_mirror
 
         @cadastre.attributes.keys.each do |key|
-          if %w(nome rg cpf special_condition_id born arrival_df main_income).include? key
+          if %w(name rg cpf special_condition_id born arrival_df main_income).include? key
             @index += 1 if @cadastre[key] != @mirror[key]
           end
         end
 
         @cadastre.dependents.each do |dependent|
-          @dep_mirror = Candidate::DependentMirror.find_by_dependent_id(dependent.id) rescue nil
+          @dep_mirror = @mirror.dependent_mirrors.find_by_dependent_id(dependent.id) rescue nil
+          
           
           if @dep_mirror.nil?
             @index += 1
           else
             dependent.attributes.keys.each do |dependent_key|
-              if %w(nome rg cpf special_condition_id born income).include? dependent_key
+              if %w(name rg cpf special_condition_id born income).include? dependent_key
                 @index += 1 if dependent[dependent_key] != @dep_mirror[dependent_key]
               end
             end
           end
+
         end
         
-        byebug
+        
         (@index == 0) ? false : true
 
       end

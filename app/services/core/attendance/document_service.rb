@@ -154,7 +154,7 @@ module Core
 
           if dependent_mirror.present?
             if dependent_mirror.income.to_f > 0
-              if !@action.income_documents.any? {|k| k.persisted? }
+              if !@action.income_documents.where(target_id: dependent_mirror.id).any? {|k| k.persisted? }
                 @action.income_documents.new(disable_destroy: true, target_id: @dependent_id.to_i, target_model: "Core::Candidate::DependentMirror")
               end
             end

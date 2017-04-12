@@ -13,6 +13,11 @@ module Core
         self.program_id == 3 
       end
       
+
+      def active_indication_present?
+        self.enterprise_cadastres.where(inactive: false).present?
+      end
+
     end
   end
 end
