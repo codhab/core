@@ -7,7 +7,7 @@ module Core
       def document_required?
 
         Core::Attendance::TicketUploadCategory.all.each do |category|
-          return true if self.send(category.target_method).present?
+          return true if self.send(category.target_method).any?
         end
         
         return false

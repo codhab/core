@@ -35,6 +35,14 @@ module Core
 
       end
 
+      def each_allow?(target: nil, target_id: nil)
+        if target_id.nil?
+          @action.send(target).any?
+        else
+          @action.send(target).any? { |s| s.target_id == target_id.to_i }
+        end
+      end
+
       def documents_required!
 
         @cadastre_mirror = @ticket.cadastre_mirror 
@@ -114,21 +122,20 @@ module Core
             end
           else
 
-
             if @dependent.age < 14
-              if !@action.certificate_born_documents.any? {|k| k.persisted? }
+              if !@action.certificate_born_documents.where(target_id: @dependent.id).any? {|k| k.persisted? }
                 @action.certificate_born_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
               end
             end
 
             if @dependent.special_condition_id == 2
-              if !@action.special_condition_documents.any? {|k| k.persisted? }
+              if !@action.special_condition_documents.where(target_id: @dependent.id).any? {|k| k.persisted? }
                 @action.special_condition_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
               end
             end
 
             if @dependent.dependent.present? && (@dependent.age >= 14 || (@dependent.cpf != @dependent.dependent.cpf))
-              if !@action.cpf_documents.present?
+              if !@action.cpf_documents.where(target_id: @dependent.id).any?
                 @action.cpf_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
               end
             end 
