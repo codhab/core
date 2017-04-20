@@ -38,11 +38,14 @@ module Core
       def write_file(file)
         begin
           extension = file.original_filename.split('.')[-1]
-          new_name  = "teste.#{extension}"
+          
+          new_name  = Digest::MD5.hexdigest(file.original_filename)
+          new_name  = "#{new_name}.#{extension}" 
+        
 
           file.original_filename = new_name
 
-          File.open(Rails.root.join('public', new_name), 'wb') do |wfile|
+          File.open(Rails.root.join('public/uploads', new_name), 'wb') do |wfile|
             wfile.write(file.read)
           end
 
