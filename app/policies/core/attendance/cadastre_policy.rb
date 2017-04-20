@@ -65,7 +65,7 @@ module Core
 
       def allow_to_question?
 
-        cadastres = Core::Candidate::View::GeneralPontuation.select(:id)
+        cadastres = Core::View::GeneralPontuation.select(:id)
                                                             .where(situation_status_id: [54,4],
                                                                    program_id: 1, 
                                                                    procedural_status_id: [14, 72],
