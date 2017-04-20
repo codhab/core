@@ -8,12 +8,6 @@ module Core
 
       before_save :normalize_fields
 
-      def initialize(attributes = {})
-        write_attributes
-
-        super
-      end
-      
       def write_attributes
         return if !fields.present?
 
