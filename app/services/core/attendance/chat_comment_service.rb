@@ -6,7 +6,7 @@ module Core
         @comments   = comments
         @comment    = comment
         @chat       = chat
-      end
+      end    
 
       def reading_comment!
         if @comments.where(candidate_read: false, candidate: false).present?
@@ -21,7 +21,7 @@ module Core
         text = 'Uma nova conversa foi inciada. Somente poderá ser iniciada outra conversa após a finalização desta. Agora faz-se necessário aguardar o retorno do atendimento da CODHAB. Você receberá notificações informando o andamento desta conversa.'
         service = Core::NotificationService.new()
         service.create({cadastre_id: @chat.cadastre_id,
-                        category_id: 1, 
+                        category_id: 1,
                         title: "Conversa Nº #{@chat.id}/#{@chat.created_at.year} foi iniciada.",
                         content: text ,
                         target_model: @chat.class,
@@ -37,7 +37,7 @@ module Core
           text = 'Você respondeu esta conversa. Agora faz-se necessário aguardar o retorno do atendimento da CODHAB. Você receberá notificações informando o andamento desta conversa.'
           service = Core::NotificationService.new()
           service.create({cadastre_id: @chat.cadastre_id,
-                          category_id: 2, 
+                          category_id: 2,
                           title: "Conversa Nº #{@chat.id}/#{@chat.created_at.year} respondida por você.",
                           content: text ,
                           target_model: @comment.class,
@@ -51,7 +51,7 @@ module Core
         text = 'A CODHAB respondeu a esta conversa. Veja a resposta em Minhas Conversas.'
         service = Core::NotificationService.new()
         service.create({cadastre_id: @chat.cadastre_id,
-                        category_id: 2, 
+                        category_id: 2,
                         title: "Conversa Nº #{@chat.id}/#{@chat.created_at.year} respondida pela CODHAB",
                         content: text ,
                         target_model: @comment.class,

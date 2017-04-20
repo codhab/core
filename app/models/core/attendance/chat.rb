@@ -29,6 +29,9 @@ module Core
         }
 
         validates :chat_category, presence: true
+
+
+      
     end
   end
 end
