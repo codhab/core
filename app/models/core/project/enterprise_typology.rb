@@ -7,6 +7,7 @@ module Core
 
       belongs_to :enterprise
       belongs_to :typology, class_name: ::Core::Project::Typology, foreign_key: :typology_id
+      
     end
   end
 end
