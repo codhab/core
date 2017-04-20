@@ -9,9 +9,9 @@ module Core
       before_save :normalize_fields
 
       def initialize(attributes = {})
-        super
-
         write_attributes
+
+        super
       end
       
       def write_attributes
