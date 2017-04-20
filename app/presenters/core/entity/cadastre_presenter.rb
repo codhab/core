@@ -4,6 +4,10 @@ module Core
   module Entity
     class CadastrePresenter < ApplicationPresenter
 
+      def current_situation_id
+        self.situations.order(:id).last.situation_status.id rescue self.situations.order(:id).last.situation_status_id
+      end
+      
       def current_situation_name
         self.situations.order(:id).last.situation_status.name rescue self.situations.order(:id).last.situation_status_id
       end

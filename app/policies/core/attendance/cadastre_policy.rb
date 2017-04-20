@@ -63,6 +63,20 @@ module Core
         [4,54].include?(self.current_situation_id) && [1,2].include?(self.program_id)
       end
 
+      def allow_to_question?
+
+        cadastres = Core::View::GeneralPontuation.select(:id)
+                                                            .where(situation_status_id: [54,4],
+                                                                   program_id: 1, 
+                                                                   procedural_status_id: [14, 72],
+                                                                   income: 0..1800)
+                                                            .where('convocation_id > 1524')
+                                                            .order('total DESC')
+                                                            .limit(100)
+        
+        (cadastres.map(&:id).include? self.id)
+      end
+
     end
   end
 end
