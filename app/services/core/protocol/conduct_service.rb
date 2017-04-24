@@ -43,15 +43,17 @@ module Core
       end
 
       def send_allotment!(allotment, sector, user)
-        @allotment_conduct = Core::Protocol::Conduct.where(allotment_id: allotment, conduct_type: 5, sector_id: sector)
+        @allotment_conduct = Core::Protocol::Conduct.where(allotment_id: allotment, conduct_type: 5)
+        byebug
         @allotment_conduct.each do |lote|
-          @conduct = Core::Protocol::Conduct.new(set_conduct_params)
-          @conduct.allotment_id = allotment
-          @conduct.conduct_type = 1
-          @conduct.assessment_id = lote.assessment_id
-          @conduct.sector_id = sector
-          @conduct.staff_id = user
-          @conduct .save
+          @conduct = Core::Protocol::Conduct.new(
+            allotment_id: allotment,
+            conduct_type: 1,
+            assessment_id: lote.assessment_id,
+            sector_id: sector,
+            staff_id: user
+          )
+          @conduct.save
         end
       end
     end
