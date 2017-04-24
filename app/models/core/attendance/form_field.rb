@@ -6,7 +6,8 @@ module Core
       self.table_name = 'extranet.attendance_form_fields'
       belongs_to :form
 
-      default_scope  -> { order(:created_at) }
+      default_scope  -> { order('order_item ASC')}
+      
       scope :allows, -> { where(allow: true)}
 
       enum field_type: ['_string', '_text', '_integer', '_file', '_select']
