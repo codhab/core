@@ -44,7 +44,6 @@ module Core
 
       def send_allotment!(allotment, sector, user)
         @allotment_conduct = Core::Protocol::Conduct.where(allotment_id: allotment, conduct_type: 5)
-        byebug
         @allotment_conduct.each do |lote|
           @conduct = Core::Protocol::Conduct.new(
             allotment_id: allotment,
