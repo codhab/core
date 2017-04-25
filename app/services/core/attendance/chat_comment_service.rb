@@ -6,7 +6,7 @@ module Core
         @comments   = comments
         @comment    = comment
         @chat       = chat
-      end    
+      end
 
       def reading_comment!
         if @comments.where(candidate_read: false, candidate: false).present?
@@ -53,6 +53,19 @@ module Core
         service.create({cadastre_id: @chat.cadastre_id,
                         category_id: 2,
                         title: "Conversa Nº #{@chat.id}/#{@chat.created_at.year} respondida pela CODHAB",
+                        content: text ,
+                        target_model: @comment.class,
+                        target: @comment.id,
+                        push: true,
+                        email: true})
+      end
+
+      def codhab_start_notification!
+        text = 'A CODHAB iniciou uma conversa. Veja a conversa em Minhas Conversas.'
+        service = Core::NotificationService.new()
+        service.create({cadastre_id: @chat.cadastre_id,
+                        category_id: 2,
+                        title: "Conversa Nº #{@chat.id}/#{@chat.created_at.year} iniciada pela CODHAB",
                         content: text ,
                         target_model: @comment.class,
                         target: @comment.id,
