@@ -11,8 +11,8 @@ module Core
       belongs_to :enterprise_cadastre,         required: false, class_name: ::Core::Candidate::EnterpriseCadastre
       belongs_to :firm_user,                   required: false, class_name: ::Core::Project::UserCompany,                  foreign_key: "firm_user_id"
 
-      enum type_action: { contato: 0, informação: 1, devolução: 2 }
-
+      # enum type_action: { contato: 0, informação: 1, devolução: 2 }
+      enum type_action: ['contato', 'informação', 'devolução' ]
     end
   end
 end
