@@ -85,7 +85,52 @@ module Core
         self.pontuations.order('created_at ASC').last.total rescue nil
       end
 
-    
+      def spouse
+        self.dependents.where(kinship_id: 6).first rescue nil
+      end
+
+      def deadline_indication
+
+      @inactives = self.enterprise_cadastres.where(inactive: true, indication_type_id: [1,4])
+
+      if @inactives.present?
+
+        @year    = @inactives.first.inactive_date + 4.years
+        @dealine = @year.strftime("%d/%m/%Y")
+
+        if @year > Date.today
+          @month = ((Date.today.year - 1) * 12 + Date.today.month) - ((@year.year - 1) * 12 + @year.month)
+
+          case @month.divmod(12)[0]
+          when -4
+            @result = "Faltam #{(@month.divmod(12)[0] + 1) * -1} ano(s) e #{12 - @month.divmod(12)[1]} mes(es)"
+          when -3
+            @result = "Faltam #{(@month.divmod(12)[0] + 1) * -1} ano(s) e #{12 - @month.divmod(12)[1]} mes(es)"
+          when -2
+            @result = "Faltam #{(@month.divmod(12)[0] + 1) * -1} ano(s) e #{12 - @month.divmod(12)[1]} mes(es)"
+          when -1
+            @result = "Faltam #{(@month.divmod(12)[0] + 1) * -1} ano(s) e #{12 - @month.divmod(12)[1]} mes(es)"
+          when 0
+            @result = "Faltam poucos dias para exceder o prazo."
+          else
+           @result  = "Prazo excedido"
+          end
+
+        end
+
+        {
+         count:   @inactives.count,
+         first:   @inactives.first.inactive_date.present? ? @inactives.first.inactive_date.strftime('%d/%m/%Y') : "Sem informação",
+         end:     @year.strftime("%d/%m/%Y"),
+         result:  @result
+        }
+
+      else
+        nil
+      end
+
+    end
+
     end
   end
 end

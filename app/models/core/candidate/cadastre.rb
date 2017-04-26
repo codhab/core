@@ -19,6 +19,7 @@ module Core
       # => Associations in attendance
       has_many :tickets,       class_name: ::Core::Attendance::Ticket
       has_many :notifications, class_name: ::Core::Attendance::Notification
+      has_many :attendances,   class_name: ::Core::Attendance::Cadastre
 
 
       has_many :requeriments,      primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Regularization::Requeriment
@@ -48,11 +49,12 @@ module Core
       has_many :cadastre_procedurals
       has_many :cadastre_logs
       has_many :inheritors
-      has_many :cadastre_activities
+      has_many :cadastre_activities, class_name: ::Core::Candidate::CadastreActivity
       has_many :cadastre_convocations
 
-      has_many :old_candidates,                                                       class_name: ::Core::Entity::OldCandidate
-      has_many :olds, through: :old_candidates,                                       class_name: ::Core::Entity::Old
+      has_many :old_candidates,                 class_name: ::Core::Entity::OldCandidate
+      has_many :olds, through: :old_candidates, class_name: ::Core::Entity::Old
+      has_many :entity_candidates,              class_name: ::Core::Entity::Candidate, foreign_key: :candidate_id
 
 
       has_many :cadastre_attendances
@@ -141,6 +143,25 @@ module Core
        array
      end
 
+     def current_indication
+       if self.enterprise_cadastres.present?
+         last_indication = self.enterprise_cadastres.order('created_at').last
+         if last_indication.inactive == false && (last_indication.indication_type_id == 1 || last_indication.indication_type_id == 4)
+           "#{last_indication.enterprise.name}"
+         end
+       end
+     end
+
+     def count_denial
+       if self.enterprise_cadastres.present?
+         "#{self.enterprise_cadastres.where(inactive: true).count}"
+       end
+     end
+
+     def ocurrences
+       self.occurrences.where(solved: false) rescue nil
+     end
+
      private
 
      def rii
@@ -162,6 +183,8 @@ module Core
      def vulnerables
        (self.program_id == 4) ? ['vulnerable', self.zone?] : nil
      end
+
+
 
      def position(array)
 

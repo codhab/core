@@ -8,6 +8,23 @@ module Core
       belongs_to :cadastre,         class_name: ::Core::Candidate::Cadastre
       belongs_to :dependent,        class_name: ::Core::Candidate::Dependent
       belongs_to :situation_status, class_name: ::Core::Candidate::SituationStatus
+
+      scope :by_income, -> (started_at = 0, ended_at = 1600) { where(income: started_at..ended_at) }
+      scope :by_cpf, -> (cpf) {
+
+        current = find_by(cpf: cpf.to_s.unformat_cpf)
+
+        where(total: (current.total - 0.400)..(current.total + 0.400))
+      }
+      scope :by_name, -> (name) {
+
+        where("name ILIKE '%#{name}%' ")
+
+      }
+
+      def cadastre
+        Core::Candidate::Cadastre.find(self.id) rescue nil
+      end
     end
   end
 end

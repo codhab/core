@@ -49,9 +49,6 @@ module Core
 
     validates :document_number, uniqueness: { scope: [:document_type] }, presence: true, on: :create
 
-
-
-
   end
  end
 end
