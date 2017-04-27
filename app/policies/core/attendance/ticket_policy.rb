@@ -87,8 +87,8 @@ module Core
           !self.actions.where(situation_id: [1,2]).present? &&
           self.actions.where(situation_id: [3,4]).present?
         when 5
-          !self.actions.where(situation_id: [1,2]).present? &&
-          self.actions.where(situation_id: [3,4]).present?
+          self.actions.present? &&
+          !self.actions.where(situation_id: [1,2]).present?
         end
       end
 
