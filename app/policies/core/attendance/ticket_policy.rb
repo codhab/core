@@ -75,8 +75,14 @@ module Core
 
           return true
         when 3
-          self.actions.present? && !self.actions.where(situation_id: [1,2]).present? &&
-          self.situation_id == 1
+          return false if !self.actions.present?
+          
+          self.actions.each do |situation|
+            return false if [1,2].include? situation.situation_id
+          end
+
+          return true
+
         when 4
           !self.actions.where(situation_id: [1,2]).present? &&
           self.actions.where(situation_id: [3,4]).present?
