@@ -54,7 +54,7 @@ module Core
           )
           @conduct.save
         end
-      end
+      end      
     end
   end
 end

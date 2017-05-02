@@ -29,6 +29,25 @@ module Core
         end
       end
 
+      def requeriment_citzen_app!
+        @assessment.document_type_id = 26
+        @assessment.finalized        = false
+        sector = 30
+        @assessment.subject_id = 1747 #request
+        number = set_number!(nil,sector)
+        @assessment.document_number = number
+        byebug
+        if @assessment.save
+          @service = Core::NotificationService.new
+          message = "Um novo requerimento nº #{@assessment.document_number} foi aberto. Agora faz-se necessário aguardar o retorno do atendimento da CODHAB."
+          @service.send_email!(message, "Abertura Requerimento CODHAB", @assessment.email)
+          set_conduct!(@assessment, nil, sector)
+          return true
+        else
+          return false
+        end
+      end
+
       def create_document!
         number = set_number!(@assessment.staff_id, @assessment.sector_id)
         @assessment.document_number = number
@@ -77,6 +96,9 @@ module Core
         @conduct.sector_id = sector
         @conduct.save
       end
+
+
+
     end
   end
 end
