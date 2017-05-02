@@ -36,7 +36,7 @@ module Core
         @assessment.subject_id = 1747 #request
         number = set_number!(nil,sector)
         @assessment.document_number = number
-        byebug
+        
         if @assessment.save
           @service = Core::NotificationService.new
           message = "Um novo requerimento nº #{@assessment.document_number} foi aberto. Agora faz-se necessário aguardar o retorno do atendimento da CODHAB."
