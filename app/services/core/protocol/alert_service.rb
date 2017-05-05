@@ -27,11 +27,13 @@ module Core
                 @service = Core::NotificationService.new()
                 subject = "Documento pendente"
                 begin
+                  # emails
                   @service.send_email!(message, subject, @staff.email) if @staff.present?
                   @service.send_email!(message, subject, @responsible.email)
-                  @service.send_email!(message, subject, @secex.email) if @secex.present? && doc.days < 1
+                  @service.send_email!(message, subject, @secex.email)
                   @service.send_email!(message, subject, @manager.email) if @manager.present? && doc.days < 1
-                  @teste = Core::Person::Staff.find_by_code('7803')
+                  #pushs
+                  @teste = Core::Person::Staff.find(1490)
                   @service.send_push!(@teste.id, message)
 
                 rescue
