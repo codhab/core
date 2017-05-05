@@ -28,6 +28,7 @@ module Core
                 subject = "Documento pendente"
                 begin
                   # emails
+                  @service.send_email!(message, subject, 'igor.marques@codhab.df.gov.br')
                   @service.send_email!(message, subject, @staff.email) if @staff.present?
                   @service.send_email!(message, subject, @responsible.email)
                   @service.send_email!(message, subject, @secex.email)
