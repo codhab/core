@@ -26,6 +26,10 @@ module Core
                primary_key: :cnpj
 
 
+      has_many :chats, class_name: ::Core::Entity::Chat, foreign_key: :entity_id
+      has_many :assessments, class_name: ::Core::Protocol::Assessment, foreign_key: :cnpj, primary_key: :cnpj
+      has_many :assessment_forms, class_name: ::Core::Entity::AssessmentForm, foreign_key: :cnpj, primary_key: :cnpj
+      
       scope :with_president, -> {
         joins('LEFT JOIN entity_members
                ON entity_members.cadastre_id = entity_cadastres.id
