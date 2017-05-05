@@ -84,6 +84,17 @@ module Core
       send_email_notification!(params)
     end
 
+    def send_push!(staff, content)
+      @staff = Core::Person::Staff.find(staff)      
+      title = 'Documentos pendentes'
+      if @staff.mobile_user_token.present?
+        params = {heading: title, message: content, user_ids: @staff.mobile_user_token}
+        send_push_notification!(params)
+      end
+    end
+
+
+
     private
 
     def send_push_notification!(message: "", user_ids: nil, heading: "")

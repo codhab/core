@@ -82,6 +82,7 @@ module Core
           @conduct.save
           return true
         else
+          @conduct.errors.add(:description, 'Documento não está no seu setor ou não pode ser tramitado.')
           errors.add(:description, 'Documento não está no seu setor ou não pode ser tramitado.')
           return false
         end
@@ -98,6 +99,8 @@ module Core
         @new_alloment.save
         return @new_alloment.present? ? @new_alloment : nil
       end
+
+
 
     end
   end
