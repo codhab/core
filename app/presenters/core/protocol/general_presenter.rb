@@ -8,25 +8,36 @@ module Core
         @allotment = Core::Protocol::Allotment.find(allotment)
         @count = 0
         @allotment.conducts.each do |conduct|
-          @count += 1 if conduct.assessment.responded != true
+          @first_conduct = conduct.conduct_type == 'doc_sent' ? conduct.assessment_id : nil
+          @responded = Core::Protocol::Conduct.where('assessment_id = ? and allotment_id > ? and sector_id = ? and conduct_type = ? and responded is true',
+                                                     @first_conduct, @allotment.id, @allotment.sector_id, 4)
+          @count += 1 if @responded.present?
+
         end
-        return @count == 0 ? false : true
+        return @count > 0 ? false : true
       end
 
       def due_date(replay_date)
         days = replay_date - Date.today
-        if days.to_i > 10
+        if days.to_i >= 10
           @color = 'green'
+          message = "Resta(m) #{days.to_i} dia(s)."
         elsif days.to_i < 10 && days.to_i >= 5
           @color = 'yellow'
+          message = "Resta(m) #{days.to_i} dia(s)."
         elsif days.to_i < 5 && days.to_i > 0
           @color = 'red'
-        elsif days.to_i <= 0
+          message = "Resta(m) #{days.to_i} dia(s)."
+        elsif days.to_i < 0
           @color = 'black'
+          message = "#{days.to_i.abs} dia(s) atrasado(s)."
+        elsif days.to_i == 0
+          @color = 'grey'
+          message = "Prazo de resposta termina hoje."
         else
-          @color = 'gray'
+          @color = 'brown'
         end
-        [@color, days]
+        [@color, message]
       end
     end
   end

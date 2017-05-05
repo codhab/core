@@ -10,7 +10,7 @@ module Core
       belongs_to :assessment,  required: false, class_name: ::Core::Protocol::Assessment
       belongs_to :allotment,   required: false, class_name: ::Core::Protocol::Allotment
       belongs_to :staff,       required: false, class_name: ::Core::Person::Staff
-      belongs_to :sector,      required: false, class_name: ::Core::Person::Sector
+      belongs_to :sector,      required: false, class_name: ::Core::Person::Sector, foreign_key: :sector_id
 
       enum :conduct_type => [:doc_create, :doc_sent, :doc_return, :doc_cancel, :doc_receive, :doc_to_send]
 
