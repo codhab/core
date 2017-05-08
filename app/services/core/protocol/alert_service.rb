@@ -11,7 +11,7 @@ module Core
               when 2
                 message = "Faltam 2 dias para o vencimento do prazo do documento: #{doc.document_number} - #{doc.document_type}. Este e-mail foi enviado ao responsável pelo documento."
               when 1
-                message = "Faltam 1 dias para o vencimento do prazo do documento: #{doc.document_number} - #{doc.document_type}. Este e-mail foi enviado ao responsável pelo documento, e seu gerente."
+                message = "Falta 1 dia para o vencimento do prazo do documento: #{doc.document_number} - #{doc.document_type}. Este e-mail foi enviado ao responsável pelo documento, e seu gerente."
               when 0
                 message = "O documento: #{doc.document_number} - #{doc.document_type} vence hoje. Este e-mail foi enviado ao responsável pelo documento, e seu gerente, seu diretor e à(o) responsável pela Secretaria Executiva."
               else
@@ -28,14 +28,13 @@ module Core
                 subject = "Documento pendente"
                 begin
                   # emails
-                  @service.send_email!(message, subject, 'igor.marques@codhab.df.gov.br')
                   @service.send_email!(message, subject, @staff.email) if @staff.present?
                   @service.send_email!(message, subject, @responsible.email) if @responsible.present?
                   @service.send_email!(message, subject, @secex.email)
                   @service.send_email!(message, subject, @manager.email) if @manager.present? && doc.days < 1
                   #pushs
-                  @teste = Core::Person::Staff.find(1490)
-                  @service.send_push!(@teste.id, message)
+                  #@teste = Core::Person::Staff.find(1490)
+                #  @service.send_push!(@teste.id, message)
 
                 rescue
                   return false

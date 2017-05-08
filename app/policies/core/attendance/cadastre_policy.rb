@@ -12,7 +12,7 @@ module Core
       # 5 => deferido
       # 6 => indeferido
       # 7 => finalizado pelo candidato
-      
+
       # define :ticket_contexts table: `attendance_ticket_contexts`
       # 1 => atualização cadastral (recadastramento)
       # 2 => atualização cadastral (convocado)
@@ -24,9 +24,9 @@ module Core
       #
       # define :ticket_action_contexts
       # 1 => atualização dados básicos
-      # 2 => atualização de dependentes 
-      # 3 => atualização de renda 
-      # 4 => atualização de dados de contato 
+      # 2 => atualização de dependentes
+      # 3 => atualização de renda
+      # 4 => atualização de dados de contato
 
       # define :ticket_action_situations
       # 1 => em processo de atualização
@@ -60,20 +60,20 @@ module Core
       end
 
       def allow_chats?
-        [4,54].include?(self.current_situation_id) && [1,2].include?(self.program_id)
+        [3, 4, 54].include?(self.current_situation_id) && [1,2].include?(self.program_id)
       end
 
       def allow_to_question?
 
         cadastres = Core::View::GeneralPontuation.select(:id)
                                                             .where(situation_status_id: [54,4],
-                                                                   program_id: 1, 
+                                                                   program_id: 1,
                                                                    procedural_status_id: [14, 72],
                                                                    income: 0..1800)
                                                             .where('convocation_id > 1524')
                                                             .order('total DESC')
                                                             .limit(100)
-        
+
         (cadastres.map(&:id).include? self.id)
       end
 

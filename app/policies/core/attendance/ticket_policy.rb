@@ -4,7 +4,6 @@ module Core
   module Attendance
     class TicketPolicy < ApplicationPolicy
 
-
       def action_allow?
         true
       end
@@ -50,20 +49,20 @@ module Core
         # 5 => deferido
         # 6 => indeferido
         # 7 => finalizado pelo candidato
-        
+
         case self.context_id
         when 1
 
           return false if !self.actions.present?
           return false if self.actions.count < 4
           return false if self.situation_id != 1
-          
+
           self.actions.each do |situation|
             return false if [1,2].include? situation.situation_id
           end
-          
+
           return true
-          
+
         when 2
 
           return false if !self.actions.present?
@@ -76,7 +75,7 @@ module Core
           return true
         when 3
           return false if !self.actions.present?
-          
+
           self.actions.each do |situation|
             return false if [1,2].include? situation.situation_id
           end
@@ -92,7 +91,7 @@ module Core
         end
       end
 
-      
+
 
       def confirmation_required? action
         self.context.confirmation_required &&
