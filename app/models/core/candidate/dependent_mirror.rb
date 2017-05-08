@@ -11,15 +11,15 @@ module Core
       belongs_to :special_condition_type,  required: false,  class_name: ::Core::Candidate::SpecialConditionType
       belongs_to :cadastre_mirror,         required: false,  class_name: ::Core::Candidate::CadastreMirror
       belongs_to :dependent,               required: false,  class_name: ::Core::Candidate::Dependent, foreign_key: :dependent_id
-       
+
       enum gender: ['N/D', 'masculino', 'feminino']
 
       def age
-        self.born.present? ? (Date.today - self.born).to_i / 365 :  0
+        self.born.present? ? (Date.today - self.born).to_i / 365.25 :  0
       end
 
       def income
-        self[:income].present? ? '%.2f' % self[:income] : 0 
+        self[:income].present? ? '%.2f' % self[:income] : 0
       end
 
     end

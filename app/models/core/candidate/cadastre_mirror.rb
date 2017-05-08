@@ -12,7 +12,7 @@ module Core
       belongs_to :city,         required: false,           class_name: ::Core::Address::City
       belongs_to :state,        required: false,           class_name: ::Core::Address::State
       belongs_to :work_city,    required: false,           class_name: ::Core::Address::City
-      belongs_to :civil_state,  required: false          
+      belongs_to :civil_state,  required: false
       belongs_to :city,         required: false,           class_name: ::Core::Address::City
       belongs_to :work_city,    required: false,           class_name: ::Core::Address::City
       belongs_to :work_state,   required: false,           class_name: ::Core::Address::State
@@ -37,9 +37,13 @@ module Core
       end
 
       def main_income
-        self[:main_income].present? ? '%.2f' % self[:main_income] : 0 
+        self[:main_income].present? ? '%.2f' % self[:main_income] : 0
       end
-      
+
+      def age
+        self.born.present? ? (Date.today - self.born).to_i / 365.25 :  0
+      end
+
     end
   end
 end

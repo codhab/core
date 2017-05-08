@@ -101,7 +101,8 @@ module Core
       # CH_ESP(i) recebe valor igual a um (1) se o candidato tiver condição especial, ou recebe valor igual a zero (0) se o candidato não tiver condição especial.
       def special_dependent_score
 
-        current_special_status    = (@cadastre_mirror.special_condition_id > 1) ? 1 : 0
+        current_special_status    = (@cadastre_mirror.special_condition_id > 1 || @cadastre_mirror.age >= 60) ? 1 : 0
+        #current_special_status    = (@cadastre_mirror.special_condition_id > 1) ? 1 : 0
         special_dependents_count  = 0
 
         # => .each para
@@ -112,11 +113,10 @@ module Core
         end
 
         if special_dependents_count >= 4
-            1200 + (300 * current_special_status)
+          1200 + (300 * current_special_status)
         else
           (special_dependents_count * 300) + (600 * current_special_status)
         end
-
       end
 
       # => PT_DP(i) = SE (DP(i) >= 5, 5*500, SENÃO(DP(i)*500))
@@ -142,13 +142,11 @@ module Core
         #=> O tempo de lista não deve exceder o teto demonstrado no decreto de 1500
         total = total > 1500 ? 1500 : total
       end
-
-
       # => a) PT_BSB(i) = PMB * (DSP – DT_CHEGADA_DF(i)) / (DSP - DIC)
       def timebsb_score
-        PMB * (dsp - @cadastre_mirror.arrival_df).to_f / (dsp - DIC).to_f
+        arrival_df = @cadastre_mirror.arrival_df >= DIC ? @cadastre_mirror.arrival_df : DIC
+        PMB * (dsp - arrival_df).to_f / (dsp - DIC).to_f
       end
-
     end
   end
 end
