@@ -93,7 +93,7 @@ module Core
 
       @inactives = self.enterprise_cadastres.where(inactive: true, indication_type_id: [1,4])
 
-      if @inactives.present?
+      if @inactives.present? && @inactives.first.inactive_date.present?
 
         @year    = @inactives.first.inactive_date + 4.years
         @dealine = @year.strftime("%d/%m/%Y")
