@@ -12,6 +12,8 @@ module Core
       belongs_to :city,                  required: false,   class_name: ::Core::Address::City
 
 
+      scope :actives, -> { where(status: true).order(:name) }
+
     end
   end
 end
