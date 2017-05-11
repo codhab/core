@@ -125,8 +125,8 @@ module Core
         if @ticket.context_id == 1
 
           if @ticket.actions.where(situation_id: 3).present?
-            
-            
+
+
             if important_data_updated?
               @ticket.update(situation_id: 2, active: true)
             else
@@ -146,7 +146,7 @@ module Core
             @ticket.update(situation_id: 2, active: true)
           else
             @ticket.update(situation_id: 7, active: false)
-            
+
             scoring_cadastre
           end
 
@@ -156,7 +156,7 @@ module Core
 
           scoring_cadastre
         else
-          
+
           if important_data_updated?
             @ticket.update(situation_id: 2, active: true)
           else
@@ -172,8 +172,8 @@ module Core
           title   = "Atualização Cadastral Nº #{@ticket.presenter.protocol} foi finalizada por você"
           message = "Sua atualização de dados foi finalizada. Caso tenha informado novos dados que necessitem ser validados, faz-se necessário aguardar o retorno do atendimento da CODHAB. Você receberá notificações informando o andamento da situação da sua atualização."
         end
-      
-        
+
+
         notification = Core::NotificationService.new
 
         notification.create({
@@ -189,7 +189,6 @@ module Core
 
       def scoring_cadastre
         if @ticket.context_id != 4
-
           @cadastre_mirror = @ticket.cadastre_mirror
           @score = Core::Candidate::ScoreService.new(cadastre_mirror_id: @cadastre_mirror)
           @scores = @score.scoring_cadastre!
@@ -228,8 +227,8 @@ module Core
 
         @cadastre.dependents.each do |dependent|
           @dep_mirror = @mirror.dependent_mirrors.find_by_dependent_id(dependent.id) rescue nil
-          
-          
+
+
           if @dep_mirror.nil?
             @index += 1
           else
@@ -241,8 +240,8 @@ module Core
           end
 
         end
-        
-        
+
+
         (@index == 0) ? false : true
 
       end
@@ -265,7 +264,6 @@ module Core
 
 
       def rewrite_to_cadastre!
-
         return false if @ticket.cadastre.nil? || @ticket.cadastre_mirror.nil?
 
         @ticket.cadastre_mirror.attributes.each do |key, value|
@@ -273,7 +271,6 @@ module Core
             @ticket.cadastre[key] = value if @ticket.cadastre.attributes.has_key?(key)
           end
         end
-
         @ticket.cadastre.save
       end
 
@@ -283,13 +280,12 @@ module Core
         @ticket.cadastre.dependents.delete_all
 
         @dependents.each do |dependent|
-          @new_dependent = @cadastre.dependents.new
+          @new_dependent = @ticket.cadastre.dependents.new
           dependent.attributes.each do |key, value|
             unless %w(id created_at cadastre_id updated_at).include? key
-             @new_dependent[key] = value if @new_dependent.attributes.has_key?(key)
+              @new_dependent[key] = value if @new_dependent.attributes.has_key?(key)
             end
           end
-
           @new_dependent.save
         end
       end
