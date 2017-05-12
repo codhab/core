@@ -12,11 +12,6 @@ module Core
         (self.project.manager_id == user_id)
       end
 
-      def allow_create?(user_id)
-        (self.project.responsible_id == user_id) ||
-        (self.project.manager_id == user_id)
-      end
-
       def allow_update?(user_id)
         (self.project.responsible_id == user_id) ||
         (self.project.manager_id == user_id)
