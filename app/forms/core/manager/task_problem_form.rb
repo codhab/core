@@ -5,6 +5,7 @@ module Core
     class TaskProblemForm < ::Core::Manager::TaskProblem
 
       validates :description, :recognition_date, presence: true
+      validates :resolution, presence: true, if: 'self.solved'
     end
   end
 end

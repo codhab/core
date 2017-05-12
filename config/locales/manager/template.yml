@@ -1,0 +1,13 @@
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        'core/manager/template':
+    models:
+      'core/manager/template': Template
+    attributes:
+      'core/manager/template': 
+        description: "Descrição"
+        name: "Nome"
+        sector_id: "Setor"
+        status: "Ativo?"

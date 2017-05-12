@@ -41,10 +41,10 @@ module Core
 
         return false if template.nil?
         
-        template.tasks.each do |task|
+        template.tasks.order(:order).each do |task|
           
           new_task  = self.tasks.new
-          last_task = self.tasks.last 
+          last_task = self.tasks.reject(&:new_record?).last 
 
           task.attributes.each do |key, value|
             
@@ -52,15 +52,24 @@ module Core
               new_task.send("#{key}=", value) if new_task.attributes.has_key?(key)
             end
             
-            if !last_task.nil?
-              new_task.due = last_task.due + task.due_days if last_task.due.present?
-            else
-              new_task.due = self.start + task.due_days
-            end
 
           end
+          
+          if !last_task.nil?
+            new_task.due = last_task.due + task.due_days if last_task.due.present?
+          else
+            new_task.due = self.start + task.due_days
+          end
+
+          if task.requester? 
+            new_task.responsible_id = self.requester_id
+          else
+            new_task.responsible_id = task.responsible_id
+            new_task.sector_id      = task.sector_id
+          end 
 
           new_task.save
+
         end
 
       end

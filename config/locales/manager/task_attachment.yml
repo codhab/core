@@ -1,0 +1,13 @@
+
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        'core/manager/task_attachment':
+    models:
+      'core/manager/task_attachment': Anexo
+    attributes:
+      'core/manager/task_attachment':
+        name: "Nome" 
+        description: "Descrição"
+        document: "Arquivo"

@@ -1,0 +1,17 @@
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        'core/manager/template_task':
+    models:
+      'core/manager/template_task': Template
+    attributes:
+      'core/manager/template_task': 
+        title: "Título"
+        description: "Descrição"
+        due_days: "Prazo(em dias)"
+        requester: "Tarefa do solicitante"
+        priority: "Prioridade"
+        task_required: "Tarefa necessária"
+        responsible: "Responsável"
+        setor: "Setor responsável"
