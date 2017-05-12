@@ -10,6 +10,8 @@ module Core
       belongs_to :civil_state,           required: false,   class_name: ::Core::Candidate::CivilState
       belongs_to :city,                  required: false,   class_name: ::Core::Address::City
 
+      scope :actives, -> { where(status: true).order(:name) }
+
     end
   end
 end

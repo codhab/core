@@ -5,13 +5,9 @@ module Core
     class Sector < ApplicationRecord
       self.table_name = 'extranet.person_sectors'
 
-      default_scope { order(:name) }
 
-      scope :by_status, -> (status = true) { where(:status => status) }
-      scope :by_name, -> (name) { where('name ilike ?', "%#{name}%") }
-
-      scope :active, -> {where(status: true)}
-
+      # => Associations
+      
       has_many :subordinates, class_name: "Sector", foreign_key: "father_id"
       has_many :staffs, foreign_key: "sector_current_id"
 
@@ -26,6 +22,18 @@ module Core
       has_many :assessments, class_name: "Protocol::Assessment"
 
       has_many :conducts,    class_name: "Protocol::Conduct"
+
+
+      # => Scopes 
+
+      default_scope { order(:name) }
+
+      scope :by_status, -> (status = true) { where(:status => status) }
+      scope :by_name, -> (name) { where('name ilike ?', "%#{name}%") }
+
+      scope :active,  -> {where(status: true)}
+      scope :actives, -> {where(status: true)}
+
 
     end
   end
