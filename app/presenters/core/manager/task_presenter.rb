@@ -12,6 +12,25 @@ module Core
         end
       end
 
+      def responsible_name
+        html = ""
+
+        sector      = self.sector.acron      rescue nil
+        responsible = self.responsible.name rescue nil
+
+        if !sector.nil?
+          html += "#{sector}"
+        end
+
+        if !responsible.nil?
+          html += " - " if !sector.nil?
+          html += "#{responsible}"
+        end
+
+        return html.html_safe
+
+      end
+
     end
   end
 end    

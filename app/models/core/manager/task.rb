@@ -6,6 +6,7 @@ module Core
       self.table_name = 'extranet.manager_tasks'
       
       belongs_to :project
+      belongs_to :sector,      class_name: ::Core::Person::Sector, foreign_key: :sector_id
       belongs_to :responsible, class_name: ::Core::Person::Staff, foreign_key: :responsible_id
 
       has_many   :problems,    class_name: ::Core::Manager::TaskProblem,    foreign_key: :task_id, dependent: :delete_all
