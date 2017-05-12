@@ -10,7 +10,7 @@ module Core
 
         return 0 if solved.to_i == 0
 
-        ((total / solved).to_f * 100).round(2)     
+        ((total / solved).to_f * 100).round(1)     
       end
 
     end

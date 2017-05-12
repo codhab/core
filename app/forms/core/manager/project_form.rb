@@ -21,10 +21,19 @@ module Core
       validate :responsible_is_valid?
       validate :manager_is_valid?
       validate :requester_is_valid?
+      validate :assessment_is_valid?, if: 'self.assessment.present?'
 
       after_save :set_template, if: 'self.template_id.present?'
 
       private
+
+      def assessment_is_valid?
+        document = ::Core::Protocol::Assessment.find_by_document_number(self.assessment) rescue nil
+        
+        if document.nil?
+          errors.add(:assessment, "Nº de documento inválido ou não existe")
+        end
+      end
 
       def set_template
         

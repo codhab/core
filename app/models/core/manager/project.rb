@@ -18,6 +18,7 @@ module Core
       has_many   :problems,    through: :tasks
       has_many   :comments,    through: :tasks
       has_many   :attachments, through: :tasks
+      has_many   :activities
       
       enum situation: ['em_construção', 'em_produção', 'concluído', 'cancelado']
 
