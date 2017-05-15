@@ -1,6 +1,9 @@
 module Core
   module Manager
     class NotificationService
+      AUTH_TOKEN = APP_ENV['onesignal']['auth_token']
+      APP_ID     = APP_ENV['onesignal']['app_id']
+
 
       attr_accessor(
         :staff,
@@ -23,24 +26,41 @@ module Core
         activity.save
       end
 
-      def write_and_send_notification(subject, text, reference_id, reference_model)
+      def write_and_send_notification(project_id: nil, task_id: nil, subject: nil, text: nil, reference_id: nil, reference_model: nil, staff_ids: [])
 
-        @notification = Core::Person::Notification.new.tap do |notification|
-          n.staff_id = @staff.id,
-          n.content  = text 
-          n.title    = subject
-          n.reference_context  = "manager"
-          n.reference_id       = reference_id
-          n.reference_model    = reference_model
+        activity = Core::Manager::Activity.new.tap do |o|
+          o.project_id      = project_id
+          o.task_id         = task_id
+          o.title           = subject 
+          o.content         = text 
         end
 
-        @notification.save
+        activity.save
+        
+        staff_ids.each do |staff_id|
 
-        email   = @staff.email
-        message = text.html_safe
+          @staff = Core::Person::Staff.find(staff_id) rescue nil
 
-        send_mail(@staff.email, subject, text.html_safe)
-        send_push(subject, text, @staff.mobile_user_token)
+          return false if @staff.nil?
+
+          @notification = Core::Person::Notification.new.tap do |n|
+            n.staff_id = @staff.id,
+            n.content  = text 
+            n.title    = subject
+            n.reference_context  = "manager"
+            n.reference_id       = reference_id
+            n.reference_model    = reference_model
+          end
+
+          @notification.save
+
+          email   = @staff.email
+          message = text.html_safe
+
+
+          send_mail(@staff.email, subject, text.html_safe)   if @staff.email.present?
+          send_push(subject, text, @staff.mobile_user_token) if @staff.mobile_user_token.present?
+        end
 
       end
 

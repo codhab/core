@@ -11,7 +11,7 @@ pt-BR:
     attributes:
       'core/manager/task_problem': 
         description: "Descrição"
-        recognition_date: "Prazo"
+        recognition_date: "Identificação"
         responsible_id: "Responsável para solucionar"
         document: "Arquivo referência"
         resolution: "Descrição da solução"
