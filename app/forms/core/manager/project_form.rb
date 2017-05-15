@@ -11,8 +11,6 @@ module Core
                 :situation,
                 :name, 
                 :description, 
-                :requester_id,
-                :requester_sector_id,
                 :start,
                 presence: true
 
@@ -20,7 +18,6 @@ module Core
 
       validate :responsible_is_valid?
       validate :manager_is_valid?
-      validate :requester_is_valid?
       validate :assessment_is_valid?, if: 'self.assessment.present?'
 
       after_save :set_template, if: 'self.template_id.present?'
@@ -61,12 +58,8 @@ module Core
             new_task.due = self.start + task.due_days
           end
 
-          if task.requester? 
-            new_task.responsible_id = self.requester_id
-          else
-            new_task.responsible_id = task.responsible_id
-            new_task.sector_id      = task.sector_id
-          end 
+          new_task.responsible_id = task.responsible_id
+          new_task.sector_id      = task.sector_id
 
           new_task.save
 
@@ -87,18 +80,6 @@ module Core
 
         if self.responsible_sector_id != self.manager.sector_current_id
           errors.add(:manager_id, "Servidor não está lotado no setor responsável informado")
-        end
-      end
-
-      def requester_is_valid?
-        return false if self.requester.nil?
-
-        if self.requester_sector_id != self.requester.sector_current_id
-          errors.add(:requester_id, "Servidor não está lotado no setor solicitante informado")
-        end
-
-        if self.requester_id == (self.responsible_id || self.manager_id)
-          errors.add(:requester_id, "Servidor não pode ser responsável ou gestor ao mesmo tempo que é solicitante")
         end
       end
 

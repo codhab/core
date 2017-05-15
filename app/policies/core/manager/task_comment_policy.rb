@@ -1,3 +1,5 @@
+require_dependency 'core/application_policy'
+
 module Core
   module Manager
     class TaskCommentPolicy < ApplicationPolicy

@@ -4,6 +4,12 @@ module Core
   module Manager
     class TaskPresenter < ApplicationPresenter
       
+      def expired?
+        return false if !self.due.present?
+
+        (self.due < Date.current)
+      end
+
       def situation
         if self.solved
           return "<div class='ui label green'> Finalizada #{self.solved_date.strftime('%d/%m/%Y')}</div>".html_safe
