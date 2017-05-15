@@ -1,0 +1,11 @@
+
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        'core/manager/task_comment':
+    models:
+      'core/manager/task_comment': Interação
+    attributes:
+      'core/manager/task_comment':
+        content: "Conteúdo" 

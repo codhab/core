@@ -3,6 +3,7 @@ module Core
     class TemplateTaskForm < ::Core::Manager::TemplateTask
       validates :title, :description, presence: true
       validates :due_days, numericality: true, presence: true
+      validate  :due_max_days
 
       before_validation :set_order, on: :create
       before_destroy    :reset_order
@@ -39,6 +40,12 @@ module Core
       end
 
       private
+
+      def due_max_days
+        if self.due_days > 15
+          errors.add(:due_days, "O prazo em dias não pode passar de 15 dias")
+        end
+      end
 
       def set_order
         last_task = self.template.tasks.order(:order).last
