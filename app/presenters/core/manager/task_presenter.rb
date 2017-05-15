@@ -7,7 +7,7 @@ module Core
       def expired?
         return false if !self.due.present?
 
-        (self.due < Date.current)
+        (self.due < Date.current && !self.solved)
       end
 
       def situation
