@@ -13,7 +13,8 @@ module Core
       has_many   :comments,    class_name: ::Core::Manager::TaskComment,    foreign_key: :task_id, dependent: :delete_all
       has_many   :attachments, class_name: ::Core::Manager::TaskAttachment, foreign_key: :task_id, dependent: :delete_all
       
-      enum priority: ['baixa', 'normal', 'alta', 'urgênte']
+      enum priority:  ['baixa', 'normal', 'alta', 'urgênte']
+      enum situation: ['aguardando', 'pendente', 'em_progresso', 'fechada']
     end
   end
 end

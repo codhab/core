@@ -3,9 +3,10 @@ require_dependency 'core/application_presenter'
 module Core
   module Manager
     class ProjectPresenter < ApplicationPresenter
-    
+      
+      # task situation: ['aguardando', 'pendente', 'em progresso', 'fechada']
       def progress
-        total  = self.tasks.where(solved: true).count.to_f
+        total  = self.tasks.where(situation: 3).count.to_f
         solved = self.tasks.count.to_f
 
         return 0 if solved.to_i == 0
@@ -17,8 +18,8 @@ module Core
         
         html  = ""
 
-        problems = self.problems.where(solved: false)
-        tasks    = self.tasks.where("due::date < ? and solved is false", Date.current.strftime('%Y-%m-%d'))
+        problems = self.problems.where(solved: true)
+        tasks    = self.tasks.where("due::date < ? and situation = 0", Date.current.strftime('%Y-%m-%d'))
 
         if problems.present?
           html += "<div class='ui label red hyper-tiny mini-margin-bottom'>Problemas (#{problems.count})</div>"

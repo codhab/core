@@ -40,28 +40,63 @@ module Core
         
         template.tasks.order(:order).each do |task|
           
-          new_task  = self.tasks.new
-          last_task = self.tasks.reject(&:new_record?).last 
+          @new_task  = self.tasks.new
+          @last_task = self.tasks.reject(&:new_record?).last 
 
           task.attributes.each do |key, value|
             
-            unless %w(id created_at updated_at task_id).include? key
-              new_task.send("#{key}=", value) if new_task.attributes.has_key?(key)
+            unless %w(id created_at updated_at task_id priority).include? key
+              @new_task.send("#{key}=", value) if @new_task.attributes.has_key?(key)
             end
             
 
           end
+
+   
+          if !@last_task.nil?
+            
+            if task.por_prioridade?
           
-          if !last_task.nil?
-            new_task.due = last_task.due + task.due_days if last_task.due.present?
+              if self.alta?
+                @new_task.due = @last_task.due + 15
+              end
+
+              if self.média?
+                @new_task.due = @last_task.due + 5
+              end
+
+              if self.baixa?
+                @new_task.due = @last_task.due + 3
+              end
+
+            else
+              @new_task.due = @last_task.due + task.due_days if @last_task.due.present?
+            end
+
           else
-            new_task.due = self.start + task.due_days
+
+            if task.por_prioridade?
+              if self.alta?
+                @new_task.due = self.start + 15
+              end
+
+              if self.média?
+                @new_task.due = self.start + 5
+              end
+
+              if self.baixa?
+                @new_task.due = self.start + 3
+              end
+            else
+              @new_task.due = self.start + task.due_days
+            end
+
           end
 
-          new_task.responsible_id = task.responsible_id
-          new_task.sector_id      = task.sector_id
+          @new_task.responsible_id = task.responsible_id
+          @new_task.sector_id      = task.sector_id
 
-          new_task.save
+          @new_task.save
 
         end
 

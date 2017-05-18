@@ -9,7 +9,7 @@ module Core
       belongs_to :responsible, class_name: ::Core::Person::Staff, foreign_key: :responsible_id
       belongs_to :sector, class_name: ::Core::Person::Sector, foreign_key: :sector_id
 
-      enum priority: ['baixa', 'normal', 'alta', 'urgênte'] 
+      enum priority: ['por_prazo', 'por_prioridade'] 
      
     end
   end

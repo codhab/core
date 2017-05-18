@@ -18,7 +18,8 @@ module Core
       has_many   :comments,    through: :tasks
       has_many   :attachments, through: :tasks
       
-      enum situation: ['em_construção', 'em_produção', 'concluído', 'cancelado']
+      enum situation: ['em_construção', 'em_produção', 'cancelado']
+      enum priority: ['baixa', 'média', 'alta']
 
 
       # Scopes para gem has_scope
