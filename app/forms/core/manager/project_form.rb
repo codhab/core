@@ -61,7 +61,7 @@ module Core
               end
 
               if self.média?
-                @new_task.due = 5.business_day.from_now(@last_task.due)
+                @new_task.due = 7.business_day.from_now(@last_task.due)
               end
 
               if self.baixa?
@@ -80,7 +80,7 @@ module Core
               end
 
               if self.média?
-                @new_task.due = 5.business_day.from_now(self.start)
+                @new_task.due = 7.business_day.from_now(self.start)
               end
 
               if self.baixa?
