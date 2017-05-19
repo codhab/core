@@ -28,9 +28,7 @@ module Core
         where(project_category_id: category_id)
       end
       
-      scope :by_sector, -> (sector_id) do  
-        where(responsible_sector: sector_id)
-      end
+      scope :by_sector, -> (sector_id) { where(responsible_sector: sector_id) }
 
       scope :by_order, -> (order) do       
         order(order.to_sym)
