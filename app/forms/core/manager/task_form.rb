@@ -38,10 +38,10 @@ module Core
         tasks.each_with_index do |task, index|
           
           if index == 0
-            task.due  = self.due + self.due_days
+            task.due  = self.due_days.business_day.from_now(self.due)
             task.save
           else
-            task.due  = @last_task.due + @last_task.due_days
+            task.due  = @last_task.due_days.business_day.from_now(@last_task.due)
             task.save
           end
 
