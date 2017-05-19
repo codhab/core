@@ -57,37 +57,37 @@ module Core
             if task.por_prioridade?
           
               if self.alta?
-                @new_task.due = @last_task.due + 15
+                @new_task.due = 15.business_day.from_now(@last_task.due)
               end
 
               if self.média?
-                @new_task.due = @last_task.due + 5
+                @new_task.due = 5.business_day.from_now(@last_task.due)
               end
 
               if self.baixa?
-                @new_task.due = @last_task.due + 3
+                @new_task.due = 3.business_day.from_now(@last_task.due)
               end
 
             else
-              @new_task.due = @last_task.due + task.due_days if @last_task.due.present?
+              @new_task.due =  task.due_days.business_day.from_now(@last_task.due) 
             end
 
           else
 
             if task.por_prioridade?
               if self.alta?
-                @new_task.due = self.start + 15
+                @new_task.due = 15.business_day.from_now(self.start)
               end
 
               if self.média?
-                @new_task.due = self.start + 5
+                @new_task.due = 5.business_day.from_now(self.start)
               end
 
               if self.baixa?
-                @new_task.due = self.start + 3
+                @new_task.due = 3.business_day.from_now(self.start)
               end
             else
-              @new_task.due = self.start + task.due_days
+              @new_task.due = task.due_days.business_day.from_now(self.start)
             end
 
           end
