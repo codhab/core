@@ -52,10 +52,6 @@ module Core
 
           end
 
-          if @new_task.sector_id.nil?
-            @new_task.sector_id = self.responsible_sector_id
-          end
-
           if !@last_task.nil?
             
             if task.por_prioridade?
@@ -97,7 +93,13 @@ module Core
           end
 
           @new_task.responsible_id = task.responsible_id
-          @new_task.sector_id      = task.sector_id
+
+
+          if @new_task.sector_id.nil?
+            @new_task.sector_id = self.responsible_sector_id
+          else
+            @new_task.sector_id      = task.sector_id
+          end
 
           @new_task.save
 
