@@ -33,9 +33,11 @@ module Core
       has_many :cadastre_observations
       has_many :cadastre_mirrors
       has_many :dependents
-      has_many :dependent_creates
+      has_many :dependent_creates, class_name: ::Core::Candidate::DependentCreateForm
+      has_many :dependent_updates, class_name: ::Core::Candidate::DependentUpdateForm
       has_many :cadastre_situations
       has_many :pontuations , ->  { order(:id)}
+      has_many :chats, class_name: ::Core::Attendance::Chat
       has_many :positions
       has_many :cadastre_attendances
       has_many :cadastre_checklists

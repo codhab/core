@@ -15,6 +15,20 @@ module Core
 
       enum gender: ['N/D', 'masculino', 'feminino']
 
+      validates :cpf, cpf: true
+
+      validates :name, :cpf, :born, :observation, presence: true
+
+      def self.log_inheritor!(cadastre, user, status, observation)
+        @cadastre = Candidate::CadastreActivity.new(
+          cadastre_id: cadastre,
+          staff_id: user,
+          activity_status_id: status,
+          type_activity: 2,
+          observation: observation
+        )
+        @cadastre.save
+      end
     end
   end
 end

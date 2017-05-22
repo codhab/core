@@ -18,6 +18,11 @@ module Core
 
         "#{@string}, #{self.humanize_first_name}"
       end
+
+      def humanize_first_name
+        self.name.split(' ')[0].humanize
+      end
+      
     end
   end
 end

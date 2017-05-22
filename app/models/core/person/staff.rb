@@ -10,6 +10,11 @@ module Core
       belongs_to :civil_state,           required: false,   class_name: ::Core::Candidate::CivilState
       belongs_to :city,                  required: false,   class_name: ::Core::Address::City
 
+      has_many :vocations
+      has_many :allowances,   class_name: Core::Person::Allowance, foreign_key: 'employee_id'
+
+      mount_uploader :avatar, Core::Cadastre::AvatarUploader
+
       scope :actives, -> { where(status: true).order(:name) }
 
     end
