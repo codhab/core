@@ -1,0 +1,18 @@
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        'core/manager/task_problem':
+          attributes:
+            recognition_date:
+              invalid_date: "data inválida"
+    models:
+      'core/manager/task_problem': Problema
+    attributes:
+      'core/manager/task_problem': 
+        description: "Descrição"
+        recognition_date: "Identificação"
+        responsible_id: "Responsável para solucionar"
+        document: "Arquivo referência"
+        resolution: "Descrição da solução"
+        solved: "Solucionado?"

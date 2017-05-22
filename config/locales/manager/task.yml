@@ -1,0 +1,21 @@
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        'core/manager/task':
+          attributes:
+            due:
+              invalid_date: "data inválida"
+    models:
+      'core/manager/task': Tarefa
+    attributes:
+      'core/manager/task': 
+        title: "Título"
+        description: "Descrição"
+        due: "Prazo"
+        responsible_id: "Responsável"
+        sector_id: "Setor"
+        resolution: "Resolução"
+        solved: "Concluída?"
+        priority: "Prioridade"
+        task_required_id: "Tarefa necessária"

@@ -15,6 +15,9 @@ module Core
 
       mount_uploader :avatar, Core::Cadastre::AvatarUploader
 
+      has_many :notifications, class_name: ::Core::Person::Notification, foreign_key: :staff_id
+
+
       scope :actives, -> { where(status: true).order(:name) }
 
     end

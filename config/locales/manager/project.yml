@@ -1,0 +1,21 @@
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        'core/manager/project':
+    models:
+      'core/manager/project': Projeto
+    attributes:
+      'core/manager/project':
+        name: "Nome"
+        project_category_id: "Categoria"
+        situation: "Situação"
+        assessment: "Processo"
+        responsible_sector_id: "Setor responsável"
+        responsible_id: "Responsável"
+        manager_id: "Gestor"
+        start: "Início"
+        requester_sector_id: "Setor solicitante"
+        requester_id: "Solicitante"
+        description: "Descrição do projeto"
+        template: "Template de tarefas"
