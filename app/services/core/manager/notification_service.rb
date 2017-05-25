@@ -34,11 +34,13 @@ module Core
           return false
         end
 
-        users_with_token = users.where('mobile_user_token is not null').map(&:mobile_user_token)
+        users_with_token = users.where("mobile_user_token is not null and mobile_user_token <> 'undefined'").map(&:mobile_user_token)
 
+        
         users_with_token.each do |user|
+          
           array = []
-          array << user.mobile_user_token
+          array << user
 
           params = {
             headings:{ en: subject },
@@ -50,10 +52,10 @@ module Core
 
           begin
             @client.notifications.create(params)
-            return true
+            
           rescue Exception => e
+            
             puts e
-            return false
           end
         end
       end
