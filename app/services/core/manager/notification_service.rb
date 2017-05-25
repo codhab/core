@@ -19,6 +19,7 @@ module Core
 
         subject = "Notificação de tarefa"
         message = "A tarefa <b>#{next_task.title}</b> do projeto <b>#{next_task.project.name}</b> vínculada ao seu setor foi iniciada. Para saber mais acesse a Extranet > Outros Sistemas > Monitoramento de projetos".html_safe
+        message_push = "A tarefa #{next_task.title} do projeto #{next_task.project.name} vínculada ao seu setor foi iniciada. Para saber mais acesse a Extranet > Outros Sistemas > Monitoramento de projetos".html_safe
 
         begin
           users.each do |user|
@@ -44,7 +45,7 @@ module Core
 
           params = {
             headings:{ en: subject },
-            contents:{ en: message },
+            contents:{ en: message_push },
             include_player_ids: array
           }
 
