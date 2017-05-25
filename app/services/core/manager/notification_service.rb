@@ -14,7 +14,7 @@ module Core
         :service
       )
 
-      def self.send_notification(users, current_task, next_task)
+      def self.send_notification(users = nil, current_task = nil, next_task = nil)
 
 
         subject = "Notificação de tarefa"
@@ -22,7 +22,11 @@ module Core
 
         begin
           users.each do |user|
-            Core::BasicMailer.simple_sender(user.email, subject, message).deliver_now!
+            begin
+              Core::BasicMailer.simple_sender(user.email, subject, message).deliver_now!
+            rescue Exception => e 
+              puts e
+            end
           end
 
         rescue Exception => e 
@@ -30,24 +34,28 @@ module Core
           return false
         end
 
-        array = users.where('mobile_user_token is not null').map(&:mobile_user_token)
+        users_with_token = users.where('mobile_user_token is not null').map(&:mobile_user_token)
 
-        params = {
-          headings:{ en: subject },
-          contents:{ en: message },
-          include_player_ids: array
-        }
+        users_with_token.each do |user|
+          array = []
+          array << user.mobile_user_token
 
-        @client = OneSignal::Client.new(auth_token: AUTH_TOKEN, app_id: APP_ID)
+          params = {
+            headings:{ en: subject },
+            contents:{ en: message },
+            include_player_ids: array
+          }
 
-        begin
-          @client.notifications.create(params)
-          return true
-        rescue Exception => e
-          puts e
-          return false
+          @client = OneSignal::Client.new(auth_token: AUTH_TOKEN, app_id: APP_ID)
+
+          begin
+            @client.notifications.create(params)
+            return true
+          rescue Exception => e
+            puts e
+            return false
+          end
         end
-          
       end
 
       def self.write_activity(project_id: nil, task_id: nil, title: nil, content: nil, responsible_id: nil)
