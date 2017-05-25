@@ -26,8 +26,16 @@ module Core
         return false if !self.fechada?
         
         next_task = self.project.tasks.where('due > ? and situation = 0', self.due ).order('due ASC').first rescue nil
-        self.project.tasks.where(due: next_task.due).update(situation: 1) if !next_task.nil?
-        
+        if !next_task.nil?
+          next_task.update(situation: 1) 
+          staffs = Core::Person::Staff.where(sector_current_id: next_task.sector_id, status: true)
+
+          begin
+            Core::Manager::NotificationService.send_notification(staffs, self, next_task)
+          rescue Exception => e 
+            puts e
+          end
+        end
       end
 
       def set_due_for_next_tasks
