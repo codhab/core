@@ -4,6 +4,7 @@ module Core
       validates :title, :description, presence: true
       validates :due_days, numericality: true, presence: true
       validate  :due_max_days
+      validate  :due_days_not_equal_zero
 
       before_validation :set_order, on: :create
       before_destroy    :reset_order
@@ -39,7 +40,13 @@ module Core
         old_task.update(order: current_order)
       end
 
-      private
+      private 
+
+      def due_days_not_equal_zero
+        if self.due_days.to_i <= 0
+          errors.add(:due_days, "Valor não pode menor ou igual a 0")
+        end
+      end
 
       def due_max_days
         if self.due_days > 15

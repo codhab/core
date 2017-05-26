@@ -101,8 +101,9 @@ module Core
             @new_task.sector_id      = task.sector_id
           end
 
+          @new_task.original_due = @new_task.due 
+          
           @new_task.save
-
         end
 
       end

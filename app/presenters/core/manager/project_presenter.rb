@@ -18,11 +18,11 @@ module Core
         
         html  = ""
 
-        problems = self.problems.where(solved: true)
+        problems = self.problems.where(solved: false)
         tasks    = self.tasks.where("due::date < ? and situation = 0", Date.current.strftime('%Y-%m-%d'))
 
         if problems.present?
-          html += "<div class='ui label red hyper-tiny mini-margin-bottom'>Problemas (#{problems.count})</div>"
+          html += "<div class='ui label red hyper-tiny mini-margin-bottom'>Problemas (#{problems.where(solved: false).count})</div>"
         end
 
         if tasks.present?
