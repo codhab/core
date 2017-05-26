@@ -7,7 +7,7 @@ module Core
       validate  :due_days_not_equal_zero
 
       before_validation :set_order, on: :create
-      before_destroy    :reset_order
+      after_commit      :reset_order, on: [:create, :destroy]
 
       def order_up
         return false if self.order == 0
@@ -67,7 +67,7 @@ module Core
 
 
       def reset_order
-        tasks = self.template.tasks.where.not(id: self.id)
+        tasks = self.template.tasks
         tasks.order('"order" ASC').each_with_index do |task, index|
           task.update(order: index)
         end
