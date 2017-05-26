@@ -6,6 +6,9 @@ module Core
       self.table_name = 'extranet.entity_chat_uploads'
 
       belongs_to :chat_comment
+
+      mount_uploader :document, Core::Attendance::DocumentUploader
+
     end
   end
 end
