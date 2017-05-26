@@ -9,12 +9,12 @@ module Core
 
       attr_accessor :start, :reprocess
       
-      validates :title, :description, :priority, presence: true
+      validates :title, :description, :priority, :due_days, presence: true
 
       before_validation :set_date_solved
 
       after_commit :set_situation_for_next_task
-      after_commit :set_due_for_next_tasks
+      after_save   :set_due_for_next_tasks
 
       private
 
@@ -41,19 +41,25 @@ module Core
       def set_due_for_next_tasks
         tasks = self.project.tasks.where('due > ? ', self.due).order('due ASC')
 
-        @last_task = nil
+        if tasks.present?
+          @last_task = nil
 
-        tasks.each_with_index do |task, index|
-          
-          if index == 0
-            task.due  = self.due_days.business_day.from_now(self.due)
-            task.save
-          else
-            task.due  = @last_task.due_days.business_day.from_now(@last_task.due)
-            task.save
+          tasks.each_with_index do |task, index|
+            
+            if index == 0
+              task.due  = self.due_days.business_day.from_now(self.due) + 1.day
+              task.save
+            else
+              task.due  = @last_task.due_days.business_day.from_now(@last_task.due) + 1.day
+              task.save
+            end
+
+            @last_task = task
           end
-
-          @last_task = task
+        else
+          task = self.project.tasks.find(self.id)
+          task.due = task.due_days.business_day.from_now(task.project.start) + 1.day
+          task.save
         end
 
       end
