@@ -19,6 +19,8 @@ module Core
       has_many :comments,      class_name: Core::Attendance::TicketComment,    foreign_key: :ticket_id
   
       has_many :uploads, through: :actions, class_name: Core::Attendance::TicketUpload, foreign_key: :action_id      
+   
+
     end
   end
 end

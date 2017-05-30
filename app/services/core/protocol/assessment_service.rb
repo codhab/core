@@ -6,27 +6,46 @@ module Core
         @assessment = assessment
       end
 
-      def app_requeriment!(candidate)
+      def app_requeriment!(candidate = nil, entity = nil)
+
         @assessment.document_type_id = 26 #external requeriment
-        @assessment.recipient        = candidate.name
-        @assessment.finalized        = false
-        if ([1,2,4,5,7,9,10].include? candidate.program_id)
-          sector = 27
-          @assessment.subject_id = 1746 #request
+
+        if entity.nil?
+          @assessment.recipient        = candidate.name
+          if ([1,2,4,5,7,9,10].include? candidate.program_id)
+            sector = 27
+            @assessment.subject_id = 1746 #request
+          else
+            sector = 30
+            @assessment.subject_id = 1747 #request
+          end
         else
-          sector = 30
-          @assessment.subject_id = 1747 #request
+          @assessment.recipient  = entity.name
+          @assessment.cnpj       = entity.cnpj
+          sector = 27
+          @assessment.subject_id = 1756 #request
         end
+
+        @assessment.finalized        = false
+    
         number = set_number!(nil,sector)
+        
         @assessment.document_number = number
+        
         if @assessment.save
-          @service = Core::Attendance::RequerimentService.new(@assessment, candidate)
-          @service.new_requeriment!
+          
+          if !candidate.nil?
+            @service = Core::Attendance::RequerimentService.new(@assessment, candidate)
+            @service.new_requeriment!
+          end
+
           set_conduct!(@assessment, nil, sector)
+
           return true
         else
           return false
         end
+      
       end
 
       def requeriment_citzen_app!

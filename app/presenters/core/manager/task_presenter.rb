@@ -18,19 +18,19 @@ module Core
 
       def situation_label
         if self.aguardando?
-          return "<div class='ui label gray'>Aguardando</div>".html_safe
+          return "<div class='ui ribbon label gray' style='padding: 8px'>Aguardando</div>".html_safe
         end
 
         if self.pendente?
-          return "<div class='ui label yellow'>Pendente</div>".html_safe
+          return "<div class='ui ribbon label yellow' style='padding: 8px'>Pendente</div>".html_safe
         end
 
         if self.em_progresso?
-          return "<div class='ui label blue'>Em execução</div>".html_safe
+          return "<div class='ui ribbon label blue' style='padding: 8px'>Em execução</div>".html_safe
         end
 
         if self.fechada?
-          return "<div class='ui label green'> #{self.situation} #{self.solved_date.strftime('%d/%m/%Y')}</div>".html_safe
+          return "<div class='ui ribbon label green' style='padding: 8px'> #{self.situation} #{self.solved_date.strftime('%d/%m/%Y')}</div>".html_safe
         end
 
       end
@@ -52,6 +52,8 @@ module Core
         return html.html_safe
 
       end
+
+
 
     end
   end

@@ -14,6 +14,53 @@ module Core
         :service
       )
 
+      def self.send_notification(users = nil, current_task = nil, next_task = nil)
+
+
+        subject = "Notificação de tarefa"
+        message = "A tarefa <b>#{next_task.title}</b> do projeto <b>#{next_task.project.name}</b> vínculada ao seu setor foi iniciada. Para saber mais acesse a Extranet > Outros Sistemas > Monitoramento de projetos".html_safe
+        message_push = "A tarefa #{next_task.title} do projeto #{next_task.project.name} vínculada ao seu setor foi iniciada. Para saber mais acesse a Extranet > Outros Sistemas > Monitoramento de projetos".html_safe
+
+        begin
+          users.each do |user|
+            begin
+              Core::BasicMailer.simple_sender(user.email, subject, message).deliver_now!
+            rescue Exception => e 
+              puts e
+            end
+          end
+
+        rescue Exception => e 
+          puts e
+          return false
+        end
+
+        users_with_token = users.where("mobile_user_token is not null and mobile_user_token <> 'undefined'").map(&:mobile_user_token)
+
+        
+        users_with_token.each do |user|
+          
+          array = []
+          array << user
+
+          params = {
+            headings:{ en: subject },
+            contents:{ en: message_push },
+            include_player_ids: array
+          }
+
+          @client = OneSignal::Client.new(auth_token: AUTH_TOKEN, app_id: APP_ID)
+
+          begin
+            @client.notifications.create(params)
+            
+          rescue Exception => e
+            
+            puts e
+          end
+        end
+      end
+
       def self.write_activity(project_id: nil, task_id: nil, title: nil, content: nil, responsible_id: nil)
         activity = Core::Manager::Activity.new.tap do |o|
           o.project_id      = project_id
