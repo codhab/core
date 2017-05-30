@@ -17,6 +17,8 @@ module Core
 
       belongs_to :general_pontuation,      required: false,   class_name: ::Core::View::GeneralPontuation,          primary_key: :id, foreign_key: :cadastre_id
 
+      scope :distributed, -> { where(situation_id: 1).order('id DESC')}
+
       enum situation_id:  ['reserva', 'distribuído', 'distrato','transferido', 'permuta','sobrestado']
       enum type_receipt:  ['segeth/codhab', 'transferencia']
 

@@ -7,25 +7,19 @@ module Core
 
       has_one :notary_office
 
-      belongs_to :situation_unit, required: false
+      belongs_to :situation_unit,     required: false
+      belongs_to :ownership_type,     required: false,
+                                      class_name: ::Core::Address::OwnershipType,
+                                      foreign_key: :ownership_type_id
+      belongs_to :project_enterprise, required: false,
+                                      class_name: ::Core::Project::Enterprise,
+                                      foreign_key: :project_enterprise_id
+      belongs_to :city,               required: false
+      belongs_to :type_use_unit,      required: false
 
-      belongs_to :ownership_type,
-                  required: false,
-                  class_name: ::Core::Address::OwnershipType,
-                  foreign_key: :ownership_type_id
-
-      belongs_to :project_enterprise,
-                  required: false,
-                  class_name: ::Core::Project::Enterprise,
-                  foreign_key: :project_enterprise_id
-
-      belongs_to :city,          required: false
-      belongs_to :type_use_unit, required: false
-
-
-      has_many :registry_units
+      has_many :registry_units,   class_name: ::Core::Address::RegistryUnit
       has_many :cadastre_address, class_name: ::Core::Candidate::CadastreAddress
-      has_many :cadastres,        class_name: ::Core::Candidate::Cadastre,        through: :cadastre_address
+      has_many :cadastres,        class_name: ::Core::Candidate::Cadastre, through: :cadastre_address
       has_many :ammvs,            class_name: ::Core::Candidate::Ammv
       has_many :activities
 
