@@ -12,13 +12,13 @@ module Core
                                            .order(:created_at).last
         return nil unless @conduct_result.present?
         if sector == 3
-          if %w[doc_create doc_cancel doc_return doc_receive]
+          if %w[doc_create doc_cancel doc_return doc_receive doc_to_send]
                  .include?(@conduct_result.conduct_type) &&
                  (sector == @conduct_result.sector_id || @conduct_result.sector_id == 2)
           return @conduct_result
           end
         else
-          if %w[doc_create doc_cancel doc_return doc_receive]
+          if %w[doc_create doc_cancel doc_return doc_receive doc_to_send]
                  .include?(@conduct_result.conduct_type) &&
                  sector == @conduct_result.sector_id
           return @conduct_result

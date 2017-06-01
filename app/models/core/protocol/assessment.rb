@@ -31,6 +31,7 @@ module Core
     scope :by_process,  -> (process) {where(document_number: process)}
     scope :by_external_number,  -> (external) {where(external_number: external)}
     scope :by_doc_type,  -> (doc_type) {where(document_type_id: doc_type)}
+    scope :by_finalized,  -> (finalized) {where(finalized: finalized)}
     scope :by_cpf,  -> (cpf) {where(cpf: cpf.gsub('-','').gsub('.',''))}
     scope :by_cnpj,  -> (cnpj) {where(cnpj: cnpj)}
     scope :by_sector,  -> (sector) {where(sector_id: sector)}
