@@ -12,6 +12,7 @@ module Core
     belongs_to :staff,          required: false, class_name: ::Core::Person::Staff
     belongs_to :sector,         required: false, class_name: ::Core::Person::Sector
     belongs_to :cadastre,      required: false, class_name: ::Core::Candidate::Cadastre,            primary_key: :cpf, foreign_key: :cpf
+    belongs_to :general, class_name: ::Core::View::GeneralPontuation, foreign_key: :cpf, primary_key: :cpf
 
     has_many :conducts
     has_many :digital_documents, class_name: ::Core::Protocol::DigitalDocument

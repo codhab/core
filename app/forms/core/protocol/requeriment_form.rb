@@ -17,6 +17,27 @@ module Core
         end
       }
 
+
+      belongs_to :general, class_name: ::Core::View::GeneralPontuation, foreign_key: :cpf, primary_key: :cpf
+
+      scope :by_candidate_situation, -> (situation_status_id) {
+        joins(:general)
+        .where('extranet.general_pontuations.situation_status_id =  ?', situation_status_id)
+      }
+
+
+      def self.situations
+        situations = {}
+        
+        all.each do |situation|
+          situations[situation.cadastre.presenter.current_situation_name] = situation.cadastre.presenter.current_situation_id rescue nil
+        end
+
+
+        situations.inject([]) { |result,h| result << h unless result.include?(h); result }
+      end
+
+
     end
   end
 end
