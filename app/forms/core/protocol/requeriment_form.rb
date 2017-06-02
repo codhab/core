@@ -30,7 +30,9 @@ module Core
         situations = {}
         
         all.each do |situation|
-          situations[situation.cadastre.presenter.current_situation_name] = situation.cadastre.presenter.current_situation_id rescue nil
+          if situation.cadastre.present?
+            situations[situation.cadastre.presenter.current_situation_name] = situation.cadastre.presenter.current_situation_id rescue nil
+          end
         end
 
 
