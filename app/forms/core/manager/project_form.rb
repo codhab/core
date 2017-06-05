@@ -16,8 +16,8 @@ module Core
 
       validates :name, uniqueness: true
 
-      validate :responsible_is_valid?
-      validate :manager_is_valid?
+      #validate :responsible_is_valid?
+      #validate :manager_is_valid?
       validate :assessment_is_valid?, if: 'self.assessment.present?'
 
       after_save :set_template, if: 'self.template_id.present?', on: :create
