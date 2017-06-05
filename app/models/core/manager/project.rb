@@ -32,19 +32,17 @@ module Core
         
         sector = Core::Person::Sector.find(sector_id) rescue nil
         
-        if sector.father.present?
-          father = sector.father 
+        childrens = Core::Person::Sector.where(father_id: sector.id, status: true)
 
-          if father.father.present?
-            super_father = father.father
-            where(responsible_sector: [sector_id, father.id, super_father.id]) 
-          else
-            where(responsible_sector: [sector_id, father.id]) 
-          end
+        if childrens.present?
+          array = childrens.map(&:id)
+          array << sector_id
+          
+          where(responsible_sector: array) 
+        else
+          where(responsible_sector: sector_id) 
         end
         
-        where(responsible_sector: sector_id) 
-
       }
 
       scope :by_order, -> (order) do       
