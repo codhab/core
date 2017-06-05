@@ -28,7 +28,24 @@ module Core
         where(project_category_id: category_id)
       end
       
-      scope :by_sector, -> (sector_id) { where(responsible_sector: sector_id) }
+      scope :by_sector, -> (sector_id) { 
+        
+        sector = Core::Person::Sector.find(sector_id) rescue nil
+        
+        if sector.father.present?
+          father = sector.father 
+
+          if father.father.present?
+            super_father = father.father
+            where(responsible_sector: [sector_id, father.id, super_father.id]) 
+          else
+            where(responsible_sector: [sector_id, father.id]) 
+          end
+        end
+        
+        where(responsible_sector: sector_id) 
+
+      }
 
       scope :by_order, -> (order) do       
         order(order.to_sym)
