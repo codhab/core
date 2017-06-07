@@ -37,9 +37,7 @@ module Core
 
       def set_situation_for_next_task
         return false if !self.fechada?
-        return false if !self.situation_previously_changed?
-
-
+        
         next_task = self.project.tasks.where('due >= ? and id <> ? and situation = 0 ', self.due, self.id).order('due ASC').first rescue nil
         
         if !next_task.nil?
