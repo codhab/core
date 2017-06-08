@@ -38,12 +38,12 @@ module Core
       def set_situation_for_next_task
         return false if !self.fechada?
         
-        next_task = self.project.tasks.where('due >= ? and id <> ? and situation = 0 ', self.due, self.id).order('due ASC').first rescue nil
+        next_task = self.project.tasks.where('original_due >= ? and id <> ? and situation = 0 ', self.original_due, self.id).order('original_due ASC').first rescue nil
         
         if !next_task.nil?
           next_task.update(situation: 1) 
           staffs = Core::Person::Staff.where(sector_current_id: next_task.sector_id, status: true)
-
+        
           begin
             Core::Manager::NotificationService.send_notification(staffs, self, next_task)
           rescue Exception => e 
@@ -54,7 +54,7 @@ module Core
 
       def set_due_for_next_tasks
         all_tasks = self.project.tasks.order('due ASC')
-        tasks = self.project.tasks.where("due > ? ", self.due).order('due ASC')
+        tasks = self.project.tasks.where("original_due >= ? ", self.original_due).order('original_due ASC')
 
         
         if tasks.present?
