@@ -38,7 +38,11 @@ module Core
       def set_situation_for_next_task
         return false if !self.fechada?
         
-        next_task = self.project.tasks.where('original_due >= ? and id <> ? and situation = 0 ', self.original_due, self.id).order('original_due ASC').first rescue nil
+        tasks = self.project.tasks.order('original_due ASC').map(&:id)
+        current_task_index = tasks.find_index(self.id)
+        next_task_index    = tasks[current_task_index + 1]
+
+        next_task = self.project.tasks.find(next_task_index)
         
         if !next_task.nil?
           next_task.update(situation: 1) 
@@ -54,8 +58,8 @@ module Core
 
       def set_due_for_next_tasks
         all_tasks = self.project.tasks.order('due ASC')
-        tasks = self.project.tasks.where("original_due >= ? ", self.original_due).order('original_due ASC')
-
+        tasks = self.project.tasks.where("original_due >= ?", self.original_due).order('original_due ASC')
+         
         
         if tasks.present?
           @last_task = nil
