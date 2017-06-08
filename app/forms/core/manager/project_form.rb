@@ -20,7 +20,7 @@ module Core
       #validate :manager_is_valid?
       validate :assessment_is_valid?, if: 'self.assessment.present?'
 
-      after_save :set_template, if: 'self.template_id.present?', on: :create
+      after_save :set_template, on: :create, if: 'self.template_id.present?'
 
       private
 
