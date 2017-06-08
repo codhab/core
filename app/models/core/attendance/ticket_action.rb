@@ -6,6 +6,7 @@ module Core
       belongs_to :situation, class_name: Core::Attendance::TicketActionSituation, foreign_key: :situation_id      
       belongs_to :context,   class_name: Core::Attendance::TicketActionContext,   foreign_key: :context_id      
       
+      validates_uniqueness_of :context_id, scope: [:ticket_id]
 
       has_many :uploads,
                class_name: Core::Attendance::TicketUpload,
