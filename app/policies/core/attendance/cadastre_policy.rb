@@ -177,9 +177,9 @@ module Core
                 320235,
                 209805]
 
-        cadastres = Core::View::GeneralPontuation.select(:id)
-                                                 .where(id: cpfs)
-        (cadastres.map(&:id).include? self.id)
+       # cadastres = Core::View::GeneralPontuation.select(:id)
+       #                                          .where(id: cpfs)
+        (cpfs.include? self.id)
       end
 
     end
