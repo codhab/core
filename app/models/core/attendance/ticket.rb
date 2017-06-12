@@ -5,8 +5,6 @@ module Core
     class Ticket < ApplicationRecord
       self.table_name = 'extranet.attendance_tickets'
 
-
-
       belongs_to :cadastre,        class_name: Core::Candidate::Cadastre
       belongs_to :cadastre_mirror, class_name: Core::Candidate::CadastreMirror
       belongs_to :context,         class_name: Core::Attendance::TicketContext,   foreign_key: :context_id
@@ -20,7 +18,17 @@ module Core
   
       has_many :uploads, through: :actions, class_name: Core::Attendance::TicketUpload, foreign_key: :action_id      
    
+      validate :context_is_valid?
 
+      private
+
+      def context_is_valid?
+        
+        if !self.context.present?
+          errors.add(:context_id, "Contexto ID não é válido")
+        end
+
+      end
     end
   end
 end
