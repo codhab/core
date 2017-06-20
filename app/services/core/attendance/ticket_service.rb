@@ -47,9 +47,12 @@ module Core
 
       def create_or_find context_id
 
-        @ticket = @cadastre.tickets.find_by(active: true) rescue nil
-
-        if @ticket.nil?
+        return false if context_id.to_i == 0
+       
+        #refatorar, forçando somente recadastramento ou context_id igual ao já criado
+        @ticket = @cadastre.tickets.find_by(context_id: context_id) rescue nil
+        
+        if @ticket.nil? 
           clone_cadastre_to_make_mirrors!
 
           @ticket = @cadastre.tickets.new.tap do |ticket|

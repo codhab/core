@@ -20,6 +20,7 @@ module Core
    
       validate :context_is_valid?
 
+
       private
 
       def context_is_valid?
