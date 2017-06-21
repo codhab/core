@@ -50,7 +50,7 @@ module Core
         return false if context_id.to_i == 0
        
         #refatorar, forçando somente recadastramento ou context_id igual ao já criado
-        @ticket = @cadastre.tickets.find_by(context_id: context_id) rescue nil
+        @ticket = @cadastre.tickets.find_by(active: true) rescue nil
         
         if @ticket.nil? 
           clone_cadastre_to_make_mirrors!
@@ -133,13 +133,13 @@ module Core
             if important_data_updated?
               @ticket.update(situation_id: 2, active: true)
             else
-              @ticket.update(situation_id: 7, active: false)
+              @ticket.update(situation_id: 7, active: true)
               scoring_cadastre
             end
 
           else
 
-            @ticket.update(situation_id: 7, active: false)
+            @ticket.update(situation_id: 7, active: true)
             scoring_cadastre
           end
 
