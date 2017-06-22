@@ -4,7 +4,7 @@ module Core
   module Manager
     class TaskSubForm < ::Core::Manager::SubTask
 
-      validates :name, :due, presence: true
+      validates :name, presence: true
     end
   end
 end
