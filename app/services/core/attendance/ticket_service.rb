@@ -50,7 +50,7 @@ module Core
        # return false if context_id.to_i == 0
        
         #refatorar, forçando somente recadastramento ou context_id igual ao já criado
-        @ticket = @cadastre.tickets.find_by(context_id: 1) rescue nil
+        @ticket = @cadastre.tickets.find_by(context_id: context_id) rescue nil
         
         if @ticket.nil? 
           clone_cadastre_to_make_mirrors!
