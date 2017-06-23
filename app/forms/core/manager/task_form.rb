@@ -14,27 +14,29 @@ module Core
       before_validation :set_order_and_due, on: :create
       before_validation :set_date_solved
 
-      before_save   :set_dinamic_due, if: 'self.fechada?'
+      before_save  :set_dinamic_due, if: 'self.fechada?'
 
       after_commit :set_situation_for_next_task
       after_save   :set_due_for_next_tasks
+      after_commit :set_due_all_tasks
+
       validate     :due_days_not_equal_zero
 
 
       def up_order_task
 
         current_task  = self
-        next_task     = self.project.tasks.find_by(order: self.order - 1) rescue nil
+        next_task     = self.project.tasks.where('due < ?', self.due).order(due: :desc).first rescue nil
 
         return true if next_task.nil?
         
-        current_order = self.order
-        next_order    = next_task.order 
+        current_order = self.due
+        next_order    = next_task.due 
 
-        next_task.order    = current_order
+        next_task.due    = current_order
         next_task.save 
 
-        current_task.order = next_order
+        current_task.due = next_order
         current_task.save 
 
 
@@ -43,17 +45,17 @@ module Core
       def down_order_task
 
         current_task  = self
-        next_task     = self.project.tasks.find_by(order: self.order + 1) rescue nil
+        next_task     = self.project.tasks.where('due > ?', self.due).order(due: :asc).first  rescue nil
 
         return true if next_task.nil?
         
-        current_order = self.order
-        next_order    = next_task.order 
+        current_order = self.due
+        next_order    = next_task.due 
 
-        next_task.order    = current_order
+        next_task.due    = current_order
         next_task.save 
 
-        current_task.order = next_order
+        current_task.due = next_order
         current_task.save 
 
       end
@@ -65,26 +67,18 @@ module Core
 
         if tasks.present?
 
-          task_last   = tasks.order(order: :asc).last
-          
-          if self.order.blank? || self.order.nil?
-            self.order  = task_last.order + 1 rescue 0
-          end
-          
+          task_last   = tasks.order(due: :asc).last rescue nil
+                  
           if self.original_due.blank? || self.original_due.nil?
-            self.original_due  = task_last.original_due.business_day.from_now(self.due_days) rescue nil
-            self.due           = task_last.due.business_day.from_now(self.due_days) rescue nil
+            self.original_due  = self.due_days.business_day.from_now(task_last.original_due) rescue nil
+            self.due           = self.due_days.business_day.from_now(task_last.due)          rescue nil
           end
 
         else
 
-          if self.order.blank? || self.order.nil?
-            self.order = 0
-          end
-
           if self.original_due.blank? || self.original_due.nil?
-            self.original_due  = self.project.start.business_day.from_now(self.due_days) rescue nil
-            self.due           = self.project.start.business_day.from_now(self.due_days) rescue nil
+            self.original_due  = self.due_days.business_day.from_now(self.project.start) rescue nil
+            self.due           = self.due_days.business_day.from_now(self.project.start) rescue nil
           end
 
         end
@@ -107,12 +101,8 @@ module Core
 
       def set_situation_for_next_task
         return false if !self.fechada?
-        
-        tasks = self.project.tasks.order(order: :asc).map(&:id)
-        current_task_index = tasks.find_index(self.id)
-        next_task_index    = tasks[current_task_index + 1]
 
-        next_task = self.project.tasks.find(next_task_index)
+        next_task = self.project.tasks.where(situation: [0,1,2]).order(due: :asc).first rescue nil
         
         if !next_task.nil?
           next_task.update(situation: 1) 
@@ -127,10 +117,10 @@ module Core
       end
 
       def set_due_for_next_tasks
+
+        all_tasks = self.project.tasks.order(due: :asc)
+        tasks     = self.project.tasks.where('due > ?', self.due).order(due: :asc)
         
-        all_tasks = self.project.tasks.order(order: :asc)
-        tasks     = self.project.tasks.where(order > self.order).order(order: :asc)
-         
         
         if tasks.present?
           @last_task = nil
@@ -150,12 +140,38 @@ module Core
 
             @last_task = task
           end
-        else
+        elsif !all_tasks.present?
           task = self.project.tasks.find(self.id)
           task.due = task.due_days.business_day.from_now(task.project.start) + 1.day
           task.save
         end
 
+      end
+
+      def set_due_all_tasks
+        tasks = self.project.tasks.order(due: :asc)
+
+        if tasks.present?
+
+          @last_task = nil
+
+          tasks.each_with_index do |task, index|
+            
+            if index == 0 
+              task.order = index
+              task.due   = task.due_days.business_day.from_now(task.project.start)
+              task.save
+            else
+              task.order = index
+              task.due   = task.due_days.business_day.from_now(@last_task.due)
+              task.save
+            end
+          
+            @last_task = task
+          
+          end 
+
+        end
       end
 
     end
