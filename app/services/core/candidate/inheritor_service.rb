@@ -17,7 +17,7 @@ module Core
           )
           @activity.save
 
-        @removed = Core::Candidate::Inheritor.new(
+        @removed = Core::Candidate::InheritorRemoved.new(
           cadastre_id: @cadastre.id,
           cadastre_cpf: @cadastre.cpf,
           name: @inheritor.name,
