@@ -8,7 +8,7 @@ module Core
         @inheritor = inheritor
       end
 
-      def inheritor_destroy(observation)
+      def inheritor_destroy!(observation)
         @activity = @cadastre.cadastre_activities.new(
             staff_id: @staff.id,
             activity_status_id: 28,
@@ -32,6 +32,7 @@ module Core
         )
         @removed.save
       end
+
     end
   end
 end
