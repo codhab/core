@@ -64,7 +64,8 @@ module Core
       end
 
       def allow_chats?
-        [3, 4, 54].include?(self.current_situation_id) && [1,2].include?(self.program_id)
+        ([3, 4, 54].include?(self.current_situation_id) && [1,2].include?(self.program_id))
+        || self.program_id == 3
       end
 
       def allow_to_question?
