@@ -7,7 +7,7 @@ module Core
   class Assessment < ApplicationRecord
     self.table_name = 'extranet.protocol_assessments'
 
-    belongs_to :document_type,  required: false, class_name: ::Core::Protocol::DocumentType
+    belongs_to :document_type,  class_name: ::Core::Protocol::DocumentType
     belongs_to :subject,        required: false, class_name: ::Core::Protocol::Subject
     belongs_to :staff,          required: false, class_name: ::Core::Person::Staff
     belongs_to :sector,         required: false, class_name: ::Core::Person::Sector

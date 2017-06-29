@@ -22,6 +22,8 @@ module Core
       belongs_to :general, class_name: ::Core::View::GeneralPontuation, foreign_key: :cpf, primary_key: :cpf
       belongs_to :cadastre, class_name: ::Core::Candidate::Cadastre, foreign_key: :cpf, primary_key: :cpf
 
+      has_many :requeriment_situations, class_name: ::Core::Protocol::AssessmentSituation , foreign_key: "assessment_id"
+
       scope :by_candidate_situation, -> (situation_status_id) {
         joins(:general)
         .where('extranet.general_pontuations.situation_status_id =  ?', situation_status_id)
