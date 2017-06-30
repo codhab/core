@@ -5,7 +5,7 @@ module Core
     class DocumentType < ApplicationRecord
       self.table_name = 'extranet.protocol_document_types'
 
-      has_many :assessment
+      has_many :assessment,  class_name: ::Core::Protocol::Assessment
 
       default_scope { order('name ASC') }
     end
