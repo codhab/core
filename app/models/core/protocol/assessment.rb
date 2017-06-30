@@ -20,6 +20,7 @@ module Core
     has_many :locations
     has_many :controls
     has_many :call_controls
+    has_many :workflows
 
     has_many :solicitations
 
