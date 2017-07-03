@@ -3,7 +3,6 @@ module Core
     class TemplateTaskForm < ::Core::Manager::TemplateTask
       validates :title, :description, presence: true
       validates :due_days, numericality: true, presence: true
-      validate  :due_max_days
       validate  :due_days_not_equal_zero
 
       before_validation :set_order, on: :create
