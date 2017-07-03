@@ -4,6 +4,28 @@ module Core
   module Protocol
     class GeneralPresenter < ApplicationPresenter # :nodoc:
 
+      def any_due
+        if self.responded == false
+          self.conducts.where(conduct_type: 1).each do |c|
+            if c.allotment.present? && c.replay_date.present?
+              if due_document(c.allotment.id)
+                returned =  due_date(c.replay_date)
+                if returned.present?
+                  html = <<-HTML
+                    <div class="ui #{returned[0]} tag label">
+                      #{c.sector.acron} #{returned[1]}
+                    </div>
+                    <br>
+                    <br>
+                  HTML
+                  return html.html_safe
+                end
+              end
+            end
+          end
+        end
+      end
+
       def due_document(allotment)
         @allotment = Core::Protocol::Allotment.find(allotment)
         @count = 0
