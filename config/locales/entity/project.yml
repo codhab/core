@@ -1,0 +1,11 @@
+pt-BR:
+  activerecord:
+    models:
+      'core/entity/project': Projeto
+    attributes:
+      'core/entity/project':
+        name: "Nome do projeto"
+        description: "Descrição"
+        situation: "Situação"
+        units: "QTD de lotes"
+        units_type: "Tipo de lote"
