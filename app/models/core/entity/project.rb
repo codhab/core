@@ -9,7 +9,9 @@ module Core
       validates :name, :description, :situation, :units, :units_type, presence: true
       validate  :units_not_equal_zero
 
+      has_many :project_units,   class_name: Core::Entity::ProjectUnit
       has_many :project_raffles, class_name: Core::Entity::ProjectRaffle
+      
       has_many :project_raffle_entities, through: :project_raffles, class_name: Core::Entity::ProjectRaffleEntity
       
       private
