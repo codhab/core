@@ -5,7 +5,7 @@ module Core
     class GeneralPresenter < ApplicationPresenter # :nodoc:
 
       def any_due
-        if self.responded == false
+        if self.responded != true
           self.conducts.where(conduct_type: 1).each do |c|
             if c.allotment.present? && c.replay_date.present?
               if due_document(c.allotment.id)
