@@ -1,0 +1,9 @@
+pt-BR:
+  activerecord:
+    models:
+      'core/entity/project_raffle': Sorteio
+    attributes:
+      'core/entity/project_raffle':
+        name: "Nome do Sorteio"
+        situation: "Situação"
+        quantity: "QTD de sorteados"
