@@ -8,7 +8,7 @@ module Core
         entity = ::Core::Entity::CadastrePresenter.new(self)
         entity.current_situation_id == 567
       end
-   
+
     end
   end
 end

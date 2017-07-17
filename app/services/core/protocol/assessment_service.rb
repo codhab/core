@@ -27,13 +27,13 @@ module Core
         end
 
         @assessment.finalized        = false
-    
+
         number = set_number!(nil,sector)
-        
+
         @assessment.document_number = number
-        
+
         if @assessment.save
-          
+
           if !candidate.nil?
             @service = Core::Attendance::RequerimentService.new(@assessment, candidate)
             @service.new_requeriment!
@@ -45,7 +45,7 @@ module Core
         else
           return false
         end
-      
+
       end
 
       def requeriment_citzen_app!
@@ -55,7 +55,7 @@ module Core
         @assessment.subject_id = 1747 #request
         number = set_number!(nil,sector)
         @assessment.document_number = number
-        
+
         if @assessment.save
           @service = Core::NotificationService.new
           message = "Um novo requerimento nº #{@assessment.document_number} foi aberto. Agora faz-se necessário aguardar o retorno do atendimento da CODHAB."

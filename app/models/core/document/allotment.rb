@@ -8,7 +8,9 @@ module Core
       belongs_to :template, class_name: ::Core::Document::Template
       belongs_to :staff,    class_name: ::Core::Person::Staff
 
-      has_many :data_prints, class_name: ::Core::Document::DataPrint
+      has_many :data_prints,      class_name: ::Core::Document::DataPrint
+
+      validates :template_id, :data_document, presence: true
 
     end
   end

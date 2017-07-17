@@ -7,7 +7,7 @@ module Core
 
       has_one :notary_office
 
-      belongs_to :situation_unit,     required: false
+      belongs_to :situation_unit,     required: false, class_name: ::Core::Address::SituationUnit
       belongs_to :ownership_type,     required: false,
                                       class_name: ::Core::Address::OwnershipType,
                                       foreign_key: :ownership_type_id

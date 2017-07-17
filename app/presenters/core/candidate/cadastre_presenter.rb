@@ -75,10 +75,23 @@ module Core
       end
 
       def current_cadastre_address
+
         self.cadastre_address.where(situation_id: [0,1,5]).order('created_at ASC').last rescue nil
       end
 
-
+      def current_address
+        units = self.cadastre_address.select(:unit_id).distinct
+        if units.present?
+          units.each do |addr|
+            unit = ::Address::Unit.find(addr.unit_id)
+            cadastre_address = unit.current_cadastre_address
+            if cadastre_address.present? && %w(reserva distribuído sobrestado).include?(cadastre_address.situation_id.to_s) && cadastre_address.cadastre_id == self.id
+              return cadastre_address
+            end
+          end
+        end
+        return nil
+      end
       # => pontuation
 
       def last_pontuation_total
