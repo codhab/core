@@ -9,6 +9,11 @@ module Core
         entity.current_situation_id == 567
       end
 
+      def allow_interested?
+        entity = ::Core::Entity::CadastrePresenter.new(self)
+        entity.interest == true
+      end
+
     end
   end
 end
