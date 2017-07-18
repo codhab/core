@@ -16,8 +16,8 @@ module Core
           template = template.gsub('doc.prof_conju', self.spouse_employment).gsub('doc.est_civil', self.spouse_civil_state.name) if self.spouse_civil_state.present?
           template = template.gsub('doc.registro_geral', ", e portador da CI nº #{self.spouse_rg} ").gsub('doc.reg_exp', self.spouse_rg_org)
           template = template.gsub('doc.reg_uf', self.spouse_rg_uf)
-          template = template.gsub('doc.regime_casamento', self.wedding_regime)
-          template = template.gsub('doc.data_casamento', self.wedding_date)
+          template = template.gsub('doc.regime_casamento', self.wedding_regime) if self.wedding_regime?
+          template = template.gsub('doc.data_casamento', self.wedding_date) if self.wedding_date?
         else
           template = template.gsub('doc.conjuge_nome,', "").gsub('doc.conj_cpf,', "").gsub('doc.nac_conjuge,', "")
           template = template.gsub('doc.prof_conju,', "").gsub('doc.conj_cpf,', "").gsub('doc.est_civil,', "")
