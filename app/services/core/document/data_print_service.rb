@@ -34,6 +34,8 @@ module Core
             spouse_rg_uf: @cadastre.spouse.present? ? @cadastre.spouse.rg_uf_id : nil,
             city_id: @cadastre.current_address.present? && @cadastre.current_address.unit.present? ? @cadastre.current_address.unit.city_id : nil,
             complete_address: @cadastre.current_address.present? && @cadastre.current_address.unit.present? ? @cadastre.current_address.unit.complete_address : nil,
+            area: @cadastre.current_address.present? && @cadastre.current_address.unit.present? ? @cadastre.current_address.unit.area : nil,
+            address_data_base: @cadastre.current_address.present? && @cadastre.current_address.unit.present? ? @cadastre.current_address.unit.complete_address : nil,
             ownership_type_id: @cadastre.current_address.present? && @cadastre.current_address.unit.present? ? @cadastre.current_address.unit.ownership_type_id : nil,
             complete_address: @cadastre.current_address.present? && @cadastre.current_address.unit.present? ? @cadastre.current_address.unit.complete_address : nil,
             ocupation: @cadastre.current_address.present? ? @cadastre.current_address.created_at.strftime('%d/%m/%Y') : nil,
@@ -84,11 +86,12 @@ module Core
 
           @address = Core::Address::Unit.find_by(complete_address: @data_print.address_data_base)
           if @address.present?
-            @address.ownership_type_id = @data_print.ownership_type_id
-            @address.registration_iptu = @data_print.registration_iptu
-            @address.certificate_sefaz = @data_print.certificate_sefaz
-            @address.date_certificate_sefaz = @data_print.date_certificate_sefaz
+            @address.ownership_type_id          = @data_print.ownership_type_id
+            @address.registration_iptu          = @data_print.registration_iptu
+            @address.certificate_sefaz          = @data_print.certificate_sefaz
+            @address.date_certificate_sefaz     = @data_print.date_certificate_sefaz
             @address.validate_certificate_sefaz = @data_print.validate_certificate_sefaz
+            @address.area                       = @data_print.area
             @address.save
             @office = @address.notary_office
             if @office.present?
@@ -124,7 +127,8 @@ module Core
           civil_state_id: @data_print.spouse_civil_state_id,
           rg: @data_print.spouse_rg,
           rg_org: @data_print.spouse_rg_org,
-          rg_uf_id: @data_print.spouse_rg_uf
+          rg_uf_id: @data_print.spouse_rg_uf,
+          kinship_id: 6
         )
         @dependent.save
 
