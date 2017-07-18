@@ -31,7 +31,7 @@ module Core
         template = template.gsub('doc.cartorio', self.office).gsub('doc.iptu', self.registration_iptu)
         template = template.gsub('doc.ato_declaratorio', self.declaratory_act_number).gsub('doc.certificado_sefaz', self.certificate_sefaz)
         template = template.gsub('doc.data_certificado', self.date_certificate_sefaz).gsub('doc.validade_certificado', self.validate_certificate_sefaz)
-        template = template.gsub('doc.averbacao', self.endorsement)
+        template = template.gsub('doc.averbacao', self.endorsement) if self.endorsement.present?
         template = template.gsub('doc.area', self.area)
         template = template.gsub('doc.data_ato', self.date_act_declaratory.strftime('%d/%m/%Y')) if self.date_act_declaratory.present?
 
