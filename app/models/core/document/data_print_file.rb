@@ -69,8 +69,10 @@ module Core
             print_new.endorsement                = print_hash["averbacao"]
             print_new.date_act_declaratory       = print_hash["data_ato"]
             print_new.address_data_base          = print_hash["endereco_base"]
+            print_new.area                       = print_hash["area"]
             print_new.staff_id                   = user
-            byebug
+            print_new.status                     = true
+
 
             @service = Core::Document::DataPrintService.new(print_new)
             @service.update_cadastre!(user)
