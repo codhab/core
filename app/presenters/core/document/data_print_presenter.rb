@@ -10,11 +10,15 @@ module Core
         template = template.gsub('doc.estado_civil', self.civil_state.name).gsub('doc.rg', self.rg)
         template = template.gsub('doc.rg_org', self.rg_org).gsub('doc.rg_uf', self.rg_uf)
         template = template.gsub('doc.processo', self.document_number).gsub('doc.regime_casamento', self.wedding_regime)
-        template = template.gsub('doc.data_casamento', self.wedding_date).gsub('doc.nome_conjuge', self.spouse_name)
-        template = template.gsub('doc.cpf_conjuge', self.spouse_cpf).gsub('doc.nacionalidade_conjuge', self.spouse_nationality)
-        template = template.gsub('doc.profissao_conjuge', self.spouse_employment).gsub('doc.est_civil_conjuge', self.spouse_civil_state.name) if self.spouse_civil_state.present?
-        template = template.gsub('doc.rg_conjuge', self.spouse_rg).gsub('doc.rg_org_conjuge', self.spouse_rg_org)
-        template = template.gsub('doc.rg_uf_conjuge', self.complete_address).gsub('doc.cidade', self.city.name) if self.city.present?
+        template = template.gsub('doc.data_casamento', self.wedding_date)
+        if self.spouse_cpf.present?
+          template = template.gsub('doc.nome_conjuge', " e #{self.spouse_name} ")
+          template = template.gsub('doc.cpf_conjuge', ", inscrito no CPF nº #{self.spouse_cpf} ").gsub('doc.nacionalidade_conjuge', self.spouse_nationality)
+          template = template.gsub('doc.profissao_conjuge', self.spouse_employment).gsub('doc.est_civil_conjuge', self.spouse_civil_state.name) if self.spouse_civil_state.present?
+          template = template.gsub('doc.rg_conjuge', ", e portador da CI nº #{self.spouse_rg} ").gsub('doc.rg_org_conjuge', self.spouse_rg_org)
+          template = template.gsub('doc.rg_uf_conjuge', self.spouse_rg_uf)
+        end
+        template = template.gsub('doc.cidade', self.city.name) if self.city.present?
         template = template.gsub('doc.endereco', self.complete_address).gsub('doc.tipo_posse', self.ownership_type.name) if self.ownership_type.present?
         template = template.gsub('doc.data_ocupacao', self.ocupation).gsub('doc.matricula', self.unit_code) if self.ocupation.present?
         template = template.gsub('doc.cartorio', self.office).gsub('doc.iptu', self.registration_iptu)
