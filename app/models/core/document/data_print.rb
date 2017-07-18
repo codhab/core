@@ -12,6 +12,7 @@ module Core
       belongs_to :ownership_type,     required: false, class_name: ::Core::Address::OwnershipType
 
       validates :cpf, cpf: true
+      validates :spouse_cpf, cpf: true, if: 'self.spouse_cpf.present?'
 
     end
   end
