@@ -47,14 +47,13 @@ module Core
 
       def create_or_find context_id
 
-        if Date.current > Date.parse('2017-07-31')
-          return false if context_id.to_i == 1
-        end
-        
         #refatorar, forçando somente recadastramento ou context_id igual ao já criado
         @ticket = @cadastre.tickets.find_by(context_id: context_id) rescue nil
         
         if @ticket.nil? 
+
+          return false if context_id.to_i == 1 && (Date.current > Date.parse('2017-07-31'))
+
           clone_cadastre_to_make_mirrors!
 
           @ticket = @cadastre.tickets.new.tap do |ticket|
