@@ -47,8 +47,10 @@ module Core
 
       def create_or_find context_id
 
-       # return false if context_id.to_i == 0
-       
+        if Date.current > Date.parse('2017-07-31')
+          return false if context_id.to_i == 1
+        end
+        
         #refatorar, forçando somente recadastramento ou context_id igual ao já criado
         @ticket = @cadastre.tickets.find_by(context_id: context_id) rescue nil
         

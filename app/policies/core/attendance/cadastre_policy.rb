@@ -35,6 +35,8 @@ module Core
 
       def allow_recadastre_update?
 
+        return false if Date.current > Date.parse('2017-07-31')
+        
         ([4,54].include?(self.current_situation_id) && ![3, 6, 8].include?(self.program_id))
 =begin
         (!self.tickets.where(context_id: 1).present? ||
