@@ -35,7 +35,7 @@ module Core
         template = template.gsub('doc.endereco', self.complete_address) if self.complete_address.present?
         template = template.gsub('doc.tipo_posse', self.ownership_type.name) if self.ownership_type.present?
         template = template.gsub('doc.data_ocupacao', self.ocupation.strftime('%d/%m/%Y')) if self.ocupation.present?
-        template = template.gsub('doc.matricula', self.unit_code) if self.unit_code.present?
+        template = template.gsub('doc.matricula', self.unit_code.to_s) if self.unit_code.present?
         template = template.gsub('doc.cartorio', self.office) if self.office.present?
         template = template.gsub('doc.iptu', self.registration_iptu) if self.registration_iptu.present?
         template = template.gsub('doc.ato_declaratorio', self.declaratory_act_number) if self.declaratory_act_number.present?
