@@ -8,7 +8,7 @@ module Core
         template = template.gsub('doc.nome', self.name).gsub('doc.cpf', self.cpf.format_cpf)
         template = self.nationality.present? ? template.gsub('doc.nacionalidade', self.nationality) : template.gsub('doc.nacionalidade', "BRASILEIRO(A)")
         template = template.gsub('doc.profissao', self.employment) if self.employment.present?
-        template = template.gsub('doc.estado_civil', self.civil_state.name) if self.civil_state.present?
+        template = template.gsub('doc.est_civil', self.civil_state.name) if self.civil_state.present?
         template = template.gsub('doc.rg', self.rg) if self.rg.present?
         template = template.gsub('doc.expeditor', self.rg_org) if self.rg_org.present?
         template = template.gsub('doc.uf_rg', self.rg_uf) if self.rg_uf.present?
