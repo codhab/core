@@ -6,7 +6,7 @@ module Core
 
       def write_document(template)
         template = template.gsub('doc.nome', self.name).gsub('doc.cpf', self.cpf.format_cpf)
-        template = template.gsub('doc.nacionalidade', self.nationality) if self.nationality.present?
+        template = self.nationality.present? ? template.gsub('doc.nacionalidade', self.nationality) : template.gsub('doc.nacionalidade', "BRASILEIRO(A)")
         template = template.gsub('doc.profissao', self.employment) if self.employment.present?
         template = template.gsub('doc.estado_civil', self.civil_state.name) if self.civil_state.present?
         template = template.gsub('doc.rg', self.rg) if self.rg.present?
@@ -15,7 +15,7 @@ module Core
         template = template.gsub('doc.processo', self.document_number) if self.document_number.present?
         if self.spouse_cpf.present? || self.spouse_cpf != ' '
           template = template.gsub('doc.conjuge_nome', " e #{self.spouse_name} ")
-          template = template.gsub('doc.conj_cpf', ", inscrito no CPF nº #{self.spouse_cpf} ") if self.spouse_cpf.present?
+          template = template.gsub('doc.conj_cpf', ", inscrito no CPF nº #{self.spouse_cpf.format_cpf} ") if self.spouse_cpf.present?
           template = template.gsub('doc.nac_conjuge', self.spouse_nationality) if self.spouse_nationality.present?
           template = template.gsub('doc.prof_conju', self.spouse_employment) if self.spouse_employment.present?
           template = template.gsub('doc.est_civil', self.spouse_civil_state.name) if self.spouse_civil_state.present?
