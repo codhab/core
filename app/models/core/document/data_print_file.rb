@@ -39,6 +39,7 @@ module Core
             print_new.allotment_id               = @allotment.id
             print_new.name                       = print_hash["nome"]
             print_new.cpf                        = cpf
+            print_new.civil_state_id             = print_hash["est_civil"]
             print_new.nationality                = print_hash["nacionalidade"]
             print_new.employment                 = print_hash["profissao"]
             print_new.rg                         = print_hash["rg"]
@@ -59,7 +60,8 @@ module Core
             print_new.ownership_type_id          = print_hash["tipo_posse"]
             print_new.complete_address           = print_hash["endereco"]
             print_new.ocupation                  = print_hash["data_ocupacao"]
-            print_new.unit_code                  = print_hash["matricula"]
+            code_unit = print_hash["matricula"]
+            print_new.unit_code                  = code_unit.class == Float ? print_hash["matricula"].to_i : print_hash["matricula"]
             print_new.office                     = print_hash["cartorio"]
             print_new.registration_iptu          = print_hash["iptu"]
             print_new.declaratory_act_number     = print_hash["ato_declaratorio"]
