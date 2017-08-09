@@ -4,6 +4,7 @@ module Core
   module SocialWork
     class ScheduleInterection < ApplicationRecord
       self.table_name = 'generic.social_work_schedule_interections'
+      belongs_to :candidate_schedule
     end
   end
 end
