@@ -39,6 +39,7 @@ module Core
             print_new.allotment_id               = @allotment.id
             print_new.name                       = print_hash["nome"]
             print_new.cpf                        = cpf
+            print_new.civil_state_id             = print_hash["est_civil"]
             print_new.nationality                = print_hash["nacionalidade"]
             print_new.employment                 = print_hash["profissao"]
             print_new.rg                         = print_hash["rg"]
