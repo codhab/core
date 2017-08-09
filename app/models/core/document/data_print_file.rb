@@ -75,12 +75,10 @@ module Core
             print_new.staff_id                   = user
             print_new.status                     = true
 
-
-            @service = Core::Document::DataPrintService.new(print_new)
-            @service.update_cadastre!(user)
-
             begin
               print_new.save!
+              @service = Core::Document::DataPrintService.new(print_new)
+              @service.update_cadastre!(user)
             rescue Exception => e
               errors.add(:file_path, "Ocorreu um erro ao processar, cpf: #{print_new.cpf}, #{e.message}")
             end
