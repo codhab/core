@@ -69,12 +69,12 @@ module Core
         @cadastre = Core::Candidate::Cadastre.find_by(cpf: @data_print.cpf)
 
         if @cadastre.present?
-          @cadastre.attributes.each do |key, value|
+          @data_print.attributes.each do |key, value|
             if %w(name cpf nationality employment civil_state_id rg rg_org rg_uf wedding_regime wedding_date).include? key
-              @data_print[key] = value if @cadastre.attributes.has_key?(key)
+              @cadastre[key] = value if @data_print.attributes.has_key?(key)
             end
           end
-          @data_print.save
+          @cadastre.save
 
           if @data_print.spouse_cpf.present?
             @spouse = @cadastre.dependents.where(kinship_id: 6).first
