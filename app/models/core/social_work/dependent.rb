@@ -5,6 +5,7 @@ module Core
     class Dependent < ApplicationRecord
       self.table_name = 'generic.social_work_dependents'
       belongs_to :candidate
+      belongs_to :civil_state,              required: false,          class_name: ::Core::Candidate::CivilState
     end
   end
 end
