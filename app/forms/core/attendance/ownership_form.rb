@@ -17,108 +17,82 @@ module Core
       validates :original_cpf, :target_cpf, cpf: true, presence: true
       validate  :original_cpf_validate
       validate  :target_cpf_validate
+      validate  :current_user_validate
 
       def create_ownership!
-        # => Migrando informações do originário para o novo titular
 
-        # Coletando informações
+        # => Migrando cadastro
+        original_id = @original_cadastre.id 
+        target_id   = @target_cadastre.id 
 
-        current_situation  = @original_cadastre.cadastre_situations.order(created_at: :desc).last rescue nil
-        current_procedural = @original_cadastre.cadastre_procedurals.order(created_at: :desc).last rescue nil
-        current_created_at = @original_cadastre.created_at 
-        current_dependents = @original_cadastre.dependents
-        current_program_id = @original_cadastre.program_id
-
-        # Migrando informações
-
-        migrate_situation = @target_cadastre.cadastre_situations.new(current_situation.attributes)
-        migrate_situation.id = nil
-        migrate_situation.save
-
-        migrate_procedural = @target_cadastre.cadastre_procedurals.new(current_procedural.attributes)
-        migrate_procedural.id = nil
-        migrate_procedural.save
-
-        @target_cadastre.created_at = current_created_at
-        @target_cadastre.program_id = current_program_id
-
-        @target_cadastre.save
-
-        # Migrando dependentes
-
-        @target_cadastre.dependents.destroy_all 
-
-        current_dependents.each do |dependent|
-          if dependent.cpf != @target_cadastre.cpf
-            dependent.attributes.each do |key, value|
-
-              new_dependent = @target_cadastre.dependents.new
-
-              unless %w(id created_at updated_at).include? key
-                new_dependent[key] = value if new_dependent.attributes.has_key?(key)    
-              end
-
-              new_dependent.save
-            end
-          end
-        end
-
-        # Criando cadastro espelho
-
-        clone_target_cadastre_to_new_mirror!
-
-        # Repontuando
-
+        @original_cadastre.update(id: 0)
+        @target_cadastre.update(id: original_id)
+        @original_cadastre.update(id: target_id)
         
-        score_service = Core::Candidate::ScoreService.new({
-          cadastre_mirror_id: @target_cadastre_mirror.id
-        }).scoring_cadastre!
-
-        @target_cadastre.pontuations.new({
-          cadastre_mirror_id: @target_cadastre_mirror.id,
-          bsb: score_service[:timebsb_score],
-          dependent: score_service[:dependent_score],
-          timelist: score_service[:timelist_score],
-          special_condition: score_service[:special_dependent_score],
-          income: score_service[:income_score],
-          total: score_service[:total],
-          program_id: @target_cadastre_mirror.program_id,
-        }).save!
-
-        # Migrando processos
-
-        assessments = Core::Protocol::Assessment.where(cpf: @original_cadastre.cpf)
-        assessments.update_all(cpf: @target_cadastre.cpf)
+        @older_cadastre = @original_cadastre
 
         # => Trocando situação do cadastro originário 
 
-        new_situation = @original_cadastre.cadastre_situations.new({
+        new_situation = @older_cadastre.cadastre_situations.new({
           situation_status_id: 66, # Titularidade trocada
           observation: "Situação migrada por troca de titularidade, vide atividades"
         })
 
         new_situation.save
 
-        # => Migrando indicações
+        # => Removendo `SE CONJUGE` 
 
-        indications = @original_cadastre.enterprise_cadastres
-        indications.update_all(cadastre_id: @target_cadastre.id)
+        dependent = @target_cadastre.dependents.find_by(cpf: @target_cadastre.cpf) rescue nil
+        dependent.destroy if !dependent.nil?
 
-        # => Migrando vínculo com endereços
+        # => Atualizando dados base
 
-        addresses = @original_cadastre.cadastre_address
-        addresses.update_all(cadastre_id: @target_cadastre.id)
+        current_created_at = @older_cadastre.created_at 
+        current_program_id = @older_cadastre.program_id
+        current_arrival_df = @older_cadastre.arrival_df
+        
+        @target_cadastre.update(created_at: current_created_at,
+                                program_id: current_program_id,
+                                arrival_df: current_arrival_df)
+
+        clone_target_cadastre_to_new_mirror!
+
+        # Repontuando
+        
+        if [1,2,4,5,7].include?(@target_cadastre.program_id)
+
+          score_service = Core::Candidate::ScoreService.new({
+            cadastre_mirror_id: @target_cadastre_mirror.id
+          }).scoring_cadastre!
+
+          @target_cadastre.pontuations.new({
+            cadastre_mirror_id: @target_cadastre_mirror.id,
+            bsb: score_service[:timebsb_score],
+            dependent: score_service[:dependent_score],
+            timelist: score_service[:timelist_score],
+            special_condition: score_service[:special_dependent_score],
+            income: score_service[:income_score],
+            total: score_service[:total],
+            program_id: @target_cadastre_mirror.program_id,
+          }).save!
+
+        end
+
+        # Migrando processos
+
+        assessments = Core::Protocol::Assessment.where(cpf: @older_cadastre.cpf)
+        assessments.update_all(cpf: @target_cadastre.cpf)
 
         # => Adicionando atividades
 
-        new_original_activity = @original_cadastre.cadastre_activities.new({
+        new_original_activity = @older_cadastre.cadastre_activities.new({
           staff_id: current_user.id,
           activity_status_id: 33,
           type_activity: 'crítico',
           observation: "Troca de titularidade entre o CPF original #{@original_cadastre.cpf} e o novo titular CPF #{@target_cadastre.cpf}"
         })
 
-        new_original_activity.save
+        new_original_activity.save!
 
         new_target_activity = @target_cadastre.cadastre_activities.new({
           staff_id: current_user.id,
@@ -127,10 +101,14 @@ module Core
           observation: "Troca de titularidade entre o CPF original #{@original_cadastre.cpf} e o novo titular CPF #{@target_cadastre.cpf}"
         })
 
-        new_target_activity.save
+        new_target_activity.save!
       end
 
       private
+
+      def current_user_validate
+        self.staff_id = current_user.id 
+      end
 
       def original_cpf_validate
         @original_cadastre = Core::Candidate::Cadastre.find_by(cpf: self.original_cpf) rescue nil
@@ -139,6 +117,10 @@ module Core
           errors.add(:original_cpf, "CPF não encontrado")
         else
           self.original_cadastre_id   = @original_cadastre.id
+        end
+
+        if !@original_cadastre.arrival_df.present?
+          errors.add(:original_cpf, "Cadastro não possuí data de chegada ao DF, favor corrigir para prosseguir")
         end
 
       end
@@ -152,6 +134,11 @@ module Core
         else
           self.target_cadastre_id   = @target_cadastre.id
         end
+
+        if !@target_cadastre.born.present?
+          errors.add(:target_cpf, "Cadastro não possuí data de nascimento, favor corrigir para prosseguir")
+        end
+
       end
 
       def clone_target_cadastre_to_new_mirror!
