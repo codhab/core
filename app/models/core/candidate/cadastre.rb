@@ -47,6 +47,7 @@ module Core
 
       has_many :invoices,               foreign_key: :cpf,         primary_key: :cpf, class_name: ::Core::Brb::Invoice
       has_many :iptus,                  foreign_key: :cpf,         primary_key: :cpf, class_name: ::Core::Candidate::Iptu
+      has_many :log_sihabs,                                                           class_name: ::Core::Candidate::LogSihab
       has_many :cadastre_address
       has_many :cadastre_procedurals
       has_many :cadastre_logs
