@@ -114,14 +114,19 @@ module Core
         @original_cadastre = Core::Candidate::Cadastre.find_by(cpf: self.original_cpf) rescue nil
         
         if @original_cadastre.nil?
+  
           errors.add(:original_cpf, "CPF não encontrado")
+  
         else
+          
           self.original_cadastre_id   = @original_cadastre.id
+  
+          if !@original_cadastre.arrival_df.present?
+            errors.add(:original_cpf, "Cadastro não possuí data de chegada ao DF, favor corrigir para prosseguir")
+          end
+  
         end
 
-        if !@original_cadastre.arrival_df.present?
-          errors.add(:original_cpf, "Cadastro não possuí data de chegada ao DF, favor corrigir para prosseguir")
-        end
 
       end
 
@@ -130,14 +135,19 @@ module Core
         @target_cadastre = Core::Candidate::Cadastre.find_by(cpf: self.target_cpf) rescue nil
         
         if @target_cadastre.nil?
+  
           errors.add(:target_cpf, "CPF não encontrado")
+  
         else
+  
           self.target_cadastre_id   = @target_cadastre.id
+  
+          if !@target_cadastre.born.present?
+            errors.add(:target_cpf, "Cadastro não possuí data de nascimento, favor corrigir para prosseguir")
+          end
+  
         end
 
-        if !@target_cadastre.born.present?
-          errors.add(:target_cpf, "Cadastro não possuí data de nascimento, favor corrigir para prosseguir")
-        end
 
       end
 
