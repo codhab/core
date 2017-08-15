@@ -59,7 +59,10 @@ module Core
         if @assessment.save
           @service = Core::NotificationService.new
           message = "Um novo requerimento nº #{@assessment.document_number} foi aberto. Agora faz-se necessário aguardar o retorno do atendimento da CODHAB."
-          @service.send_email!(message, "Abertura Requerimento CODHAB", @assessment.email)
+          begin
+           @service.send_email!(message, "Abertura Requerimento CODHAB", @assessment.email)
+          rescue            
+          end
           set_conduct!(@assessment, nil, sector)
           return true
         else
