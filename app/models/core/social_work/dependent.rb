@@ -9,6 +9,8 @@ module Core
       belongs_to :education,   required: false, class_name: ::Core::SocialWork::Education
       belongs_to :kinship,     required: false, class_name: ::Core::Candidate::Kinship
 
+      enum gender: ['N/D', 'masculino', 'feminino']
+
     end
   end
 end
