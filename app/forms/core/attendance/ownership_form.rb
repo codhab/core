@@ -7,7 +7,6 @@ module Core
       attr_accessor(
         :original_cpf, 
         :target_cpf, 
-        :observation, 
         :original_cadastre, 
         :target_cadastre,
         :target_cadastre_mirror,
@@ -15,9 +14,13 @@ module Core
       )
 
       validates :original_cpf, :target_cpf, cpf: true, presence: true
+      validates :observation, presence: true
       validate  :original_cpf_validate
       validate  :target_cpf_validate
       validate  :current_user_validate
+
+      def revert_ownership!
+      end
 
       def create_ownership!
 
@@ -29,7 +32,8 @@ module Core
         @target_cadastre.update(id: original_id)
         @original_cadastre.update(id: target_id)
         
-        @older_cadastre = @original_cadastre
+        @older_cadastre   = @original_cadastre
+        @current_cadastre = @target_cadastre
 
         # => Trocando situação do cadastro originário 
 
@@ -108,6 +112,7 @@ module Core
 
       def current_user_validate
         self.staff_id = current_user.id 
+        byebug
       end
 
       def original_cpf_validate
