@@ -21,6 +21,11 @@ module Core
 
       validates :cpf, cpf: true
 
+
+      def current_project
+        self.candidate_projects.first rescue nil
+      end
+
     end
   end
 end
