@@ -8,7 +8,7 @@ module Core
 
       validates :name, :email, presence: true
       validates :cnpj, cnpj: true
-
+      enum company_type: ['Empresa de Projetos','Empresa Executora']
     end
   end
 end
