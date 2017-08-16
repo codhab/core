@@ -2,12 +2,12 @@ require_dependency 'core/candidate/ownership_activity'
 
 module Core
   module Attendance
-    class OwnershipForm < Core::Candidate::OwnershipActivity 
-      
+    class OwnershipForm < Core::Candidate::OwnershipActivity
+
       attr_accessor(
-        :original_cpf, 
-        :target_cpf, 
-        :original_cadastre, 
+        :original_cpf,
+        :target_cpf,
+        :original_cadastre,
         :target_cadastre,
         :target_cadastre_mirror,
         :current_user
@@ -25,17 +25,17 @@ module Core
       def create_ownership!
 
         # => Migrando cadastro
-        original_id = @original_cadastre.id 
-        target_id   = @target_cadastre.id 
+        original_id = @original_cadastre.id
+        target_id   = @target_cadastre.id
 
         @original_cadastre.update(id: 0)
         @target_cadastre.update(id: original_id)
         @original_cadastre.update(id: target_id)
-        
+
         @older_cadastre   = @original_cadastre
         @current_cadastre = @target_cadastre
 
-        # => Trocando situação do cadastro originário 
+        # => Trocando situação do cadastro originário
 
         new_situation = @older_cadastre.cadastre_situations.new({
           situation_status_id: 66, # Titularidade trocada
@@ -44,17 +44,17 @@ module Core
 
         new_situation.save
 
-        # => Removendo `SE CONJUGE` 
+        # => Removendo `SE CONJUGE`
 
         dependent = @target_cadastre.dependents.find_by(cpf: @target_cadastre.cpf) rescue nil
         dependent.destroy if !dependent.nil?
 
         # => Atualizando dados base
 
-        current_created_at = @older_cadastre.created_at 
+        current_created_at = @older_cadastre.created_at
         current_program_id = @older_cadastre.program_id
         current_arrival_df = @older_cadastre.arrival_df
-        
+
         @target_cadastre.update(created_at: current_created_at,
                                 program_id: current_program_id,
                                 arrival_df: current_arrival_df)
@@ -62,7 +62,7 @@ module Core
         clone_target_cadastre_to_new_mirror!
 
         # Repontuando
-        
+
         if [1,2,4,5,7].include?(@target_cadastre.program_id)
 
           score_service = Core::Candidate::ScoreService.new({
@@ -112,24 +112,23 @@ module Core
 
       def current_user_validate
         self.staff_id = current_user.id 
-        byebug
       end
 
       def original_cpf_validate
         @original_cadastre = Core::Candidate::Cadastre.find_by(cpf: self.original_cpf) rescue nil
-        
+
         if @original_cadastre.nil?
-  
+
           errors.add(:original_cpf, "CPF não encontrado")
-  
+
         else
-          
+
           self.original_cadastre_id   = @original_cadastre.id
-  
+
           if !@original_cadastre.arrival_df.present?
             errors.add(:original_cpf, "Cadastro não possuí data de chegada ao DF, favor corrigir para prosseguir")
           end
-  
+
         end
 
 
@@ -138,28 +137,28 @@ module Core
       def target_cpf_validate
 
         @target_cadastre = Core::Candidate::Cadastre.find_by(cpf: self.target_cpf) rescue nil
-        
+
         if @target_cadastre.nil?
-  
+
           errors.add(:target_cpf, "CPF não encontrado")
-  
+
         else
-  
+
           self.target_cadastre_id   = @target_cadastre.id
-  
+
           if !@target_cadastre.born.present?
             errors.add(:target_cpf, "Cadastro não possuí data de nascimento, favor corrigir para prosseguir")
           end
-  
+
         end
 
 
       end
 
       def clone_target_cadastre_to_new_mirror!
-        
+
         # => Clonando cadastro
-        
+
         @target_cadastre_mirror = @target_cadastre.cadastre_mirrors.new
 
         @target_cadastre.attributes.each do |key, value|
