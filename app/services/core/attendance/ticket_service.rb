@@ -208,6 +208,7 @@ module Core
             total: @scores[:total],
             program_id: @cadastre_mirror.program_id
           )
+
           @pontuation.save
 
           rewrite_to_cadastre!
@@ -275,7 +276,25 @@ module Core
             @ticket.cadastre[key] = value if @ticket.cadastre.attributes.has_key?(key)
           end
         end
+
+        begin
+
+          if @ticket.cadastre_mirror.dependent_mirrors.present?
+            new_income = (@ticket.cadastre.main_income + @ticket.cadastre_mirror.dependent_mirrors.sum(:income))
+          else
+            new_income = @ticket.cadastre.main_income
+          end
+
+          @ticket.cadastre.income = new_income
+      
+        rescue 
+
+          @ticket.cadastre.income = @ticket.cadastre.main_income 
+        
+        end
+        
         @ticket.cadastre.save
+        
       end
 
       def rewrite_to_dependents!
