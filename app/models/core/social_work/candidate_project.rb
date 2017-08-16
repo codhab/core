@@ -11,6 +11,9 @@ module Core
         has_many :project_interactions
         has_many :document_uploads
 
+        def current_situation
+          self.candidate_projects.first rescue nil
+        end
     end
   end
 end
