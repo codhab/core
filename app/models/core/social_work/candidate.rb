@@ -23,15 +23,17 @@ module Core
       has_many :answers,           class_name: ::Core::SocialWork::Answer
 
       validates :cpf, cpf: true
-      validate :validate_schedule!, on: :create
+      validate :validate_schedule?, on: :create
 
 
       def current_project
         self.candidate_projects.first rescue nil
       end
 
-      def validate_schedule!
-        Core::SocialWork::CandidateSchedule.where(cpf: self.cpf).present? ? true : false
+      def validate_schedule?
+        unless Core::SocialWork::CandidateSchedule.where(cpf: self.cpf).present?
+          errors.add(:cpf, "CPF não possui agendamento.")
+        end
       end
 
     end
