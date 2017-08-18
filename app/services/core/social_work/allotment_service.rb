@@ -2,14 +2,14 @@ module Core
   module SocialWork
     class AllotmentService
 
-      def create_allotment! ids, description staff
+      def create_allotment! ids, description, staff
         @allotment = Core::SocialWork::Allotment.new(
           description: description,
           status: true
         )
         @allotment.save
         create_allotment_project!(@allotment, ids)
-        create_execute! (@allotment, staff)
+        create_execute!(@allotment, staff)
       end
 
       def create_allotment_project! allotment, ids
