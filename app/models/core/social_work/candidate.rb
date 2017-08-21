@@ -5,6 +5,9 @@ module Core
     class Candidate < ApplicationRecord
       self.table_name = 'generic.social_work_candidates'
 
+      scope :by_name,  -> (name) {where('name ilike ?', "%#{name}%")}
+      scope :by_cpf,  -> (cpf)   {where(cpf: cpf)}
+
       belongs_to :city,        required: false, class_name: ::Core::Address::City
       belongs_to :civil_state, required: false, class_name: ::Core::Candidate::CivilState
       belongs_to :benefit,     required: false, class_name: ::Core::SocialWork::Benefit
@@ -20,10 +23,17 @@ module Core
       has_many :answers,           class_name: ::Core::SocialWork::Answer
 
       validates :cpf, cpf: true
+      validate :validate_schedule?, on: :create
 
 
       def current_project
         self.candidate_projects.first rescue nil
+      end
+
+      def validate_schedule?
+        unless Core::SocialWork::CandidateSchedule.where(cpf: self.cpf).present?
+          errors.add(:cpf, "CPF não possui agendamento.")
+        end
       end
 
     end

@@ -10,6 +10,8 @@ module Core
 
         has_many :project_interactions
         has_many :document_uploads
+        has_many :allotment_projects
+        has_many :step_projects
 
         def current_situation
           self.candidate_projects.first rescue nil
