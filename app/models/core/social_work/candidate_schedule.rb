@@ -8,7 +8,7 @@ module Core
       belongs_to :schedule_status
       has_many :schedule_interactions
       belongs_to :city,                   required: false,          class_name: ::Core::Address::City
-      belongs_to :attendance_station
+      belongs_to :attendance_station      class_name: ::Core::SocialWork::AttendanceStation
 
       scope :by_name,  -> (name) {where('name ilike ?', "%#{name}%")}
       scope :by_cpf,  -> (cpf)   {where(cpf: cpf)}
