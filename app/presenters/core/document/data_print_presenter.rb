@@ -18,7 +18,7 @@ module Core
           #template = template.gsub('doc.conj_cpf', ", inscrito no CPF nº #{self.spouse_cpf.format_cpf} ") if self.spouse_cpf.present?
           template = self.spouse_nationality.present? ? template.gsub('doc.nac_conjuge', "#{self.spouse_nationality},") : template.gsub('doc.nac_conjuge', "")
           template = self.spouse_employment.present? ? template.gsub('doc.prof_conju', "#{self.spouse_employment},") : template.gsub('doc.prof_conju', "")
-          template = self.spouse_civil_state_id.present? ? template.gsub('doc.estciv_conj', "#{self.spouse_civil_state.name},") : template.gsub('doc.estciv_conj', "")
+          template = self.spouse_civil_state_id.present? ? template.gsub('doc.estciv_conj', "#{self.spouse_civil_state.name rescue "<span style='color: red'>Completar</span>".html_safe},") : template.gsub('doc.estciv_conj', "")
           template = template.gsub('doc.registro_geral', "e portador da CI nº #{self.spouse_rg} ") if self.spouse_rg.present?
           template = template.gsub('doc.reg_exp', self.spouse_rg_org) if self.spouse_rg_org.present?
           template = template.gsub('doc.reg_uf', self.spouse_rg_uf) if self.spouse_rg_uf.present?
