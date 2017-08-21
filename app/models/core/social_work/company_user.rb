@@ -8,6 +8,7 @@ module Core
       attr_accessor :password_confirmation
 
       belongs_to :company
+      enum user_type: ['comum','supervisor']
 
       validates :name, :username, :password, presence: true
       validates :username, uniqueness: true
