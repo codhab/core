@@ -11,6 +11,11 @@ module Core
       validates :name, :email, :cnpj, :company_type, presence: true
       validates :cnpj, cnpj: true
       enum company_type: ['Empresa de Projetos','Empresa Executora']
+
+      scope :by_name,    -> (name)    {where('name ilike ?', "%#{name}%")}
+      scope :by_cnpj,    -> (cnpj)    {where(cnpj: cnpj.gsub('.','').gsub('/','').gsub('-',''))}
+      scope :by_fantasy, -> (fantasy) {where('fantasy_name ilike ?', "%#{fantasy}%")}
+      scope :by_type,    -> (type)    {where(company_type: type)}
     end
   end
 end
