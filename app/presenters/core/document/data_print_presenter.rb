@@ -10,7 +10,7 @@ module Core
         template = self.employment.present? ? template.gsub('doc.profissao', "#{self.employment},") : template.gsub('doc.profissao', "")
         template = self.civil_state.present? ? template.gsub('doc.est_civil', "#{self.civil_state.name},") : template.gsub('doc.est_civil', "")
         template = self.rg.present? ? template.gsub('doc.rg', self.rg) : template.gsub('doc.rg', "")
-        template = template.gsub('doc.expeditor', "#{self.rg_org}/#{doc.uf_rg}") if self.rg_org.present? && self.rg_uf.present?
+        template = template.gsub('doc.expeditor', "#{self.rg_org}/#{self.rg_uf}") if self.rg_org.present? && self.rg_uf.present?
         template = self.document_number.present? ? template.gsub('doc.processo', "#{self.document_number},") : template.gsub('doc.processo', "")
         if self.spouse_cpf.present?
           template = template.gsub('doc.conjuge_nome', " e #{self.spouse_name}, inscrito no CPF nº #{self.spouse_cpf.format_cpf}, ")
