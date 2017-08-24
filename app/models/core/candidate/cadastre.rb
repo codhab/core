@@ -203,7 +203,7 @@ module Core
              else
 
                sql = "program_id = ? AND
-                      situation_status_id in (4,54)
+                      situation_status_id in (4,54,67)
                       AND convocation_id > 1524
                       AND procedural_status_id IN(14, 72)
                       AND income BETWEEN ? AND ?"
@@ -227,7 +227,7 @@ module Core
                         and cadastre_id = general_pontuations.id) > 0)
                         AND convocation_id > 1524
                         AND procedural_status_id IN(14, 72)
-                        AND situation_status_id in (4,54)
+                        AND situation_status_id in (4,54,67)
                         AND income BETWEEN  ? AND ?"
 
                  @geral = Core::View::GeneralPontuation.select(:id)
@@ -241,7 +241,7 @@ module Core
                          from extranet.candidate_dependents
                          where special_condition_id in (2,3)
                          and cadastre_id = general_pontuations.id) > 0)
-                         and situation_status_id in (4,54)
+                         and situation_status_id in (4,54,67)
                          and convocation_id > 1524
                          and procedural_status_id IN(14, 72)
                          and income BETWEEN ? AND ?"
