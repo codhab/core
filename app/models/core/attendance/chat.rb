@@ -21,7 +21,7 @@ module Core
         scope :by_date_end, -> (date_end) { where("created_at::date <= ?", Date.parse(date_end))}
 
         scope :by_situation, -> (situation) {
-          joins(:cadastre).where(situation_status_id: situation)
+          joins(cadastre: :general).where(situation_status_id: situation)
          }
 
 
