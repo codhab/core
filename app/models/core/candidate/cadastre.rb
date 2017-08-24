@@ -14,6 +14,7 @@ module Core
       belongs_to :civil_state,            required: false,          class_name: ::Core::Candidate::CivilState
       belongs_to :program,                required: false,          class_name: ::Core::Candidate::Program
       belongs_to :work_city,              required: false,          class_name: ::Core::Address::City
+      belongs_to :general,                required: false,          class_name: ::Core::View::GeneralPontuation, primary_key: :cpf, foreign_key: :cpf
 
 
       # => Associations in attendance
