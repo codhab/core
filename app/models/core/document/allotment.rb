@@ -12,6 +12,9 @@ module Core
 
       validates :template_id, :data_document, presence: true
 
+      scope :by_date, -> (date) {where('created_at::date = ?', Date.parse(date))}
+      scope :by_cpf, -> (cpf) {joins(:data_prints).where('document_data_prints.cpf = ?', cpf.gsub('-','').gsub('.',''))}
+
     end
   end
 end

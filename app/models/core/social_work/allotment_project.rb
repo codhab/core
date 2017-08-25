@@ -7,7 +7,7 @@ module Core
 
       attr_accessor :ids, :description
 
-      belongs_to :candidate_project
+      belongs_to :candidate_project, required: false, class_name: ::Core::SocialWork::CandidateProject
       belongs_to :allotment
     end
   end

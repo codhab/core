@@ -10,6 +10,8 @@ module Core
         @allotment.save
         create_allotment_project!(@allotment, ids)
         create_execute!(@allotment, staff)
+        @company_service = Core::SocialWork::CompanyService.new
+        @company_service.reorder_company!
       end
 
       def create_allotment_project! allotment, ids
@@ -23,9 +25,9 @@ module Core
       end
 
       def create_execute! (allotment, staff)
-        @campany = Core::SocialWork::ExecutorCompany.where(position: 1).last
+        @company = Core::SocialWork::ExecutorCompany.where(position: 1).last
         @execute = Core::SocialWork::ProjectExecute.new(
-          company_id: @company.id,
+          company_id: @company.company_id,
           allotment_id: allotment.id,
           staff_id: staff
         )

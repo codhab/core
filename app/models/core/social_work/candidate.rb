@@ -8,6 +8,7 @@ module Core
       scope :by_name,  -> (name) {where('name ilike ?', "%#{name}%")}
       scope :by_cpf,  -> (cpf)   {where(cpf: cpf)}
 
+
       belongs_to :city,        required: false, class_name: ::Core::Address::City
       belongs_to :civil_state, required: false, class_name: ::Core::Candidate::CivilState
       belongs_to :benefit,     required: false, class_name: ::Core::SocialWork::Benefit
