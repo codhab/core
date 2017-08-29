@@ -39,7 +39,7 @@ module Core
           return false
         end
 
-        ([4,54].include?(self.current_situation_id) && ![3, 6, 8].include?(self.program_id))
+        ([4,54,67].include?(self.current_situation_id) && ![3, 6, 8].include?(self.program_id))
 =begin
         (!self.tickets.where(context_id: 1).present? ||
         self.tickets.where(context_id: 1, active: true).present?) &&
@@ -50,7 +50,7 @@ module Core
 
       def allow_able_update?
         ![3, 6, 8].include?(self.program_id) &&
-        [4,54].include?(self.current_situation_id) &&
+        [4,54,67].include?(self.current_situation_id) &&
         self.tickets.where(context_id: 1, situation_id: [5,7]).present?
       end
 
@@ -68,7 +68,7 @@ module Core
       end
 
       def allow_chats?
-        ([3, 4, 54].include?(self.current_situation_id) && [1,2].include?(self.program_id)) || self.program_id == 3
+        ([3, 4, 54, 67].include?(self.current_situation_id) && [1,2].include?(self.program_id)) || self.program_id == 3
       end
 
       def allow_to_question?
