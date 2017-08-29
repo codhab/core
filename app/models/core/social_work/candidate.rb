@@ -21,6 +21,7 @@ module Core
       has_many :candidate_schedules
       has_many :candidate_projects
       has_many :document_uploads
+      has_many :project_interactions
       has_many :answers,           class_name: ::Core::SocialWork::Answer
 
       validates :cpf, cpf: true

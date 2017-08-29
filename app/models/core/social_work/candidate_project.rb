@@ -8,7 +8,7 @@ module Core
         belongs_to :project_situation
         belongs_to :city,              required: false, class_name: ::Core::Address::City
 
-        has_many :project_interactions
+        has_many :project_interactions, class_name: ::Core::SocialWork::ProjectInteraction
         has_many :document_uploads
         has_many :allotment_projects
         has_many :step_projects
