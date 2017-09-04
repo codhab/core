@@ -4,7 +4,7 @@ module Core
   module SocialWork
     class DocumentUpload < ApplicationRecord
       self.table_name = 'generic.social_work_document_uploads'
-      attr_accessor :type_document
+      attr_accessor :type_doc
 
       belongs_to :document_category
 

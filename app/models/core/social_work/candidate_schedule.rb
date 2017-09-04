@@ -13,6 +13,7 @@ module Core
 
       belongs_to :attendance_station,      class_name: ::Core::SocialWork::AttendanceStation
 
+      enum priority: ['Baixa','Média','Alta']
 
       scope :by_name,  -> (name) {where('name ilike ?', "%#{name}%")}
       scope :by_cpf,  -> (cpf)   {where(cpf: cpf)}
@@ -20,7 +21,7 @@ module Core
 
       validates :name, :city_id, :address, :hour, :date, :cpf, presence: true
       validates :cpf, cpf: true
-      enum priority: ['Baixa','Média','Alta']
+
     end
   end
 end
