@@ -8,7 +8,7 @@ module Core
 
       scope :by_type,  -> (type)   {where(type_document: type)}
 
-      enum type_document: ['N/D', 'titular', 'cônjuge', 'documentos técnicos', 'documento técnico final']
+      enum type_document: ['N/D', 'titular', 'cônjuge', 'documentos sociais', 'documento técnico final']
     end
   end
 end
