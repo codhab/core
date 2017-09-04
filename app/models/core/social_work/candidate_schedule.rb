@@ -20,6 +20,7 @@ module Core
 
       validates :name, :city_id, :address, :hour, :date, :cpf, presence: true
       validates :cpf, cpf: true
+      enum priority: ['Baixa','Média','Alta']
     end
   end
 end

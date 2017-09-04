@@ -12,7 +12,7 @@ module Core
         has_many :document_uploads
         has_many :allotment_projects
         has_many :step_projects
-        enum priority: ['Baixa','Média','Alta']
+
         def current_situation
           self.candidate_projects.first rescue nil
         end
