@@ -15,7 +15,7 @@ module Core
       enum priority: ['Baixa','Média','Alta']
 
       scope :by_name,    -> (name)    {where('name ilike ?', "%#{name}%")}
-      scope :by_cpf,     -> (cpf)     {where(cpf: cpf)}
+      scope :by_cpf,     -> (cpf)     {where(cpf: cpf.gsub('.','').gsub('-',''))}
       scope :by_date,    -> (date)    {where(date: date)}
       scope :by_station, -> (station) {where(attendance_stations_id: station)}
 
