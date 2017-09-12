@@ -11,6 +11,9 @@ module Core
       has_many :steps
       has_many :enterprise_typologies
       has_many :allotments, through: :steps
+      has_many :candidates,
+        class_name: ::Core::Candidate::EnterpriseCadastre,
+        foreign_key: :enterprise_id
 
       #enum situation:  ['editais', 'licitações', 'em construção', 'concluído'] Verificar
 

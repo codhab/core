@@ -3,39 +3,58 @@ module Core
     class Indication
       include ActiveModel::Model 
 
-      attr_accessor :cpf, :indication_id, :cadastre_id, :cpf_create
+      attr_accessor :cpf, :enterprise_id, :cadastre_id, :cpf_create
 
       validates :cpf, cpf: true, presence: true
       validate  :cpf_exist?
 
       def persist_indication
-        indication = Core::Entity::IndicationUnit.find(self.indication_id)
-        indication.update(cadastre_id: self.cadastre_id, situation: 1)
-
-        indication.indication_logs.create({
-          cadastre_id: self.cadastre_id,
-          description: "Candidato selecionado."
-        })
+        enterprise = Core::Project::Enterprise.find(self.enterprise_id)
+        indication = enterprise.candidates.new
+        indication.inactive = false
+        indication.indication_type_id = 1
+        indication.indication_situation_id = 1
+        indication.cadastre_id = @cadastre.id
+        indication.save
       end
 
       private
 
       def cpf_exist?
-        @cadastre = Core::Candidate::Cadastre.find_by(cpf: self.cpf) rescue nil
+
+
+        @enterprise = Core::Project::Enterprise.find(self.enterprise_id)
+
+        if !(@enterprise.units.to_i > @enterprise.candidates.count)
+          errors.add(:cpf, "Você já indicou a quantidade máxima para este empreendimento")
+        end
+
+        @cadastre   = Core::Candidate::Cadastre.find_by(cpf: self.cpf) rescue nil
         
         if @cadastre.nil?
           errors.add(:cpf, 'CPF não encontrado na base de dados da CODHAB') 
           self.cpf_create = true
         else
 
-          indication = Core::Entity::IndicationUnit.find(self.indication_id)
-          indication_candidate = indication.allotment.indication_units.where(cadastre_id: @cadastre.id).present?
+          candidate_enterprise = Core::Candidate::EnterpriseCadastre.where(cadastre_id: @cadastre.id)
+                                                                    .where('inactive_date is null')
 
-          if indication_candidate
-            errors.add(:cpf, "CPF já se encontra indicado")
+          if candidate_enterprise.present?
+            errors.add(:cpf, 'CPF já possui indicação ativa')
           else
-            self.cadastre_id = @cadastre.id
-          end
+            
+            if @enterprise.candidates.where(cadastre_id: @cadastre.id).present?
+              errors.add(:cpf, 'CPF já possui indicação para este empreendimento')
+            else
+
+              if !(@cadastre.cadastre_situations.order(id: :asc).last.situation_status_id == 4 &&
+                [14,72].include?(@cadastre.cadastre_procedurals.order(id: :asc).last.procedural_status_id))
+                errors.add(:cpf, 'CPF não se encontra habilitado')
+              end
+
+            end
+          end 
+            
         end
 
 
