@@ -18,6 +18,9 @@ module Core
       has_many :candidates
       has_many :candidate, through: :candidates
 
+      has_many :enterprises, class_name: ::Core::Project::Enterprise,
+        foreign_key: :entity_id 
+        
       has_many :realties
       has_many :activities
       has_many :assessments,
