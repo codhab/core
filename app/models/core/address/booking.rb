@@ -25,11 +25,13 @@ module Core
         end
 
         if %w(1 2 4 5).include?(@cadastre.program_id.to_s)
-          
+
           unless @cadastre.current_situation_id == 4 && %w(14 72).include?(@cadastre.current_procedural.procedural_status_id.to_s)
             errors.add(:cpf, 'Situação do CPF não é válida para esta operação')
           end
+
           if @unit.current_cadastre_address.present? && %w(reserva distribuído sobrestado).include?(@unit.current_cadastre_address.situation_id.to_s)
+            
             if @unit.current_cadastre_address.cadastre_id == @cadastre.id
              errors.add(:cpf, 'CPF já possui vinculo com imóvel.')
             end
