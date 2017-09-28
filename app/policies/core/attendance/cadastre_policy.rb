@@ -698,8 +698,14 @@ module Core
               354294 ]
        # cadastres = Core::View::GeneralPontuation.select(:id)
        #                                          .where(id: cpfs)
-        !cpfs.include?(self.id)
+        (!cpfs.include?(self.id) && ([4,54,67].include?(self.current_situation_id) && ![3, 6, 8].include?(self.program_id)))
       end
+      
+
+      def allow_to_question_two_modal?
+        (allow_to_question_two? && !Core::Attendance::FormValue.where(form_id: 7).where("store->>'cadastre_id' = '?'", self.id).present?)
+      end
+
 
     end
   end
