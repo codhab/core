@@ -48,6 +48,7 @@ module Core
         template = template.gsub('doc.averbacao', self.endorsement) if self.endorsement.present?
         template = template.gsub('doc.area', self.area) if self.area.present?
         template = template.gsub('doc.data_ato', self.date_act_declaratory.strftime('%d/%m/%Y')) if self.date_act_declaratory.present?
+        template = template.gsub('doc.data_doc', self.created_at.strftime('%d/%m/%Y')) if self.created_at.present?
 
         return template
       end
