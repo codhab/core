@@ -48,7 +48,7 @@ module Core
         Core::Entity::Cadastre.joins(:situations)
         .where('entity_situations.situation_status_id = (SELECT MAX(entity_situations.situation_status_id)
                 FROM entity_situations WHERE entity_situations.cadastre_id = entity_cadastres.id)')
-        .where('entity_situations.situation_status_id = ?', status)
+        #.where('entity_situations.situation_status_id = ?', status)
       }
 
       scope :senders, -> {
