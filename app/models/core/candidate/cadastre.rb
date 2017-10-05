@@ -55,6 +55,7 @@ module Core
       has_many :inheritors
       has_many :cadastre_activities, class_name: ::Core::Candidate::CadastreActivity
       has_many :cadastre_convocations
+      has_many :cadins, class_name: ::Core::Candidate::Cadin, foreign_key: :cpf, primary_key: :cpf
 
       has_many :old_candidates,                 class_name: ::Core::Entity::OldCandidate
       has_many :olds, through: :old_candidates, class_name: ::Core::Entity::Old
