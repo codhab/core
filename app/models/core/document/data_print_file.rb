@@ -72,6 +72,8 @@ module Core
             print_new.date_act_declaratory       = print_hash["data_ato"]
             print_new.address_data_base          = print_hash["endereco_base"]
             print_new.area                       = print_hash["area"]
+            print_new.property_value             = print_hash["valor_fiscal"]
+            print_new.married                    = print_hash["casado"]
             print_new.staff_id                   = user
             print_new.status                     = true
 
