@@ -21,7 +21,11 @@ module Core
           template = template.gsub('doc.registro_geral', "e portador da CI nº #{self.spouse_rg} ") if self.spouse_rg.present?
           template = template.gsub('doc.reg_exp', "#{self.spouse_rg_org}/#{self.spouse_rg_uf}") if self.spouse_rg_org.present? && self.spouse_rg_uf.present?
           template = self.wedding_regime.present? && self.wedding_date.present? ? template.gsub('doc.regime_casamento', "casados em #{self.wedding_regime} em #{self.wedding_date},") : template.gsub('doc.regime_casamento',"")
-
+          if self.married.present?
+            template = template.gsub('doc.casado', "#{self.married}")
+          else
+            template = template.gsub('doc.casado', "e") 
+          end
         else
           template = template.gsub('doc.conjuge_nome', "").gsub('doc.conj_cpf', "").gsub('doc.nac_conjuge', "")
           template = template.gsub('doc.prof_conju', "").gsub('doc.conj_cpf', "").gsub('doc.estciv_conj', "")
@@ -49,7 +53,13 @@ module Core
         template = template.gsub('doc.area', self.area) if self.area.present?
         template = template.gsub('doc.data_ato', self.date_act_declaratory.strftime('%d/%m/%Y')) if self.date_act_declaratory.present?
         template = template.gsub('doc.data_doc', self.allotment.data_document.strftime('%d/%m/%Y')) if self.allotment.present? && self.allotment.data_document.present?
-
+        if self.allotment.property_value.present?
+          template = template.gsub('doc.valor_fiscal', self.allotment.property_value)
+        elsif self.property_value.present?
+          template = template.gsub('doc.valor_fiscal', self.property_value)
+        else
+          template = template.gsub('doc.valor_fiscal', "")
+        end
         return template
       end
 
