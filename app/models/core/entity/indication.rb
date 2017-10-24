@@ -1,7 +1,7 @@
 module Core
   module Entity
     class Indication
-      include ActiveModel::Model 
+      include ActiveModel::Model
 
       attr_accessor :cpf, :enterprise_id, :cadastre_id, :cpf_create
 
@@ -25,24 +25,24 @@ module Core
 
         @enterprise = Core::Project::Enterprise.find(self.enterprise_id)
 
-        if !(@enterprise.units.to_i > @enterprise.candidates.count)
+        if !(@enterprise.units.to_i > @enterprise.candidates.where('inactive is false').count)
           errors.add(:cpf, "Você já indicou a quantidade máxima para este empreendimento")
         end
 
         @cadastre   = Core::Candidate::Cadastre.find_by(cpf: self.cpf) rescue nil
-        
+
         if @cadastre.nil?
-          errors.add(:cpf, 'CPF não encontrado na base de dados da CODHAB') 
+          errors.add(:cpf, 'CPF não encontrado na base de dados da CODHAB')
           self.cpf_create = true
         else
 
           candidate_enterprise = Core::Candidate::EnterpriseCadastre.where(cadastre_id: @cadastre.id)
-                                                                    .where('inactive_date is null')
+                                                                    .where('inactive is false')
 
           if candidate_enterprise.present?
             errors.add(:cpf, 'CPF já possui indicação ativa')
           else
-            
+
             if @enterprise.candidates.where(cadastre_id: @cadastre.id).present?
               errors.add(:cpf, 'CPF já possui indicação para este empreendimento')
             else
@@ -53,8 +53,8 @@ module Core
               end
 
             end
-          end 
-            
+          end
+
         end
 
 
