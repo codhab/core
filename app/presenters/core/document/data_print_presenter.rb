@@ -24,9 +24,10 @@ module Core
           if self.married.present?
             template = template.gsub('doc.casado', "#{self.married}")
           else
-            template = template.gsub('doc.casado', "e") 
+            template = template.gsub('doc.casado', "e")
           end
         else
+          template = template.gsub('doc.casado', "")
           template = template.gsub('doc.conjuge_nome', "").gsub('doc.conj_cpf', "").gsub('doc.nac_conjuge', "")
           template = template.gsub('doc.prof_conju', "").gsub('doc.conj_cpf', "").gsub('doc.estciv_conj', "")
           template = template.gsub('doc.registro_geral', "").gsub('doc.reg_exp', "").gsub('doc.reg_uf', "")
