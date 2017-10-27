@@ -19,8 +19,8 @@ module Core
       has_many :candidate, through: :candidates
 
       has_many :enterprises, class_name: ::Core::Project::Enterprise,
-        foreign_key: :entity_id 
-        
+        foreign_key: :entity_id
+
       has_many :realties
       has_many :activities
       has_many :assessments,
@@ -88,6 +88,10 @@ module Core
       def president_name
         obj = self.members.where(member_job_id: 2).first
         obj.name.mb_chars.upcase rescue nil
+      end
+
+      def president
+        self.members.where(member_job_id: 2).first
       end
 
     end
