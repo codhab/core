@@ -11,7 +11,7 @@ module Core
 
       has_many :social_category_totals, class_name: ::Core::SocialWork::SocialCategoryTotal, foreign_key: :execution_id, :dependent => :destroy
 
-      validates :date,:social_value, :social_support,  presence: true
+      validates :date,:social_value, :support_value,  presence: true
     end
   end
 end
