@@ -9,8 +9,9 @@ module Core
       belongs_to :station, required: false, class_name: Core::TechnicalAssistance::Station, foreign_key: :station_id
       belongs_to :staff,                    class_name: ::Core::Person::Staff
 
-      has_many :social_payments, class_name: ::Core::SocialWork::SocialPayment,   foreign_key: :contract_id, :dependent => :destroy
-      has_many :executions,      class_name: ::Core::SocialWork::SocialExecution, foreign_key: :contract_id, :dependent => :destroy
+      has_many :social_payments, class_name: ::Core::SocialWork::SocialPayment,      foreign_key: :contract_id, :dependent => :destroy
+      has_many :executions,      class_name: ::Core::SocialWork::SocialExecution,    foreign_key: :contract_id, :dependent => :destroy
+      has_many :goals,           class_name: ::Core::SocialWork::SocialContractGoal, foreign_key: :contract_id, :dependent => :destroy
 
       scope :by_conpany, -> (company) { where(company: company) }
       scope :by_station, -> (station) { where(station: station) }

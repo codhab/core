@@ -5,9 +5,9 @@ module Core
     class SocialCategory < ApplicationRecord
       self.table_name = 'generic.social_categories'
 
-      has_many :social_executions,      class_name: ::Core::SocialWork::SocialExecution,     foreign_key: :category_id, :dependent => :destroy
-      has_many :social_execution_goals,   class_name: ::Core::SocialWork::SocialExecutionGoal,   foreign_key: :category_id, :dependent => :destroy
-      has_many :social_category_totals, class_name: ::Core::SocialWork::SocialCategoryTotal, foreign_key: :category_id, :dependent => :destroy
+      has_many :executions,             class_name: ::Core::SocialWork::SocialExecution,     foreign_key: :category_id
+      has_many :goals,                  class_name: ::Core::SocialWork::SocialContractGoal,   foreign_key: :category_id
+      has_many :social_category_totals, class_name: ::Core::SocialWork::SocialCategoryTotal, foreign_key: :category_id
 
       scope :by_name,  -> (name)  {where('name ilike ?', "%#{name}%")}
 
