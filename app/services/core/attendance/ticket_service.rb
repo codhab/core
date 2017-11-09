@@ -118,6 +118,15 @@ module Core
       def close_action
         return false if @ticket.nil? || !@ticket.actions.present? || @action.nil?
         @action.update(situation_id: 3)
+
+        begin
+          unless @ticket.actions.where(situation_id: [1, 2]).present?
+            close_ticket
+          end
+        rescue StandardError => e
+          puts e
+        end
+
       end
 
       def close_ticket
