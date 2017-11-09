@@ -195,7 +195,7 @@ module Core
         if @ticket.context_id != 4
           @cadastre_mirror = @ticket.cadastre_mirror
 
-          @new_income = @ticket.cadastre_mirror.income.to_f
+          @new_income = @ticket.cadastre_mirror.main_income.to_f
           @new_income = @new_income + @ticket.cadastre_mirror.dependent_mirrors.sum(:income).to_f rescue nil
 
           @ticket.cadastre_mirror.update(income: @new_income) rescue nil
