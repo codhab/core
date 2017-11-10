@@ -7,12 +7,16 @@ module Core
         !self.tickets.where(ticket_type_id: 1).where.not(ticket_status_id: 1).present?
       end
 
+      def allow_mobile_recadastre_special?
+        self.current_situation_id == 70 && !self.tickets.where(ticket_type_id: 1).where.not(ticket_status_id: 1).present?
+      end
+
       def allow_update_button?
         ((self.program_id != 3 && self.current_situation_id == 4) &&
         self.tickets.where(ticket_type_id: 1).where.not(ticket_status_id: 1).present?) ||
-        self.program_id == 3 
+        self.program_id == 3
       end
-      
+
 
       def active_indication_present?
         self.enterprise_cadastres.where(inactive: false).present?
