@@ -39,7 +39,7 @@ module Core
           return false
         end
 
-        ([4,54,67].include?(self.current_situation_id) && ![3, 6, 8].include?(self.program_id))
+        ([4,54,67,70].include?(self.current_situation_id) && ![3, 6, 8].include?(self.program_id))
 =begin
         (!self.tickets.where(context_id: 1).present? ||
         self.tickets.where(context_id: 1, active: true).present?) &&
@@ -68,7 +68,7 @@ module Core
       end
 
       def allow_chats?
-        ([3, 4, 54, 67].include?(self.current_situation_id) && [1,2].include?(self.program_id)) || self.program_id == 3
+        ([3, 4, 54, 67,70].include?(self.current_situation_id) && [1,2].include?(self.program_id)) || self.program_id == 3
       end
 
       def allow_to_question?
@@ -700,7 +700,7 @@ module Core
        #                                          .where(id: cpfs)
         (!cpfs.include?(self.id) && ([4,54,67].include?(self.current_situation_id) && ![3, 6, 8].include?(self.program_id)))
       end
-      
+
 
       def allow_to_question_two_modal?
         (allow_to_question_two? && !Core::Attendance::FormValue.where(form_id: 7).where("store->>'cadastre_id' = '?'", self.id).present?)
