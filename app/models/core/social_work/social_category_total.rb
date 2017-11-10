@@ -9,7 +9,7 @@ module Core
       belongs_to :staff,    required: false,  class_name: ::Core::Person::Staff
       belongs_to :execution, required: false, class_name: ::Core::SocialWork::SocialExecution
 
-      validates :category_id, :value, :metreage, presence: true
+      validates :category_id, :metreage, presence: true
 
     end
   end

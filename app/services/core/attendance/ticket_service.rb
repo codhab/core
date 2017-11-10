@@ -49,8 +49,8 @@ module Core
 
         #refatorar, forçando somente recadastramento ou context_id igual ao já criado
         @ticket = @cadastre.tickets.find_by(context_id: context_id) rescue nil
-        
-        if @ticket.nil? 
+
+        if @ticket.nil?
 
           return false if context_id.to_i == 1 && (Date.current > Date.parse('2017-07-31'))
 
@@ -118,6 +118,15 @@ module Core
       def close_action
         return false if @ticket.nil? || !@ticket.actions.present? || @action.nil?
         @action.update(situation_id: 3)
+
+        begin
+          unless @ticket.actions.where(situation_id: [1, 2]).present?
+            close_ticket
+          end
+        rescue StandardError => e
+          puts e
+        end
+
       end
 
       def close_ticket
@@ -194,6 +203,14 @@ module Core
       def scoring_cadastre
         if @ticket.context_id != 4
           @cadastre_mirror = @ticket.cadastre_mirror
+
+          @new_income = @ticket.cadastre_mirror.main_income.to_f
+          @new_income = @new_income + @ticket.cadastre_mirror.dependent_mirrors.sum(:income).to_f rescue nil
+
+          @ticket.cadastre_mirror.update(income: @new_income) rescue nil
+
+          @cadastre_mirror = @ticket.cadastre_mirror
+
           @score = Core::Candidate::ScoreService.new(cadastre_mirror_id: @cadastre_mirror)
           @scores = @score.scoring_cadastre!
 
@@ -286,15 +303,15 @@ module Core
           end
 
           @ticket.cadastre.income = new_income
-      
-        rescue 
 
-          @ticket.cadastre.income = @ticket.cadastre.main_income 
-        
+        rescue
+
+          @ticket.cadastre.income = @ticket.cadastre.main_income
+
         end
-        
+
         @ticket.cadastre.save
-        
+
       end
 
       def rewrite_to_dependents!
