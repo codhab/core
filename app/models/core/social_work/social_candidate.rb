@@ -20,7 +20,10 @@ module Core
         where(id: @situation)
       end
 
-
+      scope :by_name, ->(name) { where('name ilike ?', "%#{name}%") }
+      scope :by_process, ->(process) { where(process_number: process) }
+      scope :by_company, ->(company) { where(company_id: company) }
+      scope :by_station, ->(station) { where(station_id: station) }
 
       def create_situation(candidate, situation, staff)
         @situation = Core::SocialWork::SocialCandidateSituation.new(
