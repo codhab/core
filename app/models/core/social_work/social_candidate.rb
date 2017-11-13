@@ -20,6 +20,10 @@ module Core
         where(id: @situation)
       end
 
+      validates :name, presence: true
+      validates :cpf, cpf: true, if: 'self.cpf.present?'
+
+
       scope :by_name, ->(name) { where('name ilike ?', "%#{name}%") }
       scope :by_process, ->(process) { where(process_number: process) }
       scope :by_company, ->(company) { where(company_id: company) }
