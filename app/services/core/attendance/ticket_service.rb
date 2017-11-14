@@ -201,7 +201,7 @@ module Core
       end
 
       def scoring_cadastre
-        if [5,4].include?(@ticket.context_id)
+        unless [5,4].include?(@ticket.context_id)
           @cadastre_mirror = @ticket.cadastre_mirror
 
           @new_income = @ticket.cadastre_mirror.main_income.to_f
@@ -227,7 +227,6 @@ module Core
           )
 
           @pontuation.save
-
         end
 
         rewrite_to_cadastre!
