@@ -9,9 +9,9 @@ module Core
         main = Array.new
         if @allotments.present?
           @allotments.each do |allotment|
-            second << allotment.id unless allotment.second_authenticate.present?
-            first << allotment.id if allotment.second_authenticate.present? && !allotment.first_authenticate.present?
-            main << allotment.id if allotment.second_authenticate.present? && allotment.first_authenticate.present? && !allotment.main_authenticate.present?
+            second << allotment.id unless allotment.second_authenticate == true
+            first << allotment.id if allotment.second_authenticate == true && !allotment.first_authenticate == true
+            main << allotment.id if allotment.second_authenticate == true && allotment.first_authenticate == true && !allotment.main_authenticate == true
           end
           return [second, first, main]
         end
