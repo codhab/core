@@ -3,8 +3,7 @@ require_dependency 'core/notification_service'
 
 module Core
   module Attendance
-    class TicketService
-
+    class TicketService # :nodoc:
       # Scope :attendance_tickets
       #
       # define :ticket_situations, table: `attendance_ticket_situations`
@@ -17,22 +16,22 @@ module Core
       # 7 => finalizado pelo candidato
 
       # define :ticket_contexts table: `attendance_ticket_contexts`
-      # 1 => atualização cadastral (recadastramento)
-      # 2 => atualização cadastral (convocado)
-      # 3 => atualização cadastral (habilitado)
-      # 4 => atualização cadastral (regularização)
-      # 5 => atualização cadastral (outro)
+      # 1 => atualizacao cadastral (recadastramento)
+      # 2 => atualizacao cadastral (convocado)
+      # 3 => atualizacao cadastral (habilitado)
+      # 4 => atualizacao cadastral (regularizacao)
+      # 5 => atualizacao cadastral (outro)
 
       # Scope :attendance_ticket_actions
       #
       # define :ticket_action_contexts
-      # 1 => atualização dados básicos
-      # 2 => atualização de dependentes
-      # 3 => atualização de renda
-      # 4 => atualização de dados de contato
+      # 1 => atualizacao dados basicos
+      # 2 => atualizacao de dependentes
+      # 3 => atualizacao de renda
+      # 4 => atualizacao de dados de contato
 
       # define :ticket_action_situations
-      # 1 => em processo de atualização
+      # 1 => em processo de atualizacao
       # 2 => atualizado
       # 3 => confirmado
 
@@ -46,7 +45,6 @@ module Core
       end
 
       def create_or_find context_id
-
         #refatorar, forçando somente recadastramento ou context_id igual ao já criado
         @ticket = @cadastre.tickets.find_by(context_id: context_id) rescue nil
 

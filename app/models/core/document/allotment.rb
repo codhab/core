@@ -5,11 +5,11 @@ module Core
     class Allotment < ApplicationRecord # :nodoc:
       self.table_name = 'extranet.document_allotments'
 
-      belongs_to :template, class_name: ::Core::Document::Template
-      belongs_to :staff,    class_name: ::Core::Person::Staff
-      belongs_to :main,     class_name: ::Core::Person::Staff, foreign_key: :main_authenticate_id
-      belongs_to :first,    class_name: ::Core::Person::Staff, foreign_key: :first_authenticate_id
-      belongs_to :second,   class_name: ::Core::Person::Staff, foreign_key: :second_authenticate_id
+      belongs_to :template, class_name: '::Core::Document::Template'
+      belongs_to :staff,    class_name: '::Core::Person::Staff'
+      belongs_to :main,     class_name: '::Core::Person::Staff', foreign_key: :main_authenticate_id
+      belongs_to :first,    class_name: '::Core::Person::Staff', foreign_key: :first_authenticate_id
+      belongs_to :second,   class_name: '::Core::Person::Staff', foreign_key: :second_authenticate_id
 
       has_many :data_prints, class_name: ::Core::Document::DataPrint
 
