@@ -18,7 +18,7 @@ module Core
           template = self.spouse_nationality.present? ? template.gsub('doc.nac_conjuge', "#{self.spouse_nationality},") : template.gsub('doc.nac_conjuge', "")
           template = self.spouse_employment.present? ? template.gsub('doc.prof_conju', "#{self.spouse_employment},") : template.gsub('doc.prof_conju', "")
           template = self.spouse_civil_state_id.present? ? template.gsub('doc.estciv_conj', "#{self.spouse_civil_state.name rescue "<span style='color: red'>Completar</span>".html_safe},") : template.gsub('doc.estciv_conj', "")
-          template = template.gsub('doc.registro_geral', "e portador da CI nº #{self.spouse_rg} ") if self.spouse_rg.present?
+          template = template.gsub('doc.registro_geral', "e portador da CI nº #{self.spouse_rg.to_s} ") if self.spouse_rg.present?
           template = template.gsub('doc.reg_exp', "#{self.spouse_rg_org}/#{self.spouse_rg_uf}") if self.spouse_rg_org.present? && self.spouse_rg_uf.present?
           template = self.wedding_regime.present? && self.wedding_date.present? ? template.gsub('doc.regime_casamento', "casados em #{self.wedding_regime} em #{self.wedding_date},") : template.gsub('doc.regime_casamento',"")
           if self.married.present?
