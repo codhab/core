@@ -258,7 +258,9 @@ module Core
                  sql = "program_id = ?
                        AND convocation_id > 1524
                        AND procedural_status_id IN(14, 72)
-                       AND income BETWEEN ? AND ?"
+                       AND income BETWEEN ? AND ?
+                       and situation_status_id in (4,54,67)
+                       "
 
                  @geral = Core::View::GeneralPontuation.select(:id)
                                                             .where(sql,4,
