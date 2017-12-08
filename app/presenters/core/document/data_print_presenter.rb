@@ -5,50 +5,50 @@ module Core
     class DataPrintPresenter < ApplicationPresenter
 
       def write_document(template)
-        template = template.gsub('doc.nome', "#{self.name},").gsub('doc.cpf', "#{self.cpf.format_cpf},")
-        template = self.nationality.present? ? template.gsub('doc.nacionalidade', "#{self.nationality},") : template.gsub('doc.nacionalidade', "BRASILEIRO(A)")
-        template = self.employment.present? ? template.gsub('doc.profissao', "#{self.employment},") : template.gsub('doc.profissao', "")
-        template = self.civil_state.present? ? template.gsub('doc.est_civil', "#{self.civil_state.name},") : template.gsub('doc.est_civil', "")
+        template = template.gsub('doc.nome', "#{self.name}").gsub('doc.cpf', "#{self.cpf.format_cpf}")
+        template = self.nationality.present? ? template.gsub('doc.nacionalidade', "#{self.nationality}") : template.gsub('doc.nacionalidade', "BRASILEIRO(A)")
+        template = self.employment.present? ? template.gsub('doc.profissao', "#{self.employment}") : template.gsub('doc.profissao', "")
+        template = self.civil_state.present? ? template.gsub('doc.est_civil', "#{self.civil_state.name}") : template.gsub('doc.est_civil', "")
         template = self.rg.present? ? template.gsub('doc.rg', self.rg) : template.gsub('doc.rg', "")
         template = template.gsub('doc.expeditor', "#{self.rg_org}/#{self.rg_uf}") if self.rg_org.present? && self.rg_uf.present?
-        template = self.document_number.present? ? template.gsub('doc.processo', "#{self.document_number},") : template.gsub('doc.processo', "")
+        template = self.document_number.present? ? template.gsub('doc.processo', "#{self.document_number}") : template.gsub('doc.processo', "")
         template = self.mother_name.present? ? template.gsub('doc.mae', "#{self.mother_name}") : template.gsub('doc.mae', "")
 
         if self.mother_name.present?
-          template = self.father_name.present? ? template.gsub('doc.pai', "e de #{self.father_name},") : template.gsub('doc.pai', "")
+          template = self.father_name.present? ? template.gsub('doc.pai', "e de #{self.father_name}") : template.gsub('doc.pai', "")
         else
-          template = self.father_name.present? ? template.gsub('doc.pai', "#{self.father_name},") : template.gsub('doc.pai', "")
+          template = self.father_name.present? ? template.gsub('doc.pai', "#{self.father_name}") : template.gsub('doc.pai', "")
         end
 
         # => SECUNDARIO
 
         self.allotment.data_prints.where(complete_address: self.complete_address).where.not(id: self.id).each do |second|
-          template = template.gsub('doc.second_nome', "#{second.name},").gsub('doc.second_cpf', "#{second.cpf.format_cpf},")
-          template = second.nationality.present? ? template.gsub('doc.second_nacionalidade', "#{second.nationality},") : template.gsub('doc.second_nacionalidade', "BRASILEIRO(A)")
-          template = second.employment.present? ? template.gsub('doc.second_profissao', "#{second.employment},") : template.gsub('doc.second_profissao', "")
-          template = second.civil_state.present? ? template.gsub('doc.second_est_civil', "#{second.civil_state.name},") : template.gsub('doc.second_est_civil', "")
+          template = template.gsub('doc.second_nome', "#{second.name}").gsub('doc.second_cpf', "#{second.cpf.format_cpf}")
+          template = second.nationality.present? ? template.gsub('doc.second_nacionalidade', "#{second.nationality}") : template.gsub('doc.second_nacionalidade', "BRASILEIRO(A)")
+          template = second.employment.present? ? template.gsub('doc.second_profissao', "#{second.employment}") : template.gsub('doc.second_profissao', "")
+          template = second.civil_state.present? ? template.gsub('doc.second_est_civil', "#{second.civil_state.name}") : template.gsub('doc.second_est_civil', "")
           template = second.rg.present? ? template.gsub('doc.second_rg', second.rg) : template.gsub('doc.second_rg', "")
           template = template.gsub('doc.second_expeditor', "#{second.rg_org}/#{second.rg_uf}") if second.rg_org.present? && second.rg_uf.present?
-          template = second.document_number.present? ? template.gsub('doc.second_processo', "#{second.document_number},") : template.gsub('doc.second_processo', "")
+          template = second.document_number.present? ? template.gsub('doc.second_processo', "#{second.document_number}") : template.gsub('doc.second_processo', "")
           template = second.mother_name.present? ? template.gsub('doc.second_mae', "#{second.mother_name}") : template.gsub('doc.second_mae', "")
 
           if second.mother_name.present?
-            template = second.father_name.present? ? template.gsub('doc.second_pai', "e de #{second.father_name},") : template.gsub('doc.second_pai', "")
+            template = second.father_name.present? ? template.gsub('doc.second_pai', "e de #{second.father_name}") : template.gsub('doc.second_pai', "")
           else
-            template = second.father_name.present? ? template.gsub('doc.second_pai', "#{second.father_name},") : template.gsub('doc.second_pai', "")
+            template = second.father_name.present? ? template.gsub('doc.second_pai', "#{second.father_name}") : template.gsub('doc.second_pai', "")
           end
 
 
           if second.spouse_cpf.present?
-            template = template.gsub('doc.second_conjuge_nome', "#{second.spouse_name}, inscrito no CPF nº #{second.spouse_cpf.format_cpf}, ")
+            template = template.gsub('doc.second_conjuge_nome', "#{second.spouse_name}, inscrito no CPF nº #{second.spouse_cpf.format_cpf}")
 
             #template = template.gsub('doc.second_conj_cpf', ", inscrito no CPF nº #{self.spouse_cpf.format_cpf} ") if self.spouse_cpf.present?
-            template = second.spouse_nationality.present? ? template.gsub('doc.second_nac_conjuge', "#{second.spouse_nationality},") : template.gsub('doc.second_nac_conjuge', "")
-            template = second.spouse_employment.present? ? template.gsub('doc.second_prof_conju', "#{second.spouse_employment},") : template.gsub('doc.second_prof_conju', "")
-            template = second.spouse_civil_state_id.present? ? template.gsub('doc.second_estciv_conj', "#{second.spouse_civil_state.name rescue "<span style='color: red'>Completar</span>".html_safe},") : template.gsub('doc.second_estciv_conj', "")
-            template = template.gsub('doc.second_registro_geral', "e portador da CI nº #{second.spouse_rg.to_s} ") if second.spouse_rg.present?
+            template = second.spouse_nationality.present? ? template.gsub('doc.second_nac_conjuge', "#{second.spouse_nationality}") : template.gsub('doc.second_nac_conjuge', "")
+            template = second.spouse_employment.present? ? template.gsub('doc.second_prof_conju', "#{second.spouse_employment}") : template.gsub('doc.second_prof_conju', "")
+            template = second.spouse_civil_state_id.present? ? template.gsub('doc.second_estciv_conj', "#{second.spouse_civil_state.name rescue "<span style='color: red'>Completar</span>".html_safe}") : template.gsub('doc.second_estciv_conj', "")
+            template = template.gsub('doc.second_registro_geral', "e portador da CI nº #{second.spouse_rg.to_s}") if second.spouse_rg.present?
             template = template.gsub('doc.second_reg_exp', "#{second.spouse_rg_org}/#{second.spouse_rg_uf}") if second.spouse_rg_org.present? && second.spouse_rg_uf.present?
-            template = second.wedding_regime.present? && second.wedding_date.present? ? template.gsub('doc.second_regime_casamento', "casados em #{second.wedding_regime} em #{second.wedding_date},") : template.gsub('doc.second_regime_casamento',"")
+            template = second.wedding_regime.present? && second.wedding_date.present? ? template.gsub('doc.second_regime_casamento', "casados em #{second.wedding_regime} em #{second.wedding_date}") : template.gsub('doc.second_regime_casamento',"")
             if second.married.present?
               template = template.gsub('doc.second_casado', "#{second.married}")
             else
@@ -60,9 +60,9 @@ module Core
             end
 
             if second.spouse_mother_name.present?
-              template = second.spouse_father_name.present? ? template.gsub('doc.second_conjuge_pai', "e de #{second.spouse_father_name},") : template.gsub('doc.second_conjuge_pai', "")
+              template = second.spouse_father_name.present? ? template.gsub('doc.second_conjuge_pai', "e de #{second.spouse_father_name}") : template.gsub('doc.second_conjuge_pai', "")
             else
-              template = second.spouse_father_name.present? ? template.gsub('doc.second_conjuge_pai', "#{second.spouse_father_name},") : template.gsub('doc.conjuge_pai', "")
+              template = second.spouse_father_name.present? ? template.gsub('doc.second_conjuge_pai', "#{second.spouse_father_name}") : template.gsub('doc.conjuge_pai', "")
             end
 
           else
@@ -75,15 +75,15 @@ module Core
         end
 
         if self.spouse_cpf.present?
-          template = template.gsub('doc.conjuge_nome', "#{self.spouse_name}, inscrito no CPF nº #{self.spouse_cpf.format_cpf}, ")
+          template = template.gsub('doc.conjuge_nome', "#{self.spouse_name}, inscrito no CPF nº #{self.spouse_cpf.format_cpf}")
 
           #template = template.gsub('doc.conj_cpf', ", inscrito no CPF nº #{self.spouse_cpf.format_cpf} ") if self.spouse_cpf.present?
-          template = self.spouse_nationality.present? ? template.gsub('doc.nac_conjuge', "#{self.spouse_nationality},") : template.gsub('doc.nac_conjuge', "")
-          template = self.spouse_employment.present? ? template.gsub('doc.prof_conju', "#{self.spouse_employment},") : template.gsub('doc.prof_conju', "")
-          template = self.spouse_civil_state_id.present? ? template.gsub('doc.estciv_conj', "#{self.spouse_civil_state.name rescue "<span style='color: red'>Completar</span>".html_safe},") : template.gsub('doc.estciv_conj', "")
+          template = self.spouse_nationality.present? ? template.gsub('doc.nac_conjuge', "#{self.spouse_nationality}") : template.gsub('doc.nac_conjuge', "")
+          template = self.spouse_employment.present? ? template.gsub('doc.prof_conju', "#{self.spouse_employment}") : template.gsub('doc.prof_conju', "")
+          template = self.spouse_civil_state_id.present? ? template.gsub('doc.estciv_conj', "#{self.spouse_civil_state.name rescue "<span style='color: red'>Completar</span>".html_safe}") : template.gsub('doc.estciv_conj', "")
           template = template.gsub('doc.registro_geral', "e portador da CI nº #{self.spouse_rg.to_s} ") if self.spouse_rg.present?
           template = template.gsub('doc.reg_exp', "#{self.spouse_rg_org}/#{self.spouse_rg_uf}") if self.spouse_rg_org.present? && self.spouse_rg_uf.present?
-          template = self.wedding_regime.present? && self.wedding_date.present? ? template.gsub('doc.regime_casamento', "casados em #{self.wedding_regime} em #{self.wedding_date},") : template.gsub('doc.regime_casamento',"")
+          template = self.wedding_regime.present? && self.wedding_date.present? ? template.gsub('doc.regime_casamento', "casados em #{self.wedding_regime} em #{self.wedding_date}") : template.gsub('doc.regime_casamento',"")
           if self.married.present?
             template = template.gsub('doc.casado', "#{self.married}")
           else
@@ -95,9 +95,9 @@ module Core
           end
 
           if self.spouse_mother_name.present?
-            template = self.spouse_father_name.present? ? template.gsub('doc.conjuge_pai', "e de #{self.spouse_father_name},") : template.gsub('doc.conjuge_pai', "")
+            template = self.spouse_father_name.present? ? template.gsub('doc.conjuge_pai', "e de #{self.spouse_father_name}") : template.gsub('doc.conjuge_pai', "")
           else
-            template = self.spouse_father_name.present? ? template.gsub('doc.conjuge_pai', "#{self.spouse_father_name},") : template.gsub('doc.conjuge_pai', "")
+            template = self.spouse_father_name.present? ? template.gsub('doc.conjuge_pai', "#{self.spouse_father_name}") : template.gsub('doc.conjuge_pai', "")
           end
 
         else
