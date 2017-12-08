@@ -108,7 +108,7 @@ module Core
           template = template.gsub('doc.regime_casamento', "").gsub('doc.conj_cpf', "").gsub('doc.data_casamento', "")
         end
         if self.city.present?
-          template =  template.gsub('doc.cidade', "#{self.city.name},")
+          template =  template.gsub('doc.cidade', "#{self.city.name}")
           template = template.gsub('doc.estado', self.city.state.name)
         else
           template = template.gsub('doc.cidade', "")
