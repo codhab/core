@@ -49,11 +49,11 @@ module Core
         end
 
         self.allotment.data_prints.where(complete_address: self.complete_address).where.not(id: self.id).each do |second|
-          template = template.gsub('doc.second_nome', "#{second.name}, ").gsub('doc.second_cpf', "#{second.cpf.format_cpf}, ")
-          template = second.nationality.present? ? template.gsub('doc.second_nacionalidade', "#{second.nationality}, ") : template.gsub('doc.nacionalidade', "BRASILEIRO(A)")
-          template = second.employment.present? ? template.gsub('doc.second_profissao', "#{second.employment}, ") : template.gsub('doc.profissao', "")
-          template = second.civil_state.present? ? template.gsub('doc.second_est_civil', "#{second.civil_state.name}, ") : template.gsub('doc.est_civil', "")
-          template = template.gsub('doc.second_expeditor', "#{second.rg}, #{second.rg_org}/#{second.rg_uf}, ") if self.rg_org.present? && self.rg_uf.present?
+          template = template.gsub('doc.second_nome', "#{second.name} ").gsub('doc.second_cpf', "#{second.cpf.format_cpf} ")
+          template = second.nationality.present? ? template.gsub('doc.second_nacionalidade', "#{second.nationality} ") : template.gsub('doc.nacionalidade', "BRASILEIRO(A)")
+          template = second.employment.present? ? template.gsub('doc.second_profissao', "#{second.employment} ") : template.gsub('doc.profissao', "")
+          template = second.civil_state.present? ? template.gsub('doc.second_est_civil', "#{second.civil_state.name} ") : template.gsub('doc.est_civil', "")
+          template = template.gsub('doc.second_expeditor', "#{second.rg}, #{second.rg_org}/#{second.rg_uf} ") if self.rg_org.present? && self.rg_uf.present?
           template = second.document_number.present? ? template.gsub('doc.processo', "#{second.document_number}") : template.gsub('doc.processo', "")
 
           if second.mother_name.present?
