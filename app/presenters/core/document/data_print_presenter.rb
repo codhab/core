@@ -75,7 +75,7 @@ module Core
         end
 
         if self.spouse_cpf.present?
-          template = template.gsub('doc.conjuge_nome', "#{self.spouse_name}, inscrito no CPF nº #{self.spouse_cpf.format_cpf}")
+          template = self.spouse_cpf.present? ? template.gsub('doc.conjuge_nome', "#{self.spouse_name}, inscrito no CPF nº #{self.spouse_cpf.format_cpf}") : template.gsub('doc.conjuge_nome', "")
 
           #template = template.gsub('doc.conj_cpf', ", inscrito no CPF nº #{self.spouse_cpf.format_cpf} ") if self.spouse_cpf.present?
           template = self.spouse_nationality.present? ? template.gsub('doc.nac_conjuge', "#{self.spouse_nationality}") : template.gsub('doc.nac_conjuge', "")
