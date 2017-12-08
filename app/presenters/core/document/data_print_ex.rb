@@ -24,7 +24,7 @@ module Core
           married  = ""
 
           if self.spouse_name.present?
-            married += "#{self.spouse_name}, inscrito no CPF nº #{self.spouse_cpf.format_cpf}" rescue ""
+            married += "#{self.spouse_name}, inscrito no CPF nº #{self.spouse_cpf.format_cpf} " rescue ""
           end
 
           married  += self.spouse_nationality.present? ? "#{self.spouse_nationality}, " :  nil
@@ -55,6 +55,10 @@ module Core
           template = second.civil_state.present? ? template.gsub('doc.second_est_civil', "#{second.civil_state.name} ") : template.gsub('doc.est_civil', "")
           template = template.gsub('doc.second_expeditor', "#{second.rg}, #{second.rg_org}/#{second.rg_uf} ") if self.rg_org.present? && self.rg_uf.present?
           template = second.document_number.present? ? template.gsub('doc.processo', "#{second.document_number}") : template.gsub('doc.processo', "")
+
+          template = template.gsub('doc.second_certificado_sefaz', second.certificate_sefaz) if second.certificate_sefaz.present?
+          template = template.gsub('doc.second_data_certificado', second.date_certificate_sefaz) if second.date_certificate_sefaz.present?
+          template = template.gsub('doc.second_validade_certificado', second.validate_certificate_sefaz) if second.validate_certificate_sefaz.present?
 
           if second.mother_name.present?
             template = second.mother_name.present? ? template.gsub('doc.second_mae', "#{second.mother_name}") : template.gsub('doc.second_mae', "")
@@ -167,7 +171,7 @@ module Core
 
 
           if second.spouse_cpf.present?
-            template = template.gsub('doc.second_conjuge_nome', "#{second.spouse_name}, inscrito no CPF nº #{second.spouse_cpf.format_cpf}")
+            template = template.gsub('doc.second_conjuge_nome', "#{second.spouse_name}, inscrito no CPF nº #{second.spouse_cpf.format_cpf} ")
 
             #template = template.gsub('doc.second_conj_cpf', ", inscrito no CPF nº #{self.spouse_cpf.format_cpf} ") if self.spouse_cpf.present?
             template = second.spouse_nationality.present? ? template.gsub('doc.second_nac_conjuge', "#{second.spouse_nationality}") : template.gsub('doc.second_nac_conjuge', "")

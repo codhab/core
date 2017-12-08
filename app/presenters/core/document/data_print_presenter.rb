@@ -114,6 +114,7 @@ module Core
           template = template.gsub('doc.cidade', "")
           template = template.gsub('doc.estado', "")
         end
+        template = template.gsub('doc.data_hoje', "#{Date.current.strftime('%d/%m/%Y')}")
         template = template.gsub('doc.endereco', self.complete_address) if self.complete_address.present?
         template = template.gsub('doc.tipo_posse', self.ownership_type.name) if self.ownership_type.present?
         template = template.gsub('doc.data_ocupacao', self.ocupation.strftime('%d/%m/%Y')) if self.ocupation.present?
