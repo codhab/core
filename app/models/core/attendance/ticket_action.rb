@@ -1,11 +1,11 @@
 module Core
-  module Attendance    
+  module Attendance
     class TicketAction < ApplicationRecord
       self.table_name = 'extranet.attendance_ticket_actions'
-      
-      belongs_to :situation, class_name: Core::Attendance::TicketActionSituation, foreign_key: :situation_id      
-      belongs_to :context,   class_name: Core::Attendance::TicketActionContext,   foreign_key: :context_id      
-      
+
+      belongs_to :situation, class_name: Core::Attendance::TicketActionSituation, foreign_key: :situation_id
+      belongs_to :context,   class_name: Core::Attendance::TicketActionContext,   foreign_key: :context_id
+
       validates_uniqueness_of :context_id, scope: [:ticket_id]
 
       has_many :uploads,
@@ -64,8 +64,15 @@ module Core
       accepts_nested_attributes_for :payment_documents,           allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
       accepts_nested_attributes_for :income_documents,            allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
       accepts_nested_attributes_for :special_condition_documents, allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
-    
 
+
+      def document_required?(action)
+        Core::Attendance::TicketUploadCategory.all.each do |category|
+          return true if action.send(category.target_method).any?
+        end
+        return false
+      end
+      
       def upload_categories
         Core::Attendance::TicketUploadCategory.all.order(:name)
       end
