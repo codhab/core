@@ -91,9 +91,9 @@ module Core
         end
       end
 
-      def document_required?
+      def document_required?(action)
         Core::Attendance::TicketUploadCategory.all.each do |category|
-          return true if self.send(category.target_method).any?
+          return true if action.send(category.target_method).any?
         end
         return false
       end

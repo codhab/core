@@ -66,13 +66,7 @@ module Core
       accepts_nested_attributes_for :special_condition_documents, allow_destroy: true, reject_if: proc { |att| att['document'].blank?}
 
 
-      def document_required?(action)
-        Core::Attendance::TicketUploadCategory.all.each do |category|
-          return true if action.send(category.target_method).any?
-        end
-        return false
-      end
-      
+
       def upload_categories
         Core::Attendance::TicketUploadCategory.all.order(:name)
       end
