@@ -196,7 +196,7 @@ module Core
          if array[0] == 'rii' || array[0] == 'rie'
              if [2,52].include? self.presenter.current_situation_id
 
-               sql = "program_id = ? AND code = 20141201"
+               sql = "program_id = ? AND code = 20141201 and situation_status_id in (2,52)"
                @geral = Core::View::GeneralPontuation.select(:id)
                                                           .where(sql,
                                                                  self.program_id)
@@ -258,7 +258,9 @@ module Core
                  sql = "program_id = ?
                        AND convocation_id > 1524
                        AND procedural_status_id IN(14, 72)
-                       AND income BETWEEN ? AND ?"
+                       AND income BETWEEN ? AND ?
+                       and situation_status_id in (4,54,67)
+                       "
 
                  @geral = Core::View::GeneralPontuation.select(:id)
                                                             .where(sql,4,

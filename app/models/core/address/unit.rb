@@ -70,6 +70,15 @@ module Core
         .distinct
       }
 
+      def current_candidate
+        address = self.cadastre_address.order('created_at asc').last rescue nil
+
+        return false if address.nil?
+        return false unless %w(reserva distribuído sobrestado).include?(address.situation_id)
+
+        cadastre = address.cadastre rescue nil
+
+      end
 
 
     end

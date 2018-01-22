@@ -9,6 +9,7 @@ module Core
       belongs_to :sector_current,        required: false,   class_name: ::Core::Person::Sector
       belongs_to :civil_state,           required: false,   class_name: ::Core::Candidate::CivilState
       belongs_to :city,                  required: false,   class_name: ::Core::Address::City
+      belongs_to :job,                   required: false,   class_name: ::Core::Person::Job
 
       has_many :vocations
       has_many :allowances,   class_name: Core::Person::Allowance, foreign_key: 'employee_id'

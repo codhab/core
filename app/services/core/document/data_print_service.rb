@@ -71,7 +71,7 @@ module Core
         if @cadastre.present?
           @data_print.attributes.each do |key, value|
             if %w(name cpf nationality employment civil_state_id rg rg_org rg_uf wedding_regime wedding_date).include? key
-              @cadastre[key] = value if @data_print.attributes.has_key?(key)
+              @cadastre[key] = value.to_s if @data_print.attributes.has_key?(key)
               @cadastre.program_id = 3
             end
           end
@@ -108,7 +108,7 @@ module Core
           @cadastre = Core::Candidate::Cadastre.new
           @data_print.attributes.each do |key, value|
             if %w(name cpf nationality employment civil_state_id rg rg_org rg_uf wedding_regime wedding_date).include? key
-              @cadastre[key] = value if @data_print.attributes.has_key?(key)
+              @cadastre[key] = value.to_s if @data_print.attributes.has_key?(key)
             end
           end
           @cadastre.creator_id = user
