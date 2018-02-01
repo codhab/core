@@ -207,6 +207,7 @@ module Core
                sql = "program_id = ? AND
                       situation_status_id in (4,54,67)
                       AND convocation_id > 1524
+                      AND is_older is false
                       AND procedural_status_id IN(14, 72)
                       AND income BETWEEN ? AND ?"
 
