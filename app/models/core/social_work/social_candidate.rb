@@ -20,12 +20,7 @@ module Core
         where(id: @situation)
       end
 
-      scope :situations_countable, ->(situation) do
-        @situation = Core::SocialWork::SocialCandidateSituation.select(:candidate_id)
-                                                               .where(id: Core::SocialWork::SocialCandidateSituation
-                                                               .select('max(id)').group(:candidate_id), situation_id: situation)
-        where(id: @situation)
-      end
+    
 
       validates :name, presence: true
       validates :cpf, cpf: true, if: 'self.cpf.present?'
