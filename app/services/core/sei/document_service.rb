@@ -50,7 +50,7 @@ module Core
                      "IdSerie" => "831",
                      "NivelAcesso" => 1,
                      "Numero" => nil,
-                     "Data" => nil,
+                     "Data" => Date.current.strftime('%d/%m/%Y'),
                      "Descricao" => nil,
                      "IdTipoConferencia" => nil,
                      "Remetente" => "APP",
