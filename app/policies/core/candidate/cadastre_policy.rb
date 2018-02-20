@@ -3,7 +3,7 @@ module Core
     class CadastrePolicy < ApplicationPolicy
 
       def allow_recadastre_button?
-        [4, 54].include?(self.current_situation_id) &&
+        [4, 54, 68].include?(self.current_situation_id) &&
         !self.tickets.where(context_id: 1).where.not(situation_id: 1).present?
       end
 
