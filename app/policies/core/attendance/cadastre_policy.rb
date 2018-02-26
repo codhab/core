@@ -34,12 +34,12 @@ module Core
       # 3 => confirmado
 
       def allow_recadastre_update?
+        # 
+        # if !self.tickets.where(context_id: 1).present? && (Date.current > Date.parse('2017-07-31'))
+        #   return false
+        # end
 
-        if !self.tickets.where(context_id: 1).present? && (Date.current > Date.parse('2017-07-31'))
-          return false
-        end
-
-        ([4,54,67].include?(self.current_situation_id) && ![3, 6, 8].include?(self.program_id))
+        ([4,54,67,68].include?(self.current_situation_id) && ![3, 6, 8].include?(self.program_id))
 =begin
         (!self.tickets.where(context_id: 1).present? ||
         self.tickets.where(context_id: 1, active: true).present?) &&

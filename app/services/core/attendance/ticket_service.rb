@@ -50,7 +50,7 @@ module Core
 
         if @ticket.nil?
 
-          return false if context_id.to_i == 1 && (Date.current > Date.parse('2017-07-31'))
+          #return false if context_id.to_i == 1 && (Date.current > Date.parse('2017-07-31'))
 
           clone_cadastre_to_make_mirrors!
 

@@ -45,14 +45,14 @@ module Core
 
             if @enterprise.candidates.where(cadastre_id: @cadastre.id).present?
               errors.add(:cpf, 'CPF já possui indicação para este empreendimento')
-            else
-
-              if !(@cadastre.cadastre_situations.order(id: :asc).last.situation_status_id == 4 &&
-                [14,72].include?(@cadastre.cadastre_procedurals.order(id: :asc).last.procedural_status_id))
-                errors.add(:cpf, 'CPF não se encontra habilitado')
-              end
-
             end
+
+              # if !(@cadastre.cadastre_situations.order(id: :asc).last.situation_status_id == 4 &&
+              #   [14,72].include?(@cadastre.cadastre_procedurals.order(id: :asc).last.procedural_status_id))
+              #   errors.add(:cpf, 'CPF não se encontra habilitado')
+              # end
+
+            #end
           end
 
         end
