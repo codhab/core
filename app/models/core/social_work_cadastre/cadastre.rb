@@ -1,3 +1,5 @@
+require_dependency 'core/application_record'
+
 module Core
   module SocialWorkCadastre
     class Cadastre < ApplicationRecord
@@ -5,7 +7,7 @@ module Core
       belongs_to :city, class_name: ::Core::Address::City, foreign_key: 'city_id'
       has_many :cadastre_members, class_name: ::Core::SocialWorkCadastre::CadastreMember
       has_many :cadastre_titulars, class_name: ::Core::SocialWorkCadastre::CadastreTitular
-      has_many :upload_documents, class_name: '::SocialWorkCadastre::UploadDocument'
+      has_many :upload_documents, class_name: ::Core::SocialWorkCadastre::UploadDocument
       has_many :responsibles, class_name: ::Core::SocialWorkCadastre::Responsible
       has_many :locations, class_name: ::Core::SocialWorkCadastre::CadastreLocation
       has_many :steps, class_name: ::Core::SocialWorkCadastre::CadastreStep
