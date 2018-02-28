@@ -1,6 +1,6 @@
 module Core
   module Candidate
-    class ScoreService
+    class ScoreService # :nodoc:
 
       # => 09 de agosto de  2016
 
@@ -39,7 +39,7 @@ module Core
         return nil if @cadastre_mirror.nil?
 
         # => SAL_MIM é o valor do salário mínimo na data de geração dos pontos.
-        @min_salary        = options[:min_salary]   ||= 937.0
+        @min_salary        = options[:min_salary]   ||= 954.0
 
         # => DSP é a data de geração dos pontos.
         @dsp_value         = options[:dsp]          ||= proc_dsp
@@ -56,7 +56,7 @@ module Core
       def scoring_cadastre!
 
         total_score = income_score + special_dependent_score + dependent_score + timelist_score + timebsb_score
-
+        total_score += 10_000.0 if @cadastre_mirror.cadastre.scoring == true
         {total: total_score.round(10), income_score: income_score, special_dependent_score: special_dependent_score,
          dependent_score: dependent_score, timelist_score: timelist_score, timebsb_score: timebsb_score}
       end
