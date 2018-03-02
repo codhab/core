@@ -2,8 +2,10 @@ require_dependency 'core/application_record'
 
 module Core
   module SocialWorkCadastre
-    class Cadastre < ApplicationRecord
+    class Cadastre < ApplicationRecord # :nodoc:
       self.table_name = 'portal.social_work_cadastre_cadastres'
+      attr_accessor :remember_token, :activation_token, :reset_token, :token, :password_confirmation
+
       belongs_to :city, class_name: ::Core::Address::City, foreign_key: 'city_id'
       has_many :cadastre_members, class_name: ::Core::SocialWorkCadastre::CadastreMember
       has_many :cadastre_titulars, class_name: ::Core::SocialWorkCadastre::CadastreTitular
@@ -20,6 +22,9 @@ module Core
 
       enum situation: ['Aguardando', 'Habilitado', 'Não Habilitado', 'Pendente', 'Em Analise']
 
+      before_save   :downcase_email
+      before_create :create_activation_digest
+
       def destroy_step(cadastre)
         @step =  Core::SocialWorkCadastre::CadastreStep.where(cadastre_id: cadastre.id, step: 1).last
         if @step.present?
@@ -27,6 +32,44 @@ module Core
         end
       end
 
+      # Sets the password reset attributes.
+      def create_reset_digest
+        self.reset_token = new_token
+        update_attribute(:reset_digest,  digest(reset_token))
+        update_attribute(:reset_sent_at, Time.zone.now)
+        update_attribute(:activation_digest, reset_token)
+      end
+
+      # Sends password reset email.
+      def send_password_reset_email
+        Core::SocialWorkCadastre::CadastreMailer.password_reset(self).deliver_now
+      end
+
+      def password_reset_expired?
+        reset_sent_at < 2.hours.ago
+      end
+
+      private
+
+      def digest(string)
+        cost = ActiveModel::SecurePassword.min_cost ? ::BCrypt::Engine::MIN_COST : ::BCrypt::Engine.cost
+        ::BCrypt::Password.create(string, cost: cost)
+      end
+
+      def new_token
+        ::SecureRandom.urlsafe_base64
+      end
+
+      # Converts email to all lower-case.
+      def downcase_email
+        self.email = email.downcase
+      end
+
+      # Creates and assigns the activation token and digest.
+      def create_activation_digest
+        self.activation_token  = new_token
+        self.activation_digest = digest(activation_token)
+      end
     end
   end
 end
