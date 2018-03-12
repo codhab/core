@@ -16,12 +16,17 @@ module Core
                                       foreign_key: :project_enterprise_id
       belongs_to :city,               required: false
       belongs_to :type_use_unit,      required: false
+      belongs_to :enterprise_typology, class_name: "Core::Project::EnterpriseTypology", foreign_key: 'enterprise_typology_id'
 
       has_many :registry_units,   class_name: ::Core::Address::RegistryUnit
       has_many :cadastre_address, class_name: ::Core::Candidate::CadastreAddress
       has_many :cadastres,        class_name: ::Core::Candidate::Cadastre, through: :cadastre_address
       has_many :ammvs,            class_name: ::Core::Candidate::Ammv
       has_many :activities
+      has_many :unit_images,   class_name: 'Core::Healty::UnitImage'
+      has_many :unit_vois,     class_name: 'Core::Healty::Voi'
+      has_many :unit_sealings, class_name: 'Core::Healty::SealingAddress'
+      has_many :unit_labels,   class_name: 'Core::Healty::UnitLabel'
 
       scope :by_city,   -> (value)   { where(city_id: value) }
       scope :by_block,  -> (block)   { where(block: block)   }
