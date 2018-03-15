@@ -33,6 +33,21 @@ module Core
               cpf = cpf.to_i
             end
 
+            if print_hash["cpf_conjuge"].present?
+              if print_hash["cpf_conjuge"].to_s.length == 14
+                spouse_cpf = print_hash["cpf_conjuge"].gsub('-','').gsub('.','').to_s
+              else
+                spouse_cpf = print_hash["cpf_conjuge"].to_s
+              end
+
+              if spouse_cpf.length <= 12
+                spouse_cpf = '%011d' % spouse_cpf.to_i
+              end
+              if spouse_cpf.length > 11
+                spouse_cpf = spouse_cpf.to_i
+              end
+            end
+
 
             print_new = Core::Document::DataPrint.new
 
@@ -52,11 +67,12 @@ module Core
             print_new.father_name                = print_hash["pai"]
             print_new.mother_name                = print_hash["mae"]
             print_new.spouse_name                = print_hash["nome_conjuge"]
-            print_new.spouse_cpf                 = print_hash["cpf_conjuge"]
+            print_new.spouse_cpf                 = spouse_cpf
             print_new.spouse_nationality         = print_hash["nacionalidade_conjuge"]
             print_new.spouse_employment          = print_hash["profissao_conjuge"]
             print_new.spouse_civil_state_id      = print_hash["est_civil_conjuge"]
-            print_new.spouse_rg                  = print_hash["rg_conjuge"]
+            spouse_rg = print_hash["rg_conjuge"]
+            print_new.spouse_rg                  = spouse_rg.class == Float ? print_hash["rg_conjuge"].to_i : print_hash["rg_conjuge"]
             print_new.spouse_rg_org              = print_hash["rg_org_conjuge"]
             print_new.spouse_rg_uf               = print_hash["rg_uf_conjuge"]
             print_new.spouse_mother_name         = print_hash["conjuge_mae"]

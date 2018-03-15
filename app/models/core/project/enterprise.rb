@@ -25,7 +25,7 @@ module Core
       scope :by_process, -> (process) { where(process_number: process) }
       scope :by_status, -> (status) { where(status: status) }
 
-
+      mount_uploader :image, Core::Healty::ImageUploader
 
     end
   end

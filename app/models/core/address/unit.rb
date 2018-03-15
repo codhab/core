@@ -2,7 +2,7 @@ require_dependency 'core/application_record'
 
 module Core
   module Address
-    class Unit < ApplicationRecord
+    class Unit < ApplicationRecord # :nodoc:
       self.table_name = 'extranet.address_units'
 
       has_one :notary_office
@@ -16,12 +16,17 @@ module Core
                                       foreign_key: :project_enterprise_id
       belongs_to :city,               required: false
       belongs_to :type_use_unit,      required: false
+      belongs_to :enterprise_typology, class_name: "Core::Project::EnterpriseTypology", foreign_key: 'enterprise_typology_id'
 
       has_many :registry_units,   class_name: ::Core::Address::RegistryUnit
       has_many :cadastre_address, class_name: ::Core::Candidate::CadastreAddress
       has_many :cadastres,        class_name: ::Core::Candidate::Cadastre, through: :cadastre_address
       has_many :ammvs,            class_name: ::Core::Candidate::Ammv
-      has_many :activities
+      has_many :activities,    class_name: 'Core::Address::Activity'
+      has_many :unit_images,   class_name: 'Core::Healty::UnitImage'
+      has_many :unit_vois,     class_name: 'Core::Healty::Voi'
+      has_many :unit_sealings, class_name: 'Core::Healty::SealingAddress'
+      has_many :unit_labels,   class_name: 'Core::Healty::UnitLabel'
 
       scope :by_city,   -> (value)   { where(city_id: value) }
       scope :by_block,  -> (block)   { where(block: block)   }
@@ -70,6 +75,14 @@ module Core
         .distinct
       }
 
+      scope :by_voi, ->(id) {
+        joins(:unit_vois) if id
+      }
+
+      def current_cadastre_address
+        cadastre_address.order('created_at ASC').last rescue nil
+      end
+
       def current_candidate
         address = self.cadastre_address.order('created_at asc').last rescue nil
 
@@ -77,10 +90,35 @@ module Core
         return false unless %w(reserva distribuído sobrestado).include?(address.situation_id)
 
         cadastre = address.cadastre rescue nil
-
       end
 
+      def unit_block?
+        unit_book? || self.situation_unit_id == 3 && current_cadastre_address.present? && current_cadastre_address.distribuído?
+      end
 
+      def unit_occupied?
+        [5,9,10,12].include? self.situation_unit_id
+      end
+
+      def unit_book?
+        self.situation_unit_id == 6 && current_cadastre_address.present? && current_cadastre_address.reserva?
+      end
+
+      def unit_link?
+        situation_unit_id > 1
+      end
+
+      def unit_empty?
+        situation_unit_id == 1
+      end
+
+      def unit_selling?
+        situation_unit_id == 3
+      end
+
+      def unit_void?
+        situation_unit_id == 1 && (current_cadastre_address.nil? || current_cadastre_address.distrato?)
+      end
     end
   end
 end
