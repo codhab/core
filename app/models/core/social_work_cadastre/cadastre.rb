@@ -11,6 +11,7 @@ module Core
       has_many :responsibles, class_name: ::Core::SocialWorkCadastre::Responsible
       has_many :locations, class_name: ::Core::SocialWorkCadastre::CadastreLocation
       has_many :steps, class_name: ::Core::SocialWorkCadastre::CadastreStep
+      has_many :observations, class_name: ::Core::SocialWorkCadastre::Observation
 
       validates :social_reason, :cep, :address, :telephone, :crea, :city_id, presence: true
       validates :email, email: true, presence: true
@@ -18,10 +19,14 @@ module Core
       validates :district, :uf, presence: true
       validates :cnpj, cnpj: true, presence: true, uniqueness: true
 
+      scope :by_cnpj,    -> (cnpj)    {where(cnpj: cnpj.gsub('.','').gsub('/','').gsub('-',''))}
+      scope :by_social_reason,  ->(social_reason) {where('social_reason ilike ?', "%#{social_reason}%")}
+      scope :by_sicaf,          ->(sicaf) { where(sicaf: sicaf) }
+
       enum situation: ['Aguardando', 'Habilitado', 'Não Habilitado', 'Pendente', 'Em Analise']
 
       def destroy_step(cadastre)
-        @step =  Core::SocialWorkCadastre::CadastreStep.where(cadastre_id: cadastre.id, step: 1).last
+        @step = Core::SocialWorkCadastre::CadastreStep.where(cadastre_id: cadastre.id, step: 1).last
         if @step.present?
           @step.destroy
         end
