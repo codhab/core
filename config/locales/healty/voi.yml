@@ -1,0 +1,14 @@
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        'core/healty/voi':
+          attributes:
+            due:
+              invalid_date: "data inválida"
+    models:
+      'core/healty/voi': VOI
+    attributes:
+      'core/healty/voi':
+        name: "Nome Completo"
+        cpf: "CPF"

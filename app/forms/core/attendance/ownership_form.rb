@@ -96,7 +96,7 @@ module Core
           observation: "Troca de titularidade entre o CPF original #{@original_cadastre.cpf} e o novo titular CPF #{@target_cadastre.cpf}"
         })
 
-        new_original_activity.save!
+        new_original_activity.save
 
         new_target_activity = @target_cadastre.cadastre_activities.new({
           staff_id: current_user.id,
@@ -105,13 +105,13 @@ module Core
           observation: "Troca de titularidade entre o CPF original #{@original_cadastre.cpf} e o novo titular CPF #{@target_cadastre.cpf}"
         })
 
-        new_target_activity.save!
+        new_target_activity.save
       end
 
       private
 
       def current_user_validate
-        self.staff_id = current_user.id 
+        self.staff_id = current_user.id
       end
 
       def original_cpf_validate
