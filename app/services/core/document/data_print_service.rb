@@ -134,7 +134,6 @@ module Core
         @dependent.save
 
       end
-
     end
   end
 end

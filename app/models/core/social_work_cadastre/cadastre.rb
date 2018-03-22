@@ -7,7 +7,7 @@ module Core
       attr_accessor :remember_token, :activation_token, :reset_token, :token, :password_confirmation
 
       belongs_to :city, class_name: ::Core::Address::City, foreign_key: 'city_id'
-      belongs_to :uf, class_name: ::Core::Address::State, foreign_key: 'uf'
+      #belongs_to :uf, class_name: ::Core::Address::State, foreign_key: 'uf'
       has_many :cadastre_members, class_name: ::Core::SocialWorkCadastre::CadastreMember
       has_many :cadastre_titulars, class_name: ::Core::SocialWorkCadastre::CadastreTitular
       has_many :upload_documents, class_name: ::Core::SocialWorkCadastre::UploadDocument
