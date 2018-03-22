@@ -65,6 +65,7 @@ module Core
       has_many :cadastre_attendances
       has_many :cadastre_attendance_statuses, through: :cadastre_attendances
       has_many :attendance_chats,  class_name: ::Core::Attendance::Chat
+      has_many :provisionals,  class_name: ::Core::Entity::ProvisonalCandidate, foreign_key: :candidate_id
 
       enum gender: ['N/D', 'masculino', 'feminino']
 
@@ -81,8 +82,12 @@ module Core
       end
 
       def age
-       ((Date.today - self.born).to_i / 365.25).to_i rescue I18n.t(:no_information)
-     end
+        ((Date.today - self.born).to_i / 365.25).to_i rescue I18n.t(:no_information)
+      end
+
+      def current_situation
+        cadastre_situations.order('created_at ASC').last rescue I18n.t(:no_information)
+      end
 
 
      def special?
@@ -90,11 +95,11 @@ module Core
      end
 
      def older?
-         if self.born.present?
-           (self.age >= 60)
-         else
-           false
-         end
+       if self.born.present?
+         (self.age >= 60)
+       else
+         false
+       end
      end
 
      def zone?
