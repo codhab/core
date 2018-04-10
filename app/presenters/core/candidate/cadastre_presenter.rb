@@ -104,7 +104,13 @@ module Core
 
       def deadline_indication
 
-      @inactives = self.enterprise_cadastres.where(inactive: true, indication_type_id: [1,4]).where('inactive_date is not null').where.not(enterprise_id: [27,31,33,56,55,54,57,65,66,67,68,69])
+      array = (23..58).to_a
+      array.push(*(65..69).to_a)
+
+      @inactives = self.enterprise_cadastres.where(inactive: true, indication_type_id: [1,4])
+                                            .where('inactive_date is not null')
+                                            .where(created_at: Date.parse('2017-03-31')..Date.today)
+                                            .where.not(enterprise_id: array)
 
       if @inactives.present? && @inactives.first.inactive_date.present?
 
