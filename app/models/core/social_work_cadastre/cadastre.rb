@@ -3,7 +3,7 @@ require_dependency 'core/application_record'
 module Core
   module SocialWorkCadastre
     class Cadastre < ApplicationRecord # :nodoc:
-      self.table_name = 'portal.social_work_cadastre_cadastres'
+      self.table_name = 'portal.social_work_cadastre_cadastres' 
       attr_accessor :remember_token, :activation_token, :reset_token, :token, :password_confirmation
 
       belongs_to :city, class_name: ::Core::Address::City, foreign_key: 'city_id'
