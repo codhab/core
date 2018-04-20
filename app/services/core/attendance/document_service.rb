@@ -7,17 +7,17 @@ module Core
 
       # define :ticket_action_contexts
       # 1 => atualização dados básicos
-      # 2 => atualização de dependentes 
-      # 3 => atualização de renda 
-      # 4 => atualização de dados de contato 
-      
+      # 2 => atualização de dependentes
+      # 3 => atualização de renda
+      # 4 => atualização de dados de contato
+
       # define :ticket_contexts table: `attendance_ticket_contexts`
       # 1 => atualização cadastral (recadastramento)
       # 2 => atualização cadastral (convocado)
       # 3 => atualização cadastral (habilitado)
       # 4 => atualização cadastral (regularização)
       # 5 => atualização cadastral (outro)
-      
+
       attr_accessor :cadastre, :action, :ticket, :cadastre_mirror, :dependent_id
 
       def initialize(cadastre: nil, action: nil, ticket: nil, dependent_id: nil)
@@ -45,8 +45,8 @@ module Core
 
       def documents_required!
 
-        @cadastre_mirror = @ticket.cadastre_mirror 
-        
+        @cadastre_mirror = @ticket.cadastre_mirror
+
         case @action.context_id
         when 1 # (atualização dados básicos)
           cadastre_documents
@@ -66,13 +66,13 @@ module Core
           @action.cpf_documents.new(disable_destroy: true)
           @action.born_documents.new(disable_destroy: true)
           @action.arrival_df_documents.new(disable_destroy: true)
-          
+
           if @cadastre.special_condition_id == 2
             @action.special_condition_documents.new(disable_destroy: true)
           end
 
         else
-          
+
           if @cadastre.rg != @cadastre_mirror.rg
             if !@action.rg_documents.any? {|k| k.persisted? }
               @action.rg_documents.new(disable_destroy: true)
@@ -101,12 +101,12 @@ module Core
       end
 
       def dependent_documents
-        
+
 
         if !@dependent_id.nil?
 
           @dependent = Core::Candidate::DependentMirror.find(@dependent_id.to_i) rescue nil
-          
+
           if !@ticket.context_id == 2
 
             if @dependent.age >= 14 && !@action.cpf_documents.find_by(target_id: @dependent.id).present?
@@ -138,12 +138,9 @@ module Core
               if !@action.cpf_documents.where(target_id: @dependent.id).any?
                 @action.cpf_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
               end
-            end 
-            
+            end
           end
-
         end
-
       end
 
       def income_documents
@@ -156,7 +153,7 @@ module Core
             end
           end
         else
-         
+
           dependent_mirror = Core::Candidate::DependentMirror.find(@dependent_id.to_i)
 
           if dependent_mirror.present?
@@ -168,8 +165,8 @@ module Core
           end
 
         end
-        
-        
+
+
       end
 
     end

@@ -11,8 +11,7 @@ module Core
 
       def self.model_name
         ActiveModel::Name.new(self, nil, 'SolicitationDocument')
-      end
-      
+      end      
     end
   end
 end
