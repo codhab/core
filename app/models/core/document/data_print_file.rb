@@ -7,7 +7,7 @@ module Core
 
       validates :file_path,  presence: true
       validates :file_path, file_size: { less_than_or_equal_to: 10.megabytes.to_i }
-      validates :file_path, file_content_type: { allow: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'], message: 'Somente arquivos .xlsx' }
+      #validates :file_path, file_content_type: { allow: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'], message: 'Somente arquivos .xlsx' }
 
       def import_files!(user)
         return false unless self.valid?
