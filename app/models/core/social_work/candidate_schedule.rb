@@ -20,7 +20,7 @@ module Core
       scope :by_station, -> (station) {where(attendance_station_id: station)}
 
       validates :name, :city_id, :address, :hour, :date, presence: true
-      validates :cpf, cpf: true
+      validates :cpf, cpf: true, if: 'cpf.present?'
 
     end
   end
