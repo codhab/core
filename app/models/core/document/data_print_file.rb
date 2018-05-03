@@ -7,13 +7,13 @@ module Core
 
       validates :file_path,  presence: true
       validates :file_path, file_size: { less_than_or_equal_to: 10.megabytes.to_i }
-      validates :file_path, file_content_type: { allow: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'], message: 'Somente arquivos .xlsx' }
+      validates :file_path, file_content_type: { allow: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/wps-office.xlsx'], message: 'Somente arquivos .xlsx' }
 
       def import_files!(user)
         return false unless self.valid?
         @allotment = Core::Document::Allotment.find(self.allotment_id)
 
-        spreadsheet = Roo::Excelx.new(self.file_path.path, nil, :ignore)
+        spreadsheet = Roo::Excelx.new(self.file_path.path)
         header = spreadsheet.row(1)
         (2..spreadsheet.last_row).each do |i|
           print_hash = Hash[[header, spreadsheet.row(i)].transpose]

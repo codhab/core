@@ -79,6 +79,11 @@ module Core
         joins(:unit_vois) if id
       }
 
+      validates :city, :block, :unit, :complete_address, :situation_unit, presence: true
+      validates :complete_address, uniqueness: { scope: [:city_id] }, presence: true, on: :create
+
+      after_save :create_office
+
       def current_cadastre_address
         cadastre_address.order('created_at ASC').last rescue nil
       end
@@ -118,6 +123,15 @@ module Core
 
       def unit_void?
         situation_unit_id == 1 && (current_cadastre_address.nil? || current_cadastre_address.distrato?)
+      end
+
+      private
+
+      def create_office
+        @office = Core::Address::NotaryOffice.new(
+          unit_id: self.id
+        )
+        @office.save
       end
     end
   end

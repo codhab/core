@@ -19,8 +19,8 @@ module Core
       scope :by_date,    -> (date)    {where(date: date)}
       scope :by_station, -> (station) {where(attendance_station_id: station)}
 
-      validates :name, :city_id, :address, :hour, :date, :cpf, presence: true
-      validates :cpf, cpf: true
+      validates :name, :city_id, :address, :hour, :date, presence: true
+      validates :cpf, cpf: true, if: 'cpf.present?'
 
     end
   end
