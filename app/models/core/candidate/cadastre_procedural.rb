@@ -9,7 +9,8 @@ module Core
       belongs_to :convocation,        required: false, class_name: ::Core::Candidate::Convocation
       belongs_to :cadastre,           required: false, class_name: ::Core::Candidate::Cadastre
       belongs_to :assessment,         required: false, class_name: ::Core::Protocol::Assessment
-
+      belongs_to :staff,                 required: false, class_name: ::Core::Person::Staff, foreign_key: 'staff_id'
+      
 
     end
   end
