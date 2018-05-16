@@ -21,7 +21,8 @@ module Core
       scope :by_unit,  ->(unit)  { where(unit: unit) }
 
 
-      validates :cpf, :email, :name, :content, :city_id, presence: true
+      validates :email, :name, :content, :city_id, presence: true
+      validates :cpf, cpf: true, presence: true
     end
   end
 end
