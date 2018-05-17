@@ -20,6 +20,11 @@ module Core
       scope :by_group, ->(group) { where(group: group) }
       scope :by_unit,  ->(unit)  { where(unit: unit) }
 
+      scope :name_reg, -> (name_reg) { where('name ilike ?', "%#{name_reg}%")}
+      scope :address,  -> (address) { where('address ilike ? ', "%#{address}%")}
+      scope :address, -> (address) {joins(:unit).where('address_units.complete_address ilike ?', "%#{address}%") }
+      scope :cpf,      -> (cpf) {where(cpf: cpf)}
+      scope :date,     -> (date) {where("created_at::date  = ? ", Date.parse(date))}
 
       validates :cpf, :email, :name, :content, :city_id, presence: true
     end
