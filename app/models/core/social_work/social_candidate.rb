@@ -37,6 +37,7 @@ module Core
       scope :by_process, ->(process) { where(process_number: process) }
       scope :by_company, ->(company) { where(company_id: company) }
       scope :by_station, ->(station) { where(station_id: station) }
+      scope :by_contract_number, ->(contract) { where(contract_number: contract) }
 
       def create_situation(candidate, situation, staff)
         @situation = Core::SocialWork::SocialCandidateSituation.new(

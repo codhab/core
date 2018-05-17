@@ -26,7 +26,8 @@ module Core
       scope :cpf,      -> (cpf) {where(cpf: cpf)}
       scope :date,     -> (date) {where("created_at::date  = ? ", Date.parse(date))}
 
-      validates :cpf, :email, :name, :content, :city_id, presence: true
+      validates :email, :name, :content, :city_id, presence: true
+      validates :cpf, cpf: true, presence: true
     end
   end
 end
