@@ -15,16 +15,18 @@ module Core
 
       has_many :solicitation_documents,  class_name: 'Core::Regularization::SolicitationDocument'
 
+
       scope :by_city,  ->(city)  { where(city_id: city) }
       scope :by_block, ->(block) { where(block: block) }
       scope :by_group, ->(group) { where(group: group) }
       scope :by_unit,  ->(unit)  { where(unit: unit) }
 
-      scope :name_reg, -> (name_reg) { where('name ilike ?', "%#{name_reg}%")}
-      scope :address,  -> (address) { where('address ilike ? ', "%#{address}%")}
-      scope :address, -> (address) {joins(:unit).where('address_units.complete_address ilike ?', "%#{address}%") }
-      scope :cpf,      -> (cpf) {where(cpf: cpf)}
-      scope :date,     -> (date) {where("created_at::date  = ? ", Date.parse(date))}
+      scope :name_reg,     ->(name_reg) { where('name ilike ?', "%#{name_reg}%") }
+      scope :address,      ->(address) { where('address ilike ? ', "%#{address}%") }
+      scope :address,      ->(address) { joins(:unit).where('address_units.complete_address ilike ?', "%#{address}%") }
+      scope :cpf,          ->(cpf) { where(cpf: cpf.gsub('.','').gsub('-','')) }
+      scope :date,         ->(date) { where("created_at::date  = ? ", Date.parse(date)) }
+      scope :by_situation, ->(situation) { where(answer_status: situation) }
 
       validates :email, :name, :content, :city_id, presence: true
       validates :cpf, cpf: true, presence: true
