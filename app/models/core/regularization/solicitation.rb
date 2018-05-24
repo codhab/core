@@ -14,6 +14,7 @@ module Core
       belongs_to :solicitation_subject, required: false, class_name: 'Core::Regularization::SolicitationSubject'
 
       has_many :solicitation_documents,  class_name: 'Core::Regularization::SolicitationDocument'
+      has_many :solicitation_answers,  class_name: 'Core::Regularization::SolicitationAnswer'
 
 
       scope :by_city,  ->(city)  { where(city_id: city) }
