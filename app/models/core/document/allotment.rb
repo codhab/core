@@ -10,6 +10,9 @@ module Core
       belongs_to :main,     class_name: ::Core::Person::Staff, foreign_key: :main_authenticate_id
       belongs_to :first,    class_name: ::Core::Person::Staff, foreign_key: :first_authenticate_id
       belongs_to :second,   class_name: ::Core::Person::Staff, foreign_key: :second_authenticate_id
+      belongs_to :third,    class_name: ::Core::Person::Staff, foreign_key: :third_authenticate_id
+      belongs_to :fourth,   class_name: ::Core::Person::Staff, foreign_key: :fourth_authenticate_id
+      belongs_to :fifth,    class_name: ::Core::Person::Staff,  foreign_key: :fifth_authenticate_id
 
       has_many :data_prints, class_name: ::Core::Document::DataPrint
 
