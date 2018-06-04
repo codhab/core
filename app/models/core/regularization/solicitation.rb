@@ -11,7 +11,7 @@ module Core
 
       belongs_to :unit,          required: false, class_name: 'Core::Address::Unit', foreign_key: :unit_id
       belongs_to :city,          required: false, class_name: 'Core::Address::City'
-      belongs_to :solicitation_subject, required: false, class_name: 'Core::Regularization::SolicitationSubject'
+      belongs_to :solicitation_subject, required: false, class_name: 'Core::Regularization::SolicitationSubject', foreign_key: :subject_id
 
       has_many :solicitation_documents,  class_name: 'Core::Regularization::SolicitationDocument'
       has_many :solicitation_answers,  class_name: 'Core::Regularization::SolicitationAnswer'
