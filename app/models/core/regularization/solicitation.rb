@@ -11,20 +11,23 @@ module Core
 
       belongs_to :unit,          required: false, class_name: 'Core::Address::Unit', foreign_key: :unit_id
       belongs_to :city,          required: false, class_name: 'Core::Address::City'
-      belongs_to :solicitation_subject, required: false, class_name: 'Core::Regularization::SolicitationSubject'
+      belongs_to :solicitation_subject, required: false, class_name: 'Core::Regularization::SolicitationSubject', foreign_key: :subject_id
 
       has_many :solicitation_documents,  class_name: 'Core::Regularization::SolicitationDocument'
+      has_many :solicitation_answers,  class_name: 'Core::Regularization::SolicitationAnswer'
+
 
       scope :by_city,  ->(city)  { where(city_id: city) }
       scope :by_block, ->(block) { where(block: block) }
       scope :by_group, ->(group) { where(group: group) }
       scope :by_unit,  ->(unit)  { where(unit: unit) }
 
-      scope :name_reg, -> (name_reg) { where('name ilike ?', "%#{name_reg}%")}
-      scope :address,  -> (address) { where('address ilike ? ', "%#{address}%")}
-      scope :address, -> (address) {joins(:unit).where('address_units.complete_address ilike ?', "%#{address}%") }
-      scope :cpf,      -> (cpf) {where(cpf: cpf)}
-      scope :date,     -> (date) {where("created_at::date  = ? ", Date.parse(date))}
+      scope :name_reg,     ->(name_reg) { where('name ilike ?', "%#{name_reg}%") }
+      scope :address,      ->(address) { where('address ilike ? ', "%#{address}%") }
+      scope :address,      ->(address) { joins(:unit).where('address_units.complete_address ilike ?', "%#{address}%") }
+      scope :cpf,          ->(cpf) { where(cpf: cpf.gsub('.','').gsub('-','')) }
+      scope :date,         ->(date) { where("created_at::date  = ? ", Date.parse(date)) }
+      scope :by_situation, ->(situation) { where(answer_status: situation) }
 
       validates :email, :name, :content, :city_id, presence: true
       validates :cpf, cpf: true, presence: true
