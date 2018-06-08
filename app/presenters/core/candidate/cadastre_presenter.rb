@@ -20,7 +20,7 @@ module Core
       end
 
       def humanize_first_name
-        self.name.split(' ')[0].humanize
+        self.name.split(' ')[0].to_s.mb_chars.humanize
       end
 
       def humanize_complete_name
