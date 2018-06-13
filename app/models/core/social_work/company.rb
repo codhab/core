@@ -11,8 +11,8 @@ module Core
       has_many :project_executes, class_name: Core::SocialWork::ProjectExecute
       has_many :executor_companies
 
-      validates :name, :email, :cnpj, :company_type, :station, presence: true
-      validates :cnpj, cnpj: true
+      validates :name, :company_type, presence: true
+      validates :cnpj, cnpj: true, if: 'cnpj.present?'
 
       enum company_type: ['Empresa de Projetos','Empresa Executora']
 
