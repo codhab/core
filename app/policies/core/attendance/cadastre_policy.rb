@@ -50,7 +50,7 @@ module Core
 
       def allow_able_update?
         ![3, 6, 8].include?(self.program_id) &&
-        [4,54,67].include?(self.current_situation_id) &&
+        [4,54,67,70].include?(self.current_situation_id) &&
         self.tickets.where(context_id: 1, situation_id: [5,7]).present?
       end
 
