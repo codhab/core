@@ -39,7 +39,7 @@ module Core
         #   return false
         # end
 
-        ([4,54,67,68].include?(self.current_situation_id) && ![3, 6, 8].include?(self.program_id))
+        ([4,54,67,68,70].include?(self.current_situation_id) && ![3, 6, 8].include?(self.program_id))
 =begin
         (!self.tickets.where(context_id: 1).present? ||
         self.tickets.where(context_id: 1, active: true).present?) &&
