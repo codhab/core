@@ -122,6 +122,14 @@ module Core
             end
           else
 
+            if @dependent.age >= 14 && !@action.cpf_documents.find_by(target_id: @dependent.id).present?
+              @action.cpf_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
+            end
+            
+            if @dependent.age > 14 && @dependent.kinship_id == 6
+              @action.born_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
+            end
+
             if @dependent.age < 14
               if !@action.certificate_born_documents.where(target_id: @dependent.id).any? {|k| k.persisted? }
                 @action.certificate_born_documents.new(disable_destroy: true, target_id: @dependent.id, target_model: "Core::Candidate::DependentMirror")
