@@ -29,8 +29,8 @@ module Core
       scope :date,         ->(date) { where("created_at::date  = ? ", Date.parse(date)) }
       scope :by_situation, ->(situation) { where(answer_status: situation) }
 
-      validates :email, :name, :content, :city_id, presence: true
-      validates :cpf, cpf: true, presence: true
+      validates :email, :name, :content, :city_id, presence: true, on: :create
+      validates :cpf, cpf: true, presence: true, on: :create
     end
   end
 end
