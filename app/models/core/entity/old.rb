@@ -16,7 +16,7 @@ module Core
 
 
       has_many :assessments, class_name: "::Protocol::Assessment", foreign_key: 'cnpj', primary_key: 'cnpj'
-
+      belongs_to :new_city, class_name: "Address::City", foreign_key: :city_id
     end
   end
 end
