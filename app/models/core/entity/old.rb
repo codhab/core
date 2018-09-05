@@ -16,7 +16,9 @@ module Core
 
 
       has_many :assessments, class_name: "::Protocol::Assessment", foreign_key: 'cnpj', primary_key: 'cnpj'
-      belongs_to :new_city, class_name: "Address::City", foreign_key: :city_id
+      belongs_to :new_city, class_name: "Core::Address::City", foreign_key: :city_id
+    
+     validates_presence_of :name,:telephone, :email, :president_name,:president_cpf, :password, :address, :city_id, :cep, :fantasy_name 
     end
   end
 end
