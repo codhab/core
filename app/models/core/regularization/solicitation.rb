@@ -18,6 +18,7 @@ module Core
 
 
       scope :by_city,  ->(city)  { where(city_id: city) }
+      scope :by_id,    ->(id)    { where(id: id) }
       scope :by_block, ->(block) { where(block: block) }
       scope :by_group, ->(group) { where(group: group) }
       scope :by_unit,  ->(unit)  { where(unit: unit) }
