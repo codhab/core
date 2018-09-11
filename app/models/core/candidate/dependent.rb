@@ -11,6 +11,10 @@ module Core
       belongs_to :special_condition,  required: false, class_name: ::Core::Candidate::SpecialCondition
 
       enum gender: ['N/D', 'masculino', 'feminino']
+
+      def age
+        ((Date.today - self.born).to_i / 365.25).to_i rescue I18n.t(:no_information)
+      end
     end
   end
 end

@@ -199,7 +199,7 @@ module Core
       end
 
       def scoring_cadastre
-        unless [5,4].include?(@ticket.context_id)
+        unless [5, 4].include?(@ticket.context_id)
           @cadastre_mirror = @ticket.cadastre_mirror
 
           @new_income = @ticket.cadastre_mirror.main_income.to_f
@@ -293,23 +293,16 @@ module Core
         end
 
         begin
-
           if @ticket.cadastre_mirror.dependent_mirrors.present?
             new_income = (@ticket.cadastre.main_income + @ticket.cadastre_mirror.dependent_mirrors.sum(:income))
           else
             new_income = @ticket.cadastre.main_income
           end
-
           @ticket.cadastre.income = new_income
-
         rescue
-
           @ticket.cadastre.income = @ticket.cadastre.main_income
-
         end
-
         @ticket.cadastre.save
-
       end
 
       def rewrite_to_dependents!
@@ -354,10 +347,8 @@ module Core
           end
 
           @new_dependent.save
-
         end
       end
-
     end
   end
 end

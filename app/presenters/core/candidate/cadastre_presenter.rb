@@ -50,6 +50,10 @@ module Core
         current_situation.situation_status_id rescue nil
       end
 
+      def active_indicate
+        self.enterprise_cadastres.where(inactive: false).last rescue nil
+      end
+
       # => procedural
 
       def current_procedural
