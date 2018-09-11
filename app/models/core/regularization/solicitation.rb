@@ -14,6 +14,7 @@ module Core
       belongs_to :solicitation_subject, required: false, class_name: 'Core::Regularization::SolicitationSubject', foreign_key: :subject_id
 
       has_many :solicitation_documents,  class_name: 'Core::Regularization::SolicitationDocument'
+      has_many :solicitation_requests,  class_name: 'Core::Regularization::SolicitationRequest'
       has_many :solicitation_answers,  class_name: 'Core::Regularization::SolicitationAnswer'
 
 
