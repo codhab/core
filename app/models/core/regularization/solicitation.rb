@@ -14,10 +14,12 @@ module Core
       belongs_to :solicitation_subject, required: false, class_name: 'Core::Regularization::SolicitationSubject', foreign_key: :subject_id
 
       has_many :solicitation_documents,  class_name: 'Core::Regularization::SolicitationDocument'
+      has_many :solicitation_requests,  class_name: 'Core::Regularization::SolicitationRequest'
       has_many :solicitation_answers,  class_name: 'Core::Regularization::SolicitationAnswer'
 
 
       scope :by_city,  ->(city)  { where(city_id: city) }
+      scope :by_id,    ->(id)    { where(id: id) }
       scope :by_block, ->(block) { where(block: block) }
       scope :by_group, ->(group) { where(group: group) }
       scope :by_unit,  ->(unit)  { where(unit: unit) }
