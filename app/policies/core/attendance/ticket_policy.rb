@@ -27,7 +27,8 @@ module Core
       end
 
       def disable_remove_spouse mirror
-        mirror.kinship_id != 6 || mirror.age > 18
+        # mirror.kinship_id != 6 || mirror.age > 18
+        mirror.kinship_id != 6
       end
 
       def on_attendance?
