@@ -154,8 +154,7 @@ module Core
       def income_documents
 
         if @dependent_id.nil?
-          if (@ticket.cadastre.main_income.to_f != @ticket.cadastre_mirror.main_income.to_f) &&
-            @ticket.cadastre_mirror.main_income.to_f > 0
+          if (@ticket.cadastre.main_income.to_f != @ticket.cadastre_mirror.main_income.to_f) 
             if !@action.income_documents.any? {|k| k.persisted? }
               @action.income_documents.new(disable_destroy: true)
             end
@@ -165,10 +164,8 @@ module Core
           dependent_mirror = Core::Candidate::DependentMirror.find(@dependent_id.to_i)
 
           if dependent_mirror.present?
-            if dependent_mirror.income.to_f > 0
-              if !@action.income_documents.where(target_id: dependent_mirror.id).any? {|k| k.persisted? }
-                @action.income_documents.new(disable_destroy: true, target_id: @dependent_id.to_i, target_model: "Core::Candidate::DependentMirror")
-              end
+            if !@action.income_documents.where(target_id: dependent_mirror.id).any? {|k| k.persisted? }
+              @action.income_documents.new(disable_destroy: true, target_id: @dependent_id.to_i, target_model: "Core::Candidate::DependentMirror")
             end
           end
 

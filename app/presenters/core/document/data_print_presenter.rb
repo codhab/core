@@ -7,6 +7,7 @@ module Core
       def write_document(template)
         template = template.gsub('doc.nome', "#{self.name}").gsub('doc.cpf', "#{self.cpf.format_cpf}")
         template = self.nationality.present? ? template.gsub('doc.nacionalidade', "#{self.nationality}") : template.gsub('doc.nacionalidade', "BRASILEIRO(A)")
+        template = self.procuration.present? ? template.gsub('doc.procuracao', "#{self.procuration}") : template.gsub('doc.procuracao', "")
         template = self.employment.present? ? template.gsub('doc.profissao', "#{self.employment}") : template.gsub('doc.profissao', "")
         template = self.civil_state.present? ? template.gsub('doc.est_civil', "#{self.civil_state.name}") : template.gsub('doc.est_civil', "")
         template = self.rg.present? ? template.gsub('doc.rg', self.rg) : template.gsub('doc.rg', "")
