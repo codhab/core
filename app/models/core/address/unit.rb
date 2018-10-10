@@ -34,6 +34,10 @@ module Core
       scope :by_unit,   -> (unit)    { where(unit: unit)     }
       scope :by_donate, -> (donate)  { where(donate: donate) }
 
+      scope :by_own, ->(own) {
+        where(type_use_unit_id: 13) if own
+      }
+
       scope :by_enterprise, -> (value)   {
         enterprise = Project::Enterprise.find(value) rescue nil
         where(enterprise_typology_id: enterprise.enterprise_typologies.ids)
