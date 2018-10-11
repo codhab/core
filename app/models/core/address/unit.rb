@@ -33,6 +33,7 @@ module Core
       scope :by_group,  -> (group)   { where(group: group)   }
       scope :by_unit,   -> (unit)    { where(unit: unit)     }
       scope :by_donate, -> (donate)  { where(donate: donate) }
+      scope :by_complete_address, -> (donate)  { where(donate: donate) }
 
       scope :by_own, ->(own) {
         where(type_use_unit_id: 13) if own
