@@ -30,7 +30,7 @@ module Core
           married  += self.spouse_nationality.present? ? "#{self.spouse_nationality}, " :  nil
           married  += self.spouse_employment.present? ?  "#{self.spouse_employment}, " : nil
           married  += self.spouse_civil_state_id.present? ? "#{self.spouse_civil_state.name}, "   : nil
-          married  += self.spouse_rg.present? ? "e portador da CI nº #{self.spouse_rg.to_s} " : nil
+          married  += self.spouse_rg.present? ? "e portador(a) da CI nº #{self.spouse_rg.to_s} " : nil
           married  += (self.spouse_rg_org.present? && self.spouse_rg_uf.present?) ? "#{self.spouse_rg_org}/#{self.spouse_rg_uf}, " : nil
           married  += (self.wedding_regime.present? && self.wedding_date.present?) ? "casados em #{self.wedding_regime} em #{self.wedding_date}" : nil
 
@@ -79,7 +79,7 @@ module Core
             married  += second.spouse_nationality.present? ? "#{second.spouse_nationality}, " :  nil
             married  += second.spouse_employment.present? ?  "#{second.spouse_employment}, " : nil
             married  += second.spouse_civil_state_id.present? ? "#{second.spouse_civil_state.name}, "   : nil
-            married  += second.spouse_rg.present? ? "e portador da CI nº #{second.spouse_rg.to_s} " : nil
+            married  += second.spouse_rg.present? ? "e portador(a) da CI nº #{second.spouse_rg.to_s} " : nil
             married  += (second.spouse_rg_org.present? && second.spouse_rg_uf.present?) ? "#{second.spouse_rg_org}/#{second.spouse_rg_uf}, " : nil
             married  += (second.wedding_regime.present? && second.wedding_date.present?) ? "casados em #{second.wedding_regime} em #{second.wedding_date} " : nil
 
@@ -177,7 +177,7 @@ module Core
             template = second.spouse_nationality.present? ? template.gsub('doc.second_nac_conjuge', "#{second.spouse_nationality}") : template.gsub('doc.second_nac_conjuge', "")
             template = second.spouse_employment.present? ? template.gsub('doc.second_prof_conju', "#{second.spouse_employment}") : template.gsub('doc.second_prof_conju', "")
             template = second.spouse_civil_state_id.present? ? template.gsub('doc.second_estciv_conj', "#{second.spouse_civil_state.name rescue "<span style='color: red'>Completar</span>".html_safe}") : template.gsub('doc.second_estciv_conj', "")
-            template = template.gsub('doc.second_registro_geral', "e portador da CI nº #{second.spouse_rg.to_s}") if second.spouse_rg.present?
+            template = template.gsub('doc.second_registro_geral', "e portador(a) da CI nº #{second.spouse_rg.to_s}") if second.spouse_rg.present?
             template = template.gsub('doc.second_reg_exp', "#{second.spouse_rg_org}/#{second.spouse_rg_uf}") if second.spouse_rg_org.present? && second.spouse_rg_uf.present?
             template = second.wedding_regime.present? && second.wedding_date.present? ? template.gsub('doc.second_regime_casamento', "casados em #{second.wedding_regime} em #{second.wedding_date}") : template.gsub('doc.second_regime_casamento',"")
             if second.married.present?
