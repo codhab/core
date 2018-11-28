@@ -54,12 +54,8 @@ module Core
 
             #end
           end
-
         end
-
-
       end
-
     end
   end
 end

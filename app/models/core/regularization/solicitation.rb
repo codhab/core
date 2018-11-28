@@ -18,11 +18,12 @@ module Core
       has_many :solicitation_answers,  class_name: 'Core::Regularization::SolicitationAnswer'
 
 
-      scope :by_city,  ->(city)  { where(city_id: city) }
-      scope :by_id,    ->(id)    { where(id: id) }
-      scope :by_block, ->(block) { where(block: block) }
-      scope :by_group, ->(group) { where(group: group) }
-      scope :by_unit,  ->(unit)  { where(unit: unit) }
+      scope :by_city,    ->(city)    { where(city_id: city) }
+      scope :by_id,      ->(id)      { where(id: id) }
+      scope :by_block,   ->(block)   { where(block: block) }
+      scope :by_group,   ->(group)   { where(group: group) }
+      scope :by_unit,    ->(unit)    { where(unit: unit) }
+      scope :by_subject, ->(subject) { where(subject_id: subject) }
 
       scope :name_reg,     ->(name_reg) { where('name ilike ?', "%#{name_reg}%") }
       scope :address,      ->(address) { where('address ilike ? ', "%#{address}%") }

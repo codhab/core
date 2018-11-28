@@ -52,7 +52,8 @@ module Core
             status: true,
             allotment_id: allotment
           )
-          @data_print.save
+          return nil unless @data_print.save
+
         else
           @data_print = Core::Document::DataPrint.new(
             cpf: cpf,
@@ -60,9 +61,8 @@ module Core
             status: true,
             allotment_id: allotment
           )
-          @data_print.save
+          return nil unless @data_print.save
         end
-        return @data_print
       end
 
       def update_cadastre!(user)
