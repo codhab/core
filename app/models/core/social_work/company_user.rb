@@ -10,8 +10,8 @@ module Core
       belongs_to :company
       enum user_type: ['comum','supervisor']
 
-      validates :name, :username, :password, presence: true
-      validates :username, uniqueness: true
+      validates :name, :username, :password, presence: true, on: :create
+      validates :username, uniqueness: true, on: :create
       validates :password, presence: true, length: {within: 8..28}
       validates :password_confirmation, presence: true, length: { within: 8..28}
 
