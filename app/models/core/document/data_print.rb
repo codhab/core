@@ -13,6 +13,10 @@ module Core
 
       validates :cpf, cpf: true
       validates :spouse_cpf, cpf: true, if: 'self.spouse_cpf.present?'
+      validates :wedding_regime,:wedding_date,:spouse_name,:spouse_cpf,:spouse_civil_state_id,:spouse_employment,
+                :spouse_rg,:spouse_rg_org,:spouse_rg_uf,:spouse_nationality, presence: true, if: 'self.civil_state_id == 2', on: :update
+      validates :name,:cpf,:civil_state_id,:rg,:rg_org,:rg_uf, :nationality,:employment,:address_data_base,:area,:city_id,:complete_address,
+                :registration_iptu,:ocupation,:office,:unit_code,:declaratory_act_number,:endorsement, presence: true , on: :update
 
       def self.to_csv(options = {})
         desired_columns = %w[Nome CPF Cidade RG Expeditor RG_UF Estado_civil Nacionalidade Ocupação Processo Regime_casamento Data_regime Nome_pai Nome_mae

@@ -52,7 +52,12 @@ module Core
             status: true,
             allotment_id: allotment
           )
-          return nil unless @data_print.save
+
+          if @data_print.save
+              return @data_print
+          else
+            return nil
+          end
 
         else
           @data_print = Core::Document::DataPrint.new(
@@ -61,7 +66,13 @@ module Core
             status: true,
             allotment_id: allotment
           )
-          return nil unless @data_print.save
+
+          if @data_print.save
+              return @data_print
+          else
+            return nil
+          end
+
         end
       end
 
