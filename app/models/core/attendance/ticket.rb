@@ -15,20 +15,18 @@ module Core
 
       has_many :actions,       class_name: Core::Attendance::TicketAction,     foreign_key: :ticket_id
       has_many :comments,      class_name: Core::Attendance::TicketComment,    foreign_key: :ticket_id
-  
-      has_many :uploads, through: :actions, class_name: Core::Attendance::TicketUpload, foreign_key: :action_id      
-   
+
+      has_many :uploads, through: :actions, class_name: Core::Attendance::TicketUpload, foreign_key: :action_id
+
       validate :context_is_valid?
 
 
       private
 
-      def context_is_valid?
-        
+      def context_is_valid?        
         if !self.context.present?
           errors.add(:context_id, "Contexto ID não é válido")
         end
-
       end
     end
   end

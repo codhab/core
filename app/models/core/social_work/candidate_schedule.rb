@@ -14,13 +14,14 @@ module Core
 
       enum priority: ['Baixa','Média','Alta']
 
-      scope :by_name,    -> (name)    {where('name ilike ?', "%#{name}%")}
-      scope :by_cpf,     -> (cpf)     {where(cpf: cpf.gsub('.','').gsub('-',''))}
-      scope :by_date,    -> (date)    {where(date: date)}
-      scope :by_station, -> (station) {where(attendance_station_id: station)}
+      scope :by_name,    ->(name)    { where('name ilike ?', "%#{name}%") }
+      scope :by_cpf,     ->(cpf)     { where(cpf: cpf.gsub('.','').gsub('-','')) }
+      scope :by_date,    ->(date)    { where(date: date) }
+      scope :by_station, ->(station) { where(attendance_station_id: station) }
+      scope :by_city,    ->(city)    { where(city_id: city) }
 
-      validates :name, :city_id, :address, :hour, :date, presence: true
-      validates :cpf, cpf: true, if: 'cpf.present?'
+      #validates :name, :city_id, :address, :hour, :date, presence: true
+      #validates :cpf, cpf: true, if: 'cpf.present?'
 
     end
   end
