@@ -12,7 +12,6 @@ module Core
       enum gender: ['N/D', 'masculino', 'feminino']
 
       validates :name, :born, presence: true
-
     end
   end
 end

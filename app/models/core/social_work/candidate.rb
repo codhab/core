@@ -38,7 +38,6 @@ module Core
           errors.add(:cpf, "CPF não possui agendamento.")
         end
       end
-
     end
   end
 end
