@@ -229,14 +229,12 @@ module Core
              case array[0]
              when 'older'
 
-                 sql = "(extract(year from age(born)) >= 60 or (select COUNT(*)
-                        from extranet.candidate_dependents
-                        where extract(year from age(born)) >= 60
-                        and cadastre_id = general_pontuations.id) > 0)
+                 sql = "is_older is true
+                        AND program_id = 1
                         AND convocation_id > 1524
                         AND procedural_status_id IN(14, 72)
                         AND situation_status_id in (4,54,67)
-                        AND income BETWEEN  ? AND ?"
+                        AND income BETWEEN  ? AND ? "
 
                  @geral = Core::View::GeneralPontuation.select(:id)
                                                             .where(sql,
@@ -245,10 +243,8 @@ module Core
                                                             .map(&:id)
                                                             .find_index(self.id)
              when 'special'
-                 sql = "(special_condition_id in (2,3) or (select COUNT(*)
-                         from extranet.candidate_dependents
-                         where special_condition_id in (2,3)
-                         and cadastre_id = general_pontuations.id) > 0)
+                 sql = " is_special is true
+                         and program_id = 1
                          and situation_status_id in (4,54,67)
                          and convocation_id > 1524
                          and procedural_status_id IN(14, 72)
