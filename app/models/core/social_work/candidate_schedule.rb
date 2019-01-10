@@ -7,6 +7,7 @@ module Core
 
       belongs_to :schedule_status
       belongs_to :city,               required: false, class_name: ::Core::Address::City
+      belongs_to :burgh,              required: false, class_name: ::Core::Address::Burgh
       belongs_to :company,            required: false, class_name: ::Core::SocialWork::Company
       belongs_to :attendance_station, required: false, class_name: ::Core::TechnicalAssistance::Station, foreign_key: :attendance_station_id
 
@@ -20,8 +21,15 @@ module Core
       scope :by_station, ->(station) { where(attendance_station_id: station) }
       scope :by_city,    ->(city)    { where(city_id: city) }
 
-      #validates :name, :city_id, :address, :hour, :date, presence: true
-      #validates :cpf, cpf: true, if: 'cpf.present?'
+      validates :hour, :date, presence: true
+      validates :cpf, cpf: true, if: 'cpf.present?'
+
+      before_create :set_order
+
+      def set_order
+        new_order = Core::SocialWork::CandidateSchedule.where(city_id: self.city_id).order(created_at: :asc).last.order
+        self.order = new_order.present? ? new_order + 1 : 1
+      end
 
     end
   end
