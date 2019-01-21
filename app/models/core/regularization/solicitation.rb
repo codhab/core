@@ -30,7 +30,10 @@ module Core
       scope :address,      ->(address) { joins(:unit).where('address_units.complete_address ilike ?', "%#{address}%") }
       scope :cpf,          ->(cpf) { where(cpf: cpf.gsub('.','').gsub('-','')) }
       scope :date,         ->(date) { where("created_at::date  = ? ", Date.parse(date)) }
-      scope :by_situation, ->(situation) { where(answer_status: situation) }
+      scope :by_situation, ->(situation) {
+        uniq = self.map(&:cpf).uniq
+        where(answer_status: situation, cpf: uniq).order(:answer_status)
+       }
 
       validates :email, :name, :content, :city_id, presence: true, on: :create
       validates :cpf, cpf: true, presence: true, on: :create
