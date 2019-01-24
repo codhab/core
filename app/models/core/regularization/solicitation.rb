@@ -32,8 +32,10 @@ module Core
       scope :date,         ->(date) { where("created_at::date  = ? ", Date.parse(date)) }
       scope :by_situation, ->(situation) {
 
-        uniq = self.map(&:cpf).uniq
+        # uniq = self.map(&:cpf).uniq
+ 
           where(answer_status: situation).order(:answer_status)
+    
 
        }
 
