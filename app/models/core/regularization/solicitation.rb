@@ -31,8 +31,10 @@ module Core
       scope :cpf,          ->(cpf) { where(cpf: cpf.gsub('.','').gsub('-','')) }
       scope :date,         ->(date) { where("created_at::date  = ? ", Date.parse(date)) }
       scope :by_situation, ->(situation) {
+
         uniq = self.map(&:cpf).uniq
-        where(answer_status: situation, cpf: uniq).order(:answer_status)
+          where(answer_status: situation).order(:answer_status)
+
        }
 
       validates :email, :name, :content, :city_id, presence: true, on: :create
