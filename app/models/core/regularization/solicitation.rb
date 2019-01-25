@@ -30,8 +30,7 @@ module Core
       scope :address,      ->(address) { joins(:unit).where('address_units.complete_address ilike ?', "%#{address}%") }
       scope :cpf,          ->(cpf) { where(cpf: cpf.gsub('.','').gsub('-','')) }
       scope :date,         ->(date) { where("created_at::date  = ? ", Date.parse(date)) }
-      scope :by_situation, ->(situation) { where(answer_status: situation).order(:answer_status)
-       }
+      scope :by_situation, ->(situation) { where(answer_status: situation).order(:answer_status) }
 
       validates :email, :name, :content, :city_id, presence: true, on: :create
       validates :cpf, cpf: true, presence: true, on: :create
