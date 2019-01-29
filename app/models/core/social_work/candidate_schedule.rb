@@ -28,9 +28,9 @@ module Core
       after_destroy :set_order
 
       def set_order
-        Core::SocialWork::CandidateSchedule.order(created_at: :asc).each_with_index do |schedule, i|
+        Core::SocialWork::CandidateSchedule.where(city_id: self.city_id).order(created_at: :asc).each_with_index do |schedule, i|
           schedule.order = i + 1
-          schedule.save
+          schedule.save(validate: false)
         end
       end
     end
