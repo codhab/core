@@ -24,13 +24,15 @@ module Core
       validates :hour, :date, presence: true
       validates :cpf, cpf: true, if: 'cpf.present?'
 
-      before_create :set_order
+      after_create :set_order
+      after_destroy :set_order
 
       def set_order
-        new_order = Core::SocialWork::CandidateSchedule.where(city_id: self.city_id).order(created_at: :asc).last.order
-        self.order = new_order.present? ? new_order + 1 : 1
+        Core::SocialWork::CandidateSchedule.order(created_at: :asc).each_with_index do |schedule, i|
+          schedule.order = i + 1
+          schedule.save
+        end
       end
-
     end
   end
 end
