@@ -10,6 +10,7 @@ module Core
       belongs_to :burgh,              required: false, class_name: ::Core::Address::Burgh
       belongs_to :company,            required: false, class_name: ::Core::SocialWork::Company
       belongs_to :attendance_station, required: false, class_name: ::Core::TechnicalAssistance::Station, foreign_key: :attendance_station_id
+      belongs_to :candidate,          required: false, class_name: ::Core::SocialWork::Candidate, foreign_key: :cpf, primary_key: :cpf
 
       has_many :schedule_interactions
 
@@ -20,6 +21,13 @@ module Core
       scope :by_date,    ->(date)    { where(date: date) }
       scope :by_station, ->(station) { where(attendance_station_id: station) }
       scope :by_city,    ->(city)    { where(city_id: city) }
+      scope :by_profile, ->(profile) {
+        if profile == "true"
+          joins(:candidate)
+        else
+          joins('left join generic.social_work_candidates cand on cand.cpf = generic.social_work_candidate_schedules.cpf').where('cand.id is null')
+        end
+      }
 
       validates :hour, :date, presence: true
       validates :cpf, cpf: true, if: 'cpf.present?'
