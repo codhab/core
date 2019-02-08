@@ -16,13 +16,15 @@ module Core
 
       enum priority: ['Baixa','Média','Alta']
 
-      scope :by_name,    ->(name)    { where('name ilike ?', "%#{name}%") }
-      scope :by_cpf,     ->(cpf)     { where(cpf: cpf.gsub('.','').gsub('-','')) }
-      scope :by_date,    ->(date)    { where(date: date) }
-      scope :by_station, ->(station) { where(attendance_station_id: station) }
-      scope :by_city,    ->(city)    { where(city_id: city) }
-      scope :by_profile, ->(profile) {
-        
+      scope :by_name,       ->(name)    { where('name ilike ?', "%#{name}%") }
+      scope :by_cpf,        ->(cpf)     { where(cpf: cpf.gsub('.','').gsub('-','')) }
+      scope :by_date,       ->(date)    { where(date: date) }
+      scope :by_station,    ->(station) { where(attendance_station_id: station) }
+      scope :by_city,       ->(city)    { where(city_id: city) }
+      scope :by_start_date, ->(date) {where('created_at::date >= ?', Date.parse(date))}
+      scope :by_end_date,   ->(date) {where('created_at::date <= ?', Date.parse(date))}
+      scope :by_profile,    ->(profile) {
+
         if profile == "true"
           joins(:candidate)
         else
