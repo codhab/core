@@ -5,8 +5,8 @@ module Core
     class Candidate < ApplicationRecord
       self.table_name = 'generic.social_work_candidates'
 
-      scope :by_name,  -> (name) {where('name ilike ?', "%#{name}%")}
-      scope :by_cpf,  -> (cpf)   {where(cpf: cpf)}
+      scope :by_name, ->(name) { where('name ilike ?', "%#{name}%")}
+      scope :by_cpf,  ->(cpf)  { where(cpf: cpf) }
 
 
       belongs_to :city,        required: false, class_name: ::Core::Address::City

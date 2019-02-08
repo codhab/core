@@ -22,6 +22,7 @@ module Core
       scope :by_station, ->(station) { where(attendance_station_id: station) }
       scope :by_city,    ->(city)    { where(city_id: city) }
       scope :by_profile, ->(profile) {
+        
         if profile == "true"
           joins(:candidate)
         else
