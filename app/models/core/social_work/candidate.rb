@@ -5,6 +5,8 @@ module Core
     class Candidate < ApplicationRecord
       self.table_name = 'generic.social_work_candidates'
 
+      belongs_to :civil_state, class_name 'Core::Candidate::CivilState'
+
       scope :by_name, ->(name) { where('name ilike ?', "%#{name}%")}
       scope :by_cpf,  ->(cpf)  { where(cpf: cpf) }
 
