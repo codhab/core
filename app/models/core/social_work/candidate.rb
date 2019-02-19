@@ -10,6 +10,7 @@ module Core
 
 
       belongs_to :city,        required: false, class_name: ::Core::Address::City
+      belongs_to :burgh,       required: false, class_name: ::Core::Address::Burgh
       belongs_to :civil_state, required: false, class_name: ::Core::Candidate::CivilState
       belongs_to :benefit,     required: false, class_name: ::Core::SocialWork::Benefit
       belongs_to :pension,     required: false, class_name: ::Core::SocialWork::Pension
