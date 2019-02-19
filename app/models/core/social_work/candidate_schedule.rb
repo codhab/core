@@ -21,8 +21,8 @@ module Core
       scope :by_date,       ->(date)    { where(date: date) }
       scope :by_station,    ->(station) { where(attendance_station_id: station) }
       scope :by_city,       ->(city)    { where(city_id: city) }
-      scope :by_start_date, ->(date) {where('created_at::date >= ?', Date.parse(date))}
-      scope :by_end_date,   ->(date) {where('created_at::date <= ?', Date.parse(date))}
+      scope :by_start_date, ->(date) {where('social_work_candidate_schedules.created_at::date >= ?', Date.parse(date))}
+      scope :by_end_date,   ->(date) {where('social_work_candidate_schedules.created_at::date <= ?', Date.parse(date))}
       scope :by_profile,    ->(profile) {
 
         if profile == "true"
