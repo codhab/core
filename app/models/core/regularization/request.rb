@@ -5,7 +5,7 @@ module Core
     class Request < ApplicationRecord
       self.table_name = 'extranet.regularization_requests'
 
-      enum situation: ['Aguardando atendimento', 'Em atendimento', 'Finalizado', 'Cancelado']
+      enum situation: ['Não lido', 'lido']
 
       mount_uploader :file, Core::Regularization::DocumentUploader
 
