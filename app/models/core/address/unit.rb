@@ -36,6 +36,11 @@ module Core
       scope :by_complete_address, -> (donate)  { where(donate: donate) }
       scope :by_id, -> (id)  { where(id: id) }
 
+      scope :by_filter_city,   -> (value)   { where(city_id: value) }
+      scope :by_filter_block,  -> (block)   { where(block: block).uniq(:group)   }
+      scope :by_filter_group,  -> (group)   { where(group: group)   }
+      scope :by_filter_unit,   -> (unit)    { where(unit: unit)     }
+
       scope :by_own, ->(own) {
         where(type_use_unit_id: 13) if own
       }
