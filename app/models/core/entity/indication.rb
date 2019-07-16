@@ -47,12 +47,10 @@ module Core
               errors.add(:cpf, 'CPF já possui indicação para este empreendimento')
             end
 
-              # if !(@cadastre.cadastre_situations.order(id: :asc).last.situation_status_id == 4 &&
-              #   [14,72].include?(@cadastre.cadastre_procedurals.order(id: :asc).last.procedural_status_id))
-              #   errors.add(:cpf, 'CPF não se encontra habilitado')
-              # end
+            if @cadastre.cadastre_situations.order(id: :asc).last.situation_status_id == 7 
+              errors.add(:cpf, ', não é possível indicar um CPF já contemplado')
+            end
 
-            #end
           end
         end
       end
