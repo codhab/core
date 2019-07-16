@@ -5,8 +5,6 @@ module Core
     class Cadastre < ApplicationRecord
 
       self.table_name = 'extranet.candidate_cadastres'
-
-      audited
       
       belongs_to :special_condition,      required: false,          class_name: ::Core::Candidate::SpecialCondition
       belongs_to :special_condition_type, required: false,          class_name: ::Core::Candidate::SpecialConditionType
