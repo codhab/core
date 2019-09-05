@@ -22,9 +22,11 @@ module Core
       validates :district, :uf, presence: true
       validates :cnpj, cnpj: true, presence: true, uniqueness: true
 
-      scope :by_cnpj,    -> (cnpj)    {where(cnpj: cnpj.gsub('.','').gsub('/','').gsub('-',''))}
+      scope :by_cnpj,           -> (cnpj)    {where(cnpj: cnpj.gsub('.','').gsub('/','').gsub('-',''))}
       scope :by_social_reason,  ->(social_reason) {where('social_reason ilike ?', "%#{social_reason}%")}
       scope :by_sicaf,          ->(sicaf) { where(sicaf: sicaf) }
+      scope :credential_2018,   -> { where(assignment: 2018).order('id desc') }
+      scope :credential_2019,   -> { where(assignment: 2019).order('id desc') }
 
       enum situation: ['Aguardando', 'Habilitado', 'Não Habilitado', 'Pendente', 'Em Analise']
 
