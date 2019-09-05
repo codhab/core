@@ -29,7 +29,7 @@ module Core
           errors.add(:cpf, "Você já indicou a quantidade máxima para este empreendimento")
         end
 
-        @cadastre   = Core::Candidate::Cadastre.find_by(cpf: self.cpf) rescue nil
+        @cadastre = Core::Candidate::Cadastre.find_by(cpf: self.cpf) rescue nil
 
         if @cadastre.nil?
           errors.add(:cpf, 'CPF não encontrado na base de dados da CODHAB')
@@ -42,10 +42,10 @@ module Core
           if candidate_enterprise.present?
             errors.add(:cpf, 'CPF já possui indicação ativa')
           else
-
-            if @enterprise.candidates.where(cadastre_id: @cadastre.id).present?
-              errors.add(:cpf, 'CPF já possui indicação para este empreendimento')
-            end
+            
+            #if @enterprise.candidates.where(cadastre_id: @cadastre.id).present?
+            #  errors.add(:cpf, 'CPF já possui indicação para este empreendimento')
+            #end
 
             if @cadastre.cadastre_situations.order(id: :asc).last.situation_status_id == 7 
               errors.add(:cpf, ', não é possível indicar um CPF já contemplado')
