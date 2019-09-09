@@ -20,7 +20,7 @@ module Core
       validates :email, email: true, presence: true
       validates :password, presence: true, length: {minimum: 6, maximum: 20}
       validates :district, :uf, presence: true
-      validates :cnpj, cnpj: true, presence: true, uniqueness: true
+      validates :cnpj, cnpj: true, presence: true
 
       scope :by_cnpj,           -> (cnpj)    {where(cnpj: cnpj.gsub('.','').gsub('/','').gsub('-',''))}
       scope :by_social_reason,  ->(social_reason) {where('social_reason ilike ?', "%#{social_reason}%")}
@@ -32,6 +32,13 @@ module Core
 
       before_save   :downcase_email
       before_create :create_activation_digest
+      validate :validate_cadastre?, on: :create
+
+      def validate_cadastre?
+        if Core::SocialWorkCadastre::Cadastre.where(cnpj: self.cnpj, assignment: 2019).present?
+          errors.add(:cnpj, "CNPJ ja cadastrado.")
+        end
+      end
 
       def destroy_step(cadastre)
         @step = Core::SocialWorkCadastre::CadastreStep.where(cadastre_id: cadastre.id, step: 1).last

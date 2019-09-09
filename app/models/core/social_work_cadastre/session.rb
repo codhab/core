@@ -14,7 +14,7 @@ module Core
       private
 
       def authenticate?
-        cadastre = Core::SocialWorkCadastre::Cadastre.find_by(cnpj: self.cnpj) rescue nil
+        cadastre = Core::SocialWorkCadastre::Cadastre.where(cnpj: self.cnpj, assignment: 2019).order(created_at: :asc).last rescue nil
 
         if cadastre.nil? || cadastre.password != self.password
           errors.add(:email, "CNPJ ou senha inválidos")
