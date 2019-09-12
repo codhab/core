@@ -9,7 +9,7 @@ module Core
 
       mount_uploader :file_path, Core::SocialWorkCadastre::FilePathUploader
 
-      validates :file_path, :document_type_id, presence: true
+      validates :file_path, :document_type_id, presence: true, on: :create
     end
   end
 end
