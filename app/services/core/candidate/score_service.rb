@@ -70,8 +70,8 @@ module Core
       # => DSP é a data de geração dos pontos.
       # => Deverá ser validado para que o mesmo seja coerente com a pontuação dos candidatos
       def proc_dsp
-        # Refatorar para rodar anualmente nesta mesma data
-        Date.parse('2017-04-03').strftime("%Y-%m-%d")
+        # Refatorar para rodar anualmente nesta mesma data 
+        Date.parse("#{Date.current.year}-04-03").strftime("%Y-%m-%d")
       end
 
       def dsp
