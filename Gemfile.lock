@@ -83,7 +83,7 @@ GEM
     eventmachine (1.0.9.1)
     factory_girl (4.8.0)
       activesupport (>= 3.0.0)
-    ffi (1.9.18)
+    ffi (1.12.2)
     file_validators (2.1.0)
       activemodel (>= 3.0)
       mime-types (>= 1.0)
