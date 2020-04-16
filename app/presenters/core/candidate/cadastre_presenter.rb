@@ -111,6 +111,10 @@ module Core
       array = (23..58).to_a
       array.push(*(65..69).to_a)
 
+      enterprises = Core::Project::Enterprise.where(entity: true).map(&:id)
+
+      array += enterprises
+
       @inactives = self.enterprise_cadastres.where(inactive: true, indication_type_id: [1,4])
                                             .where('inactive_date is not null')
                                             .where(created_at: Date.parse('2017-03-31')..Date.today)
