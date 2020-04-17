@@ -111,7 +111,7 @@ module Core
       array = (23..58).to_a
       array.push(*(65..69).to_a)
 
-      enterprises = Core::Project::Enterprise.where(entity: true).map(&:id)
+      enterprises = Core::Project::Enterprise.where(enable: true).map(&:id)
 
       array += enterprises
 
