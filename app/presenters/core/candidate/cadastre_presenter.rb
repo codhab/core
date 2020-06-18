@@ -80,7 +80,7 @@ module Core
 
       def current_cadastre_address
 
-        self.cadastre_address.where(situation_id: [0,1,5]).order('created_at ASC').last rescue nil
+        self.cadastre_address.order('created_at ASC').last rescue nil
       end
 
       def current_address
