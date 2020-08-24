@@ -80,7 +80,7 @@ module Core
 
       def current_cadastre_address
 
-        self.cadastre_address.where(situation_id: [0,1,5]).order('created_at ASC').last rescue nil
+        self.cadastre_address.order('created_at ASC').last rescue nil
       end
 
       def current_address
@@ -110,6 +110,10 @@ module Core
 
       array = (23..58).to_a
       array.push(*(65..69).to_a)
+
+      enterprises = Core::Project::Enterprise.where(enable: true).map(&:id)
+
+      array += enterprises
 
       @inactives = self.enterprise_cadastres.where(inactive: true, indication_type_id: [1,4])
                                             .where('inactive_date is not null')

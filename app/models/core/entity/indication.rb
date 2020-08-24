@@ -37,6 +37,7 @@ module Core
         else
 
           candidate_enterprise = Core::Candidate::EnterpriseCadastre.where(cadastre_id: @cadastre.id)
+                                                                    .where.not(indication_type_id: 999)
                                                                     .where('inactive is false')
 
           if candidate_enterprise.present?

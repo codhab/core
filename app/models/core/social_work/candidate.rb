@@ -26,8 +26,8 @@ module Core
       has_many :answers,           class_name: ::Core::SocialWork::Answer
 
       validates :cpf, cpf: true
-      validates :name, :cpf, :civil_state, :born, presence: true
-      validate :validate_schedule?, on: :create
+      validates :name, :cpf, :civil_state, presence: true
+      validate  :validate_schedule?, on: :create
 
 
       def current_project
