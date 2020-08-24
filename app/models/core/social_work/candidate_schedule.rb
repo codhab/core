@@ -32,7 +32,7 @@ module Core
         end
       }
 
-      validates :hour, :date, presence: true
+      validates :hour, :date, :city_id, presence: true
       validates :cpf, cpf: true, if: 'cpf.present?'
 
       after_create :set_order
