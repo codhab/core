@@ -369,7 +369,7 @@ module Core
 
         begin
           if @cadastre_mirror.dependent_mirrors.present?
-            new_income = (@cadastre_mirror.cadastre.main_income + @cadastre_mirror.cadastre_mirror.dependent_mirrors.sum(:income))
+            new_income = (@cadastre_mirror.cadastre.main_income + @cadastre_mirror.dependent_mirrors.sum(:income))
           else
             new_income = @cadastre_mirror.cadastre.main_income
           end
