@@ -22,6 +22,8 @@ module Core
       has_many :tickets,       class_name: ::Core::Attendance::Ticket
       has_many :notifications, class_name: ::Core::Attendance::Notification
       has_many :attendances,   class_name: ::Core::Attendance::Cadastre
+      
+      has_many :cadastre_dossiers,   class_name: ::Core::Candidate::CadastreDossier
 
 
       has_many :requeriments,      primary_key: :cpf, foreign_key: :cpf, class_name: ::Core::Regularization::Requeriment
