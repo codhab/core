@@ -37,7 +37,6 @@ module Core
             area: @cadastre.current_address.present? && @cadastre.current_address.unit.present? ? @cadastre.current_address.unit.area : nil,
             address_data_base: @cadastre.current_address.present? && @cadastre.current_address.unit.present? ? @cadastre.current_address.unit.complete_address : nil,
             ownership_type_id: @cadastre.current_address.present? && @cadastre.current_address.unit.present? ? @cadastre.current_address.unit.ownership_type_id : nil,
-            complete_address: @cadastre.current_address.present? && @cadastre.current_address.unit.present? ? @cadastre.current_address.unit.complete_address : nil,
             ocupation: @cadastre.current_address.present? ? @cadastre.current_address.created_at.strftime('%d/%m/%Y') : nil,
             registration_iptu: @cadastre.current_address.present? && @cadastre.current_address.unit.present? ? @cadastre.current_address.unit.registration_iptu : nil,
             unit_code: @cadastre.current_address.present? && @cadastre.current_address.unit.present? && @cadastre.current_address.unit.notary_office.present? ? @cadastre.current_address.unit.notary_office.unit_code : nil,
