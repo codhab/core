@@ -198,12 +198,44 @@ module Core
 
       end
 
+      def scoring_cadastre_by_mirror
+        return false if @cadastre_mirror.nil?
+
+        @new_income = @cadastre_mirror.main_income.to_f
+        @new_income = @new_income + @cadastre_mirror.dependent_mirrors.sum(:income).to_f rescue 0
+
+        @cadastre_mirror.update(income: @new_income) rescue nil
+
+        @cadastre_mirror = @cadastre_mirror
+
+        @score = Core::Candidate::ScoreService.new(cadastre_mirror_id: @cadastre_mirror)
+        @scores = @score.scoring_cadastre!
+
+        @pontuation = Core::Candidate::Pontuation.new(
+          cadastre_id: @cadastre_mirror.cadastre_id,
+          cadastre_mirror_id: @cadastre_mirror.id,
+          bsb: @scores[:timebsb_score],
+          dependent: @scores[:dependent_score],
+          timelist: @scores[:timelist_score],
+          special_condition: @scores[:special_dependent_score],
+          income: @scores[:income_score],
+          total: @scores[:total],
+          program_id: @cadastre_mirror.program_id
+        )
+
+        @pontuation.save(validate: false)
+      
+
+        mirror_rewrite_to_cadastre!
+        mirror_rewrite_to_dependents!        
+      end
+
       def scoring_cadastre
         unless [5, 4].include?(@ticket.context_id)
           @cadastre_mirror = @ticket.cadastre_mirror
 
           @new_income = @ticket.cadastre_mirror.main_income.to_f
-          @new_income = @new_income + @ticket.cadastre_mirror.dependent_mirrors.sum(:income).to_f rescue nil
+          @new_income = @new_income + @ticket.cadastre_mirror.dependent_mirrors.sum(:income).to_f rescue 0
 
           @ticket.cadastre_mirror.update(income: @new_income) rescue nil
 
@@ -224,7 +256,7 @@ module Core
             program_id: @cadastre_mirror.program_id
           )
 
-          @pontuation.save
+          @pontuation.save(validate: false)
         end
 
         rewrite_to_cadastre!
@@ -286,9 +318,11 @@ module Core
       def rewrite_to_cadastre!
         return false if @ticket.cadastre.nil? || @ticket.cadastre_mirror.nil?
 
+        @new_cadastre = @ticket.cadastre
+
         @ticket.cadastre_mirror.attributes.each do |key, value|
           unless %w(id created_at updated_at).include? key
-            @ticket.cadastre[key] = value if @ticket.cadastre.attributes.has_key?(key)
+            @new_cadastre[key] = value if @ticket.cadastre.attributes.has_key?(key)
           end
         end
 
@@ -298,11 +332,11 @@ module Core
           else
             new_income = @ticket.cadastre.main_income
           end
-          @ticket.cadastre.income = new_income
+          @new_cadastre.income = new_income
         rescue
-          @ticket.cadastre.income = @ticket.cadastre.main_income
+          @new_cadastre.income = @new_cadastre.main_income
         end
-        @ticket.cadastre.save
+        @new_cadastre.save(validate: false)
       end
 
       def rewrite_to_dependents!
@@ -317,9 +351,52 @@ module Core
               @new_dependent[key] = value if @new_dependent.attributes.has_key?(key)
             end
           end
-          @new_dependent.save
+          @new_dependent.save(validate: false)
         end
+
       end
+
+      def mirror_rewrite_to_cadastre!
+        return false if @cadastre_mirror.nil?
+
+        @new_cadastre = @cadastre_mirror.cadastre
+
+        @cadastre_mirror.attributes.each do |key, value|
+          unless %w(id created_at updated_at).include? key
+            @new_cadastre[key] = value if @cadastre_mirror.cadastre.attributes.has_key?(key)
+          end
+        end
+
+        begin
+          if @cadastre_mirror.dependent_mirrors.present?
+            new_income = (@cadastre_mirror.cadastre.main_income + @cadastre_mirror.dependent_mirrors.sum(:income))
+          else
+            new_income = @cadastre_mirror.cadastre.main_income
+          end
+          @new_cadastre.income = new_income
+        rescue
+          @new_cadastre.income = @new_cadastre.main_income
+        end
+        @new_cadastre.save(validate: false)
+      end
+
+      def mirror_rewrite_to_dependents!
+        @dependents = @cadastre_mirror.dependent_mirrors
+
+        @cadastre_mirror.cadastre.dependents.delete_all
+
+        @dependents.each do |dependent|
+          @new_dependent = @cadastre_mirror.cadastre.dependents.new
+          dependent.attributes.each do |key, value|
+            unless %w(id created_at cadastre_id updated_at).include? key
+              @new_dependent[key] = value if @new_dependent.attributes.has_key?(key)
+            end
+          end
+          @new_dependent.save(validate: false)
+        end
+
+      end
+
 
 
       def clone_cadastre_to_make_mirrors!
@@ -346,7 +423,7 @@ module Core
             end
           end
 
-          @new_dependent.save
+          @new_dependent.save(validate: false)
         end
       end
     end
