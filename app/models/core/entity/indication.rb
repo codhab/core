@@ -25,7 +25,7 @@ module Core
 
         @enterprise = Core::Project::Enterprise.find(self.enterprise_id)
 
-        if !(@enterprise.units.to_i > @enterprise.candidates.where('inactive is false').count)
+        if !(@enterprise.units.to_i >= @enterprise.candidates.where('indication_type_id = 1 and inactive is false').count)
           errors.add(:cpf, "Você já indicou a quantidade máxima para este empreendimento")
         end
 
@@ -37,7 +37,7 @@ module Core
         else
 
           candidate_enterprise = Core::Candidate::EnterpriseCadastre.where(cadastre_id: @cadastre.id)
-                                                                    .where.not(indication_type_id: 999)
+                                                                    .where(indication_type_id: 1)
                                                                     .where('inactive is false')
 
           if candidate_enterprise.present?
